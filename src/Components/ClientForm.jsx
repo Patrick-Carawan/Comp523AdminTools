@@ -4,6 +4,7 @@ import Typography from "@material-ui/core/Typography";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Button from "@material-ui/core/Button";
+import {Link} from "react-router-dom";
 
 const clientAppState = {
     WELCOME: 'welcome',
@@ -118,6 +119,7 @@ function ClientForm(props) {
                     soon
                     with more details.
                 </Typography>
+                <Link to="/">Go Home</Link>
             </div>
         )
     }
