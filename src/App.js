@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import './App.css';
-import {BrowserRouter, Route} from 'react-router-dom';
-import Switch from "react-router-dom/es/Switch";
+import {BrowserRouter, Switch ,Route} from 'react-router-dom';
 import ClientForm from "./Components/ClientForm";
 import Home from "./Components/Home";
+import Login from "./Components/Login";
 
 function App() {
 
@@ -12,7 +12,8 @@ function App() {
         <BrowserRouter>
             <Switch>
                 <Route path="/" component={Home} exact={true}/>
-                <Route path="/ClientForm" component={ClientForm} exact={true}/>
+                <Route path="/clientForm" component={ClientForm} exact={true}/>
+                <Route path="/login" component={Login} exact={true}/>
             </Switch>
 
         </BrowserRouter>
