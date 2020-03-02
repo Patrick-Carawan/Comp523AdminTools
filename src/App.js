@@ -5,6 +5,7 @@ import ClientForm from "./Components/ClientForm";
 import Home from "./Components/Home";
 import Login from "./Components/Login";
 import ProposalsAdminView from "./Components/ProposalsAdminView";
+import ProposalsStudentView from "./Components/ProposalsStudentView";
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
                 <Route path="/clientForm" component={ClientForm} exact={true}/>
                 <Route path="/login" component={Login} exact={true}/>
                 <Route path="/admin" component={ProposalsAdminView} exact={true}/>
+                <Route path="/studentProps" component={ProposalsStudentView} exact={true}/>
             </Switch>
 
         </BrowserRouter>
