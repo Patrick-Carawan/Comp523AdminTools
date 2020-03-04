@@ -7,6 +7,7 @@ import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import AppBar from "@material-ui/core/AppBar";
 import {Checkbox} from "@material-ui/core";
+import TopNav from "./TopNav";
 
 const proposals = [{
     title: 'iPhone App',
@@ -37,36 +38,39 @@ const proposals = [{
 function ProposalsStudentView(props) {
     return (
         <div>
-            <AppBar position="static">
-                <Box textAlign="center" style={{'marginBottom': '5px'}}>
-                    <Typography variant="h3">
-                        Please select your favorite 7 proposals
-                    </Typography>
-                </Box>
-            </AppBar>
+            <TopNav/>
+            <Box textAlign="center">
+                <Typography variant="h3">
+                    Please select your favorite 7 proposals
+                </Typography>
+            </Box>
             {
                 proposals.map((prop, i) =>
-                    <div key={i} style={{'display':'inline', 'align-item':'middle'}}>
-                        <Checkbox/>
-                        <Card className="MiddleText" variant="outlined">
-                            <CardContent>
-                                <Grid container spacing={3}>
-                                    <Grid item xs={12}>
-
-                                        <Typography variant="h2">{prop.title}</Typography>
-                                        <Typography variant="h3">{`${prop.firstName}  ${prop.lastName}`}</Typography>
-                                        <Typography variant="h5">{prop.description}</Typography>
-                                        <Typography variant="h5">
-                                            <a href={prop.url}>{prop.url}
-                                            </a>
-                                        </Typography>
-                                        <Typography variant="h5">{prop.softwareReq}</Typography>
-                                        <Typography variant="h5">{prop.hardwareReq}</Typography>
+                    <Grid style={{'marginLeft':'8%', 'marginTop':'4%'}} container direction="row" justify="flex-start" alignItems="center" key={i}>
+                        <Grid item>
+                            <Checkbox/>
+                        </Grid>
+                        <Grid item>
+                            <Card variant="outlined">
+                                <CardContent>
+                                    <Grid container spacing={3}>
+                                        <Grid item >
+                                            <Typography variant="h2">{prop.title}</Typography>
+                                            <Typography
+                                                variant="h3">{`${prop.firstName}  ${prop.lastName}`}</Typography>
+                                            <Typography variant="h5">{prop.description}</Typography>
+                                            <Typography variant="h5">
+                                                <a href={prop.url}>{prop.url}
+                                                </a>
+                                            </Typography>
+                                            <Typography variant="h5">{prop.softwareReq}</Typography>
+                                            <Typography variant="h5">{prop.hardwareReq}</Typography>
+                                        </Grid>
                                     </Grid>
-                                </Grid>
-                            </CardContent>
-                        </Card>
-                    </div>)
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    </Grid>)
             }
         </div>
     );
