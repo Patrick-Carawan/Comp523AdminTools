@@ -6,6 +6,7 @@ import Home from "./Components/Home";
 import Login from "./Components/Login";
 import ProposalsAdminView from "./Components/ProposalsAdminView";
 import ProposalsStudentView from "./Components/ProposalsStudentView";
+import TeamsGrid from "./Components/TeamsGrid";
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
                 <Route path="/login" component={Login} exact={true}/>
                 <Route path="/admin" component={ProposalsAdminView} exact={true}/>
                 <Route path="/studentProps" component={ProposalsStudentView} exact={true}/>
+                <Route path="/teams" component={TeamsGrid} exact={true}/>
             </Switch>
 
         </BrowserRouter>
