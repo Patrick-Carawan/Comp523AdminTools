@@ -4,6 +4,7 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
+import TopNav from "./TopNav";
 
 const proposals = [{
     title: 'iPhone App',
@@ -33,7 +34,9 @@ const proposals = [{
 
 function ProposalsAdminView(props) {
     return (
-        <div>{proposals.map((prop, i) => <Card className="MiddleText" variant="outlined">
+        <div>
+            <TopNav/>
+            {proposals.map((prop, i) => <Card className="MiddleText" variant="outlined">
             <CardContent>
                 <Grid container spacing={3}>
                     <Grid item xs={8}>
