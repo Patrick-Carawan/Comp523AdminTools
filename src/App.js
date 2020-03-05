@@ -5,6 +5,9 @@ import ClientForm from "./Components/ClientForm";
 import Home from "./Components/Home";
 import Login from "./Components/Login";
 import ProposalsAdminView from "./Components/ProposalsAdminView";
+import StudentSetupPage from "./Components/StudentSetupPage";
+import TeammateSelectionRules from "./Components/TeammateSelectionRules";
+import TeamPreferences from "./Components/TeamPreferences";
 
 function App() {
 
@@ -16,8 +19,10 @@ function App() {
                 <Route path="/clientForm" component={ClientForm} exact={true}/>
                 <Route path="/login" component={Login} exact={true}/>
                 <Route path="/admin" component={ProposalsAdminView} exact={true}/>
+                <Route path="/studentSetupPage" component={StudentSetupPage} exact={true}/>
+                <Route path="/teammateSelectionRules" component={TeammateSelectionRules} exact={true}/>
+                <Route path="/teamPreferences" component={TeamPreferences} exact={true}/>
             </Switch>
-
         </BrowserRouter>
     )
 }
