@@ -8,9 +8,9 @@ import ProposalsAdminView from "./Components/ProposalsAdminView";
 import ProposalsStudentView from "./Components/ProposalsStudentView";
 import TeamsGrid from "./Components/TeamsGrid";
 import {DndProvider} from "react-dnd";
-import Example from './Components/example';
+import Example from './Components/ProjectRanking';
 import Backend from 'react-dnd-html5-backend'
-import ProjectRank from "./Components/ProjectRank";
+import RankContainer from "./Components/RankContainer";
 
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
                     <Route path="/admin" component={ProposalsAdminView} exact={true}/>
                     <Route path="/studentProps" component={ProposalsStudentView} exact={true}/>
                     <Route path="/teams" component={TeamsGrid} exact={true}/>
-                    <Route path="/rank" component={ProjectRank} exact={true}/>
+                    <Route path="/rank" component={RankContainer} exact={true}/>
                 </Switch>
             </BrowserRouter>
         </div>

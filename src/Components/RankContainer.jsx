@@ -1,14 +1,14 @@
 import React from 'react';
 import Backend from "react-dnd-html5-backend";
-import Example from "./example";
+import ProjectRanking from "./ProjectRanking";
 import {DndProvider} from "react-dnd";
 
-function ProjectRank(props) {
+function RankContainer(props) {
     return (
         <DndProvider backend={Backend}>
-            <Example />
+            <ProjectRanking />
         </DndProvider>
     );
 }
 
-export default ProjectRank;
+export default RankContainer;

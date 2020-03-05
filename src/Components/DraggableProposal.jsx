@@ -1,16 +1,13 @@
-import React, { useImperativeHandle, useRef } from 'react'
-import { DragSource, DropTarget } from 'react-dnd'
+import React, {useImperativeHandle, useRef} from 'react'
+import {DragSource, DropTarget} from 'react-dnd'
 import ItemTypes from './ItemTypes'
-const style = {
-    border: '1px dashed gray',
-    padding: '0.5rem 1rem',
-    marginBottom: '.5rem',
-    backgroundColor: 'white',
-    cursor: 'move',
-};
+import Proposal from "./Proposal";
+import Card from "@material-ui/core/Card";
+import {CardContent} from "@material-ui/core";
+
 
 const DraggableProposal = React.forwardRef(
-    ({ text, isDragging, connectDragSource, connectDropTarget }, ref) => {
+    ({title, firstName, lastName, url, description, hardwareReq, softwareReq, isDragging, connectDragSource, connectDropTarget}, ref) => {
         const elementRef = useRef(null);
         connectDragSource(elementRef);
         connectDropTarget(elementRef);
@@ -19,8 +16,18 @@ const DraggableProposal = React.forwardRef(
             getNode: () => elementRef.current,
         }));
         return (
-            <div ref={elementRef} style={{ ...style, opacity }}>
-                {text}
+            <div ref={elementRef} style={{opacity}}>
+                <Card>
+                    <CardContent>
+                        <Proposal title={title}
+                                  firstName={firstName}
+                                  lastName={lastName}
+                                  url={url}
+                                  description={description}
+                                  hardwareReq={hardwareReq}
+                                  softwareReq={hardwareReq}/>
+                    </CardContent>
+                </Card>
             </div>
         )
     },
