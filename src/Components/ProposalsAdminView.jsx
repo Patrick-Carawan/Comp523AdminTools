@@ -5,6 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import TopNav from "./TopNav";
+import Proposal from "./Proposal";
 
 const proposals = [{
     title: 'iPhone App',
@@ -36,30 +37,26 @@ function ProposalsAdminView(props) {
     return (
         <div>
             <TopNav/>
-            {proposals.map((prop, i) => <Card className="MiddleText" variant="outlined">
-            <CardContent>
-                <Grid container spacing={3}>
-                    <Grid item xs={8}>
+            {proposals.map((prop, i) =>
+                <Card className="MiddleText" variant="outlined">
+                    <CardContent>
+                        <Grid container spacing={3}>
+                            <Proposal title={prop.title}
+                                      firstName={prop.firstName}
+                                      lastName={prop.lastName}
+                                      url={prop.url}
+                                      description={prop.description}
+                                      hardwareReq={prop.hardwareReq}
+                                      softwareReq={prop.hardwareReq}
+                            />
+                            <Grid className="MiddleText" item={4}>
+                                <Button>Accept</Button>
+                                <Button>Reject</Button>
+                            </Grid>
+                        </Grid>
 
-                        <Typography variant="h2">{prop.title}</Typography>
-                        <Typography variant="h3">{`${prop.firstName}  ${prop.lastName}`}</Typography>
-                        <Typography variant="h5">{prop.description}</Typography>
-                        <Typography variant="h5">
-                            <a href={prop.url}>{prop.url}
-                            </a>
-                        </Typography>
-                        <Typography variant="h5">{prop.softwareReq}</Typography>
-                        <Typography variant="h5">{prop.hardwareReq}</Typography>
-
-                    </Grid>
-                    <Grid className="MiddleText" item={4}>
-                        <Button>Accept</Button>
-                        <Button>Reject</Button>
-                    </Grid>
-                </Grid>
-
-            </CardContent>
-        </Card>)}</div>
+                    </CardContent>
+                </Card>)}</div>
     );
 }
 
