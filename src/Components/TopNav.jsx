@@ -19,10 +19,8 @@ const useStyles = makeStyles(theme => ({
         flexGrow: 1,
     },
 }));
-
 function TopNav() {
     const classes = useStyles();
-
     return (
         <div className={classes.root}>
             <AppBar position="static">
@@ -36,5 +34,4 @@ function TopNav() {
         </div>
     );
 }
-
 export default TopNav;
