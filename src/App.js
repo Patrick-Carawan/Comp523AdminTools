@@ -7,6 +7,10 @@ import Login from "./Components/Login";
 import ProposalsAdminView from "./Components/ProposalsAdminView";
 import ProposalsStudentView from "./Components/ProposalsStudentView";
 import TeamsGrid from "./Components/TeamsGrid";
+import DashBoard from "./Components/DashBoard";
+import StudentSetupPage from "./Components/StudentSetupPage";
+import TeammateSelectionRules from "./Components/TeammateSelectionRules";
+import TeamPreferences from "./Components/TeamPreferences";
 
 function App() {
 
@@ -17,9 +21,25 @@ function App() {
                 <Route path="/" component={Home} exact={true}/>
                 <Route path="/clientForm" component={ClientForm} exact={true}/>
                 <Route path="/login" component={Login} exact={true}/>
+                <Route path="/dashboard" component={DashBoard} exact={true} />
                 <Route path="/admin" component={ProposalsAdminView} exact={true}/>
                 <Route path="/studentProps" component={ProposalsStudentView} exact={true}/>
                 <Route path="/teams" component={TeamsGrid} exact={true}/>
+                <Route
+                path="/studentSetupPage"
+                component={StudentSetupPage}
+                exact={true}
+            />
+                <Route
+                    path="/teammateSelectionRules"
+                    component={TeammateSelectionRules}
+                    exact={true}
+                />
+                <Route
+                    path="/teamPreferences"
+                    component={TeamPreferences}
+                    exact={true}
+                />
             </Switch>
 
         </BrowserRouter>
