@@ -43,24 +43,39 @@
   margin-top: 5%;
 }
 
-.flexbox{
+.flexdiv{
   display: flex;
-  justify-content: space-between;
+  flex-direction: row;
+  /*justify-content: space-between;*/
   width: 100%;
-  max-width: 768px;
-  height: 100vh;
-  overflow: hidden;
   margin: 0 auto;
   padding: 15px;
 }
 
-.flexbox .board{
+.name{
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+
+}
+
+.nameBank{
+  background-color: gold;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 15px;
+  margin-top: 15px;
+}
+
+.teamTile{
+  background-color: aqua;
   display: flex;
   flex-direction: column;
-  width: 100%;
   padding: 15px;
-  background-color: aqua;
+  margin-top: 15px;
 }
+
 
 .flexbox .board .card{
   padding: 15px 25px;
