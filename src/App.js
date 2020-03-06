@@ -11,10 +11,8 @@ import DashBoard from "./Components/DashBoard";
 import StudentSetupPage from "./Components/StudentSetupPage";
 import TeammateSelectionRules from "./Components/TeammateSelectionRules";
 import TeamPreferences from "./Components/TeamPreferences";
-import {DndProvider} from "react-dnd";
-import Example from './Components/ProjectRanking';
-import Backend from 'react-dnd-html5-backend'
 import RankContainer from "./Components/RankContainer";
+import TeamSelection from "./Components/TeamSelection";
 
 
 function App() {
@@ -31,6 +29,7 @@ function App() {
                 <Route path="/studentProps" component={ProposalsStudentView} exact={true}/>
                 <Route path="/teams" component={TeamsGrid} exact={true}/>
                 <Route path="/rank" component={RankContainer} exact={true}/>
+                <Route path="/teamSelection" component={TeamSelection} exact={true}/>
                 <Route
                 path="/studentSetupPage"
                 component={StudentSetupPage}
