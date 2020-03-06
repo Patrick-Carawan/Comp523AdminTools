@@ -43,20 +43,20 @@
   margin-top: 5%;
 }
 
-.flexdiv{
-  display: flex;
-  flex-direction: row;
-  /*justify-content: space-between;*/
-  width: 100%;
-  margin: 0 auto;
-  padding: 15px;
-}
 
 .name{
   margin-left: 5px;
   margin-right: 5px;
   margin-bottom: 5px;
+}
 
+.newNameArea{
+  width:95%;
+  background-color: rgba(245, 249, 95, 0.4);
+  border-radius: 2px;
+  box-shadow: #282c34;
+  text-align: center;
+  padding-bottom: 15px;
 }
 
 .nameBank{
@@ -70,15 +70,7 @@
 
 .teamTile{
   background-color: aqua;
-  display: flex;
-  flex-direction: column;
   padding: 15px;
-  margin-top: 15px;
+    min-height: 30px;
 }
 
-
-.flexbox .board .card{
-  padding: 15px 25px;
-  cursor: pointer;
-  margin-bottom: 15px;
-}
