@@ -4,9 +4,7 @@ function Name(props) {
     const dragStart = e => {
         const target = e.target;
         e.dataTransfer.setData('name_id', target.id);
-        console.log(target.id)
-        // setTimeout(() => {
-        //     target.style.display = "none";
+        // setTimeout(() => { target.style.display = "none";
         // }, 0);
     };
 

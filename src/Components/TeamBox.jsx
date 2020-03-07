@@ -4,11 +4,10 @@ function TeamBox(props) {
     const drop = e => {
         e.preventDefault();
         const name_id = e.dataTransfer.getData('name_id');
-
-        console.log(e.target.id);
         const name = document.getElementById(name_id);
         name.style.display = 'block';
         e.target.appendChild(name);
+        props.setTeam(name_id, props.id);
     };
 
     const dragOver = e => {
