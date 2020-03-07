@@ -5,6 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import {Card, CardContent, Container} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import Box from "@material-ui/core/Box";
 
 //This will need to come from the backend. Teacher should be able to set this parameter.
 const numTeams = 8;
@@ -63,6 +64,11 @@ function TeamSelection(props) {
             </TeamBox>
 
             <Container className="disable-select">
+                <Box textAlign="center">
+                    <Typography>
+                        Drag your name to the top of the box for the team you want to join.
+                    </Typography>
+                </Box>
                 <Grid container spacing={3}>
                     {letters.map((letter, index) =>
                         index < numTeams ?
