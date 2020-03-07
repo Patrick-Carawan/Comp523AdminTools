@@ -7,7 +7,8 @@ function TeamBox(props) {
         const name = document.getElementById(name_id);
         name.style.display = 'block';
         e.target.appendChild(name);
-        props.setTeam(name_id, props.id);
+        const boxID = parseInt(props.id.match(/[0-9]+/)[0]);
+        props.setTeam(name_id, boxID);
     };
 
     const dragOver = e => {

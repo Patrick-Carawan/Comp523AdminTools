@@ -22,7 +22,7 @@ const studentNames = [
 
 let nameTeamMap = new Map();
 console.log('setting blank student map');
-studentNames.forEach((name, index) => nameTeamMap.set(index,-1));
+studentNames.forEach((name, index) => nameTeamMap.set(index, -1));
 let studentArray = []
 studentNames.forEach(name => studentArray.push({
     name: name,
@@ -31,13 +31,13 @@ studentNames.forEach(name => studentArray.push({
 
 const letters = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'];
 
-const setTeam = function(studentIndex, teamIndex){
+const setTeam = function (studentIndex, teamIndex) {
     // nameTeamMap.set(studentIndex, teamIndex);
     // console.log(nameTeamMap.get(studentIndex));
     studentArray[studentIndex]['group'] = letters[teamIndex];
 };
 
-const submitTeams = function(){
+const submitTeams = function () {
 
     let groups = studentArray.reduce((r, a) => {
         r[a.group] = [...r[a.group] || [], a];
@@ -62,22 +62,23 @@ function TeamSelection(props) {
                 )}
             </TeamBox>
 
-            <Container>
+            <Container className="disable-select">
                 <Grid container spacing={3}>
                     {letters.map((letter, index) =>
                         index < numTeams ?
-                            <Grid item key={0-index} xs={3} ml={5}>
-                                <TeamBox id={index} setTeam={setTeam}>
-                                    <Card className="teamTile">
+                            <Grid item key={0 - index-1} xs={3} ml={5}>
+                                <Card className="teamTile">
+                                    <TeamBox id={`${index}box`} setTeam={setTeam}>
                                         <Typography variant="h6">Team {letter}</Typography>
-                                    </Card>
-                                </TeamBox>
+                                    </TeamBox>
+                                </Card>
                             </Grid>
                             : null
                     )}
                 </Grid>
             </Container>
-            <Button variant="contained" color="primary" onClick={submitTeams} style={{'marginLeft': '30px', 'marginTop':'30px'}}>
+            <Button variant="contained" color="primary" onClick={submitTeams}
+                    style={{'marginLeft': '30px', 'marginTop': '30px'}}>
                 Submit Teams
             </Button>
         </div>
