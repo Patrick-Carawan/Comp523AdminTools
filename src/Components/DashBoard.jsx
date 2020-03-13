@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -15,6 +15,8 @@ import MailIcon from '@material-ui/icons/Mail';
 import Team from '@material-ui/icons/Group';
 import Calendar from '@material-ui/icons/DateRange';
 import Deliverable from '@material-ui/icons/ListAlt';
+import TeamSelection from "./TeamSelection";
+import ProposalsAdminView from "./ProposalsAdminView";
 
 const drawerWidth = 240;
 
@@ -41,8 +43,27 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+const pages = {
+    EMAIL: 'email',
+    PROPOSALS: 'proposals',
+    TEAMS: 'teams',
+    MEETINGS: 'meetings',
+    DELIVERABLES: 'deliverables'
+};
+
 export default function Dashboard() {
     const classes = useStyles();
+    const [page, setPage] = useState();
+
+
+    function renderPage() {
+        switch (page) {
+            case pages.TEAMS:
+                return <TeamSelection/>;
+            case pages.PROPOSALS:
+                return <ProposalsAdminView/>;
+        }
+    }
 
     return (
         <div className={classes.root}>
@@ -65,16 +86,17 @@ export default function Dashboard() {
                 <div className={classes.toolbar}/>
                 <Divider/>
                 <List>
-                    <ListItem button key={1}>
+                    <ListItem button key={1} onClick={() => setPage(pages.EMAIL)}>
                         <ListItemIcon><MailIcon/></ListItemIcon>
                         <ListItemText primary="Email Clients"/>
                     </ListItem>
-                    <ListItem button key={2}>
+                    <ListItem button key={2} onClick={() => setPage(pages.PROPOSALS)}>
                         <ListItemIcon><Proposals/></ListItemIcon>
                         <ListItemText primary="View Proposals"/>
                     </ListItem>
                     <Divider/>
-                    <ListItem button key={3} title="Change which students are in which teams">
+                    <ListItem button key={3} title="Change which students are in which teams"
+                              onClick={() => setPage(pages.TEAMS)}>
                         <ListItemIcon><Team/></ListItemIcon>
                         <ListItemText primary="Manage Teams"/>
                     </ListItem>
@@ -91,30 +113,10 @@ export default function Dashboard() {
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
-                <Typography paragraph>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                    ut labore et dolore magna aliqua. Rhoncus dolor purus non enim praesent elementum
-                    facilisis leo vel. Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
-                    gravida rutrum quisque non tellus. Convallis convallis tellus id interdum velit laoreet id
-                    donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-                    adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras.
-                    Metus vulputate eu scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis
-                    imperdiet massa tincidunt. Cras tincidunt lobortis feugiat vivamus at augue. At augue eget
-                    arcu dictum varius duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt. Lorem
-                    donec massa sapien faucibus et molestie ac.
-                </Typography>
-                <Typography paragraph>
-                    Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-                    facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-                    tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-                    consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
-                    vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In
-                    hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et
-                    tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
-                    nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
-                    accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
-                </Typography>
+                {renderPage()}
             </main>
+            }
+            }
         </div>
     );
 }
