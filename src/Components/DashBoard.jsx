@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
+import {createMuiTheme, makeStyles} from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -18,6 +18,8 @@ import Deliverable from '@material-ui/icons/ListAlt';
 import TeamSelection from "./TeamSelection";
 import ProposalsAdminView from "./ProposalsAdminView";
 import ComposeEmail from "./ComposeEmail";
+import Box from "@material-ui/core/Box";
+
 
 const drawerWidth = 240;
 
@@ -65,16 +67,20 @@ export default function Dashboard() {
                 return <ProposalsAdminView/>;
             case pages.EMAIL:
                 return <ComposeEmail/>;
+            case undefined:
+                return <Box textAlign="center">
+                    <Typography variant="h6"> Welcome to your COMP 523 Administrator Dashboard</Typography>
+                </Box>
         }
     }
 
     return (
         <div className={classes.root}>
             <CssBaseline/>
-            <AppBar position="fixed" className={classes.appBar}>
+        <AppBar style={{'color':'white'}} position="fixed" className={classes.appBar}>
                 <Toolbar>
                     <Typography variant="h6" noWrap>
-                        Permanent drawer
+                        COMP 523 Admin Tools
                     </Typography>
                 </Toolbar>
             </AppBar>

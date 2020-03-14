@@ -7,6 +7,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import {InputLabel} from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
+import Box from "@material-ui/core/Box";
 
 
 const clientGroups = {
@@ -117,15 +118,15 @@ function ComposeEmail(props) {
                     justify="flex-start"
                     alignItems="center"
                 >
-                    <a style={{
-                        'padding': '10px',
-                        'color': 'white',
-                        'borderRadius': '5px',
-                        'backgroundColor': '#3f51b5'
-                    }}
-                       href={`mailto:${dummyClientString}?body=${body}&subject=${subject}`}>
-                        Email Clients
-                    </a>
+                        <a style={{
+                            'padding': '10px',
+                            'color': 'white',
+                            'borderRadius': '5px',
+                            'backgroundColor': '#003b9e'
+                        }}
+                           href={`mailto:${dummyClientString}?body=${body}&subject=${subject}`}>
+                            Email Clients
+                        </a>
                 </Grid>
             </form>
         </Container>

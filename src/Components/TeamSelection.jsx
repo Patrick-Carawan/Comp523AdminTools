@@ -80,7 +80,7 @@ function TeamSelection(props) {
                     )}
                 </Grid>
             </Container>
-            <Button variant="contained" color="primary" onClick={submitTeams}
+            <Button variant="contained" color="secondary" onClick={submitTeams}
                     style={{'marginLeft': '30px', 'marginTop': '30px'}}>
                 Submit Teams
             </Button>

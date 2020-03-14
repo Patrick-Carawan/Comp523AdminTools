@@ -36,7 +36,6 @@ const proposals = [{
 function ProposalsAdminView(props) {
     return (
         <div>
-            <TopNav/>
             {proposals.map((prop, i) =>
                 <Card className="MiddleText" variant="outlined" key={i}>
                     <CardContent>
