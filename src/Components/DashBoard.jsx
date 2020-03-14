@@ -17,6 +17,7 @@ import Calendar from '@material-ui/icons/DateRange';
 import Deliverable from '@material-ui/icons/ListAlt';
 import TeamSelection from "./TeamSelection";
 import ProposalsAdminView from "./ProposalsAdminView";
+import ComposeEmail from "./ComposeEmail";
 
 const drawerWidth = 240;
 
@@ -62,6 +63,8 @@ export default function Dashboard() {
                 return <TeamSelection/>;
             case pages.PROPOSALS:
                 return <ProposalsAdminView/>;
+            case pages.EMAIL:
+                return <ComposeEmail/>;
         }
     }
 
