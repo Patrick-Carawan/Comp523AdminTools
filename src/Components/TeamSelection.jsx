@@ -24,22 +24,20 @@ const studentNames = [
 let nameTeamMap = new Map();
 console.log('setting blank student map');
 studentNames.forEach((name, index) => nameTeamMap.set(index, -1));
-let studentArray = []
+let studentArray = [];
 studentNames.forEach(name => studentArray.push({
     name: name,
     group: 'NONE'
 }));
 
 const letters = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'];
+letters.unshift('NONE');
 
 const setTeam = function (studentIndex, teamIndex) {
-    // nameTeamMap.set(studentIndex, teamIndex);
-    // console.log(nameTeamMap.get(studentIndex));
     studentArray[studentIndex]['group'] = letters[teamIndex];
 };
 
 const submitTeams = function () {
-
     let groups = studentArray.reduce((r, a) => {
         r[a.group] = [...r[a.group] || [], a];
         return r;
@@ -51,7 +49,7 @@ const submitTeams = function () {
 function TeamSelection(props) {
     return (
         <div>
-            <TeamBox id="box-1" className="nameBank">
+            <TeamBox id="0box" className="nameBank" setTeam={setTeam}>
                 {studentNames.map((studentName, index) =>
                     <Name key={index} id={index} className="name" draggable="true">
                         <Card variant="outlined">
@@ -71,7 +69,7 @@ function TeamSelection(props) {
                 </Box>
                 <Grid container spacing={3}>
                     {letters.map((letter, index) =>
-                        index < numTeams ?
+                        index < numTeams && index !== 0 ?
                             <Grid item key={0 - index-1} xs={3} ml={5}>
                                 <Card className="teamTile">
                                     <TeamBox id={`${index}box`} setTeam={setTeam}>
