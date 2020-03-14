@@ -25,8 +25,6 @@ let dummyClientString = (() => {
     });
     return concat;
 })();
-// dummyClientString = dummyClientString();
-console.log(dummyClientString);
 
 function ComposeEmail(props) {
 
