@@ -18,14 +18,15 @@ const clientGroups = {
 
 
 const dummyClientEmails = ['dan97w@ad.unc.edu', 'daniel.weber.443@gmail.com'];
-let dummyClientString = () => {
+let dummyClientString = (() => {
     let concat = '';
     dummyClientEmails.forEach((email, index) => {
         concat += index < dummyClientEmails.length - 1 ? `${email},` : email;
     });
     return concat;
-};
-dummyClientString = dummyClientString();
+})();
+// dummyClientString = dummyClientString();
+console.log(dummyClientString);
 
 function ComposeEmail(props) {
 
