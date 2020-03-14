@@ -13,12 +13,20 @@ import TeammateSelectionRules from "./Components/TeammateSelectionRules";
 import TeamPreferences from "./Components/TeamPreferences";
 import RankContainer from "./Components/RankContainer";
 import TeamSelection from "./Components/TeamSelection";
+import {createMuiTheme} from "@material-ui/core/styles";
+import {MuiThemeProvider} from "@material-ui/core";
 
-
+const theme = createMuiTheme({
+    palette:{
+        primary: {main: '#53c5e8'},
+        secondary:{main: '#0a0960'}
+    }
+});
 function App() {
 
 
     return (
+        <MuiThemeProvider theme={theme}>
         <BrowserRouter>
             <Switch>
                 <Route path="/" component={Home} exact={true}/>
@@ -48,6 +56,7 @@ function App() {
             </Switch>
 
         </BrowserRouter>
+        </MuiThemeProvider>
     )
 }
 
