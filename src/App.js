@@ -15,11 +15,13 @@ import RankContainer from "./Components/RankContainer";
 import TeamSelection from "./Components/TeamSelection";
 import {createMuiTheme} from "@material-ui/core/styles";
 import {MuiThemeProvider} from "@material-ui/core";
+import AcceptedClientForm from "./Components/AcceptedClientForm";
 
 const theme = createMuiTheme({
     palette:{
         primary: {main: '#53c5e8'},
-        secondary:{main: '#0a0960'}
+        secondary:{main: '#0a0960'},
+        danger: {main: 'rgba(255,24,34,0.96)'}
     }
 });
 function App() {
@@ -38,6 +40,7 @@ function App() {
                 <Route path="/teams" component={TeamsGrid} exact={true}/>
                 <Route path="/rank" component={RankContainer} exact={true}/>
                 <Route path="/teamSelection" component={TeamSelection} exact={true}/>
+                <Route path="/acceptedClientForm" component={AcceptedClientForm} exact={true}/>
                 <Route
                 path="/studentSetupPage"
                 component={StudentSetupPage}
