@@ -38,7 +38,7 @@ function ProposalsAdminView(props) {
         <div>
             <TopNav/>
             {proposals.map((prop, i) =>
-                <Card className="MiddleText" variant="outlined">
+                <Card className="MiddleText" variant="outlined" key={i}>
                     <CardContent>
                         <Grid container spacing={3}>
                             <Proposal title={prop.title}
@@ -49,7 +49,7 @@ function ProposalsAdminView(props) {
                                       hardwareReq={prop.hardwareReq}
                                       softwareReq={prop.hardwareReq}
                             />
-                            <Grid className="MiddleText" item={4}>
+                            <Grid className="MiddleText" item>
                                 <Button>Accept</Button>
                                 <Button>Reject</Button>
                             </Grid>
