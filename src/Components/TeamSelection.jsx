@@ -22,7 +22,6 @@ const studentNames = [
 ];
 
 let nameTeamMap = new Map();
-console.log('setting blank student map');
 studentNames.forEach((name, index) => nameTeamMap.set(index, -1));
 let studentArray = [];
 studentNames.forEach(name => studentArray.push({
