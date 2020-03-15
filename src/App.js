@@ -16,6 +16,7 @@ import TeamSelection from "./Components/TeamSelection";
 import {createMuiTheme} from "@material-ui/core/styles";
 import {MuiThemeProvider} from "@material-ui/core";
 import AcceptedClientForm from "./Components/AcceptedClientForm";
+import ComposeEmail from "./Components/ComposeEmail";
 
 const theme = createMuiTheme({
     palette:{
@@ -35,10 +36,11 @@ function App() {
                 <Route path="/clientForm" component={ClientForm} exact={true}/>
                 <Route path="/login" component={Login} exact={true}/>
                 <Route path="/dashboard" component={DashBoard} exact={true} />
-                <Route path="/admin" component={ProposalsAdminView} exact={true}/>
+                <Route path="/proposalsAdmin" component={ProposalsAdminView} exact={true}/>
                 <Route path="/studentProps" component={ProposalsStudentView} exact={true}/>
                 <Route path="/teams" component={TeamsGrid} exact={true}/>
                 <Route path="/rank" component={RankContainer} exact={true}/>
+                <Route path="/composeEmail" component={ComposeEmail} exact={true}/>
                 <Route path="/teamSelection" component={TeamSelection} exact={true}/>
                 <Route path="/acceptedClientForm" component={AcceptedClientForm} exact={true}/>
                 <Route

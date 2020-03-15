@@ -6,9 +6,24 @@ import {Card, CardContent, Container} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
+import {makeStyles} from "@material-ui/core/styles";
+import DashBoard from "./DashBoard";
 
 //This will need to come from the backend. Teacher should be able to set this parameter.
 const numTeams = 8;
+
+
+const useStyles = makeStyles(theme => ({
+    root: {
+        display: 'flex',
+    },
+    toolbar: theme.mixins.toolbar,
+    content: {
+        flexGrow: 1,
+        backgroundColor: theme.palette.background.default,
+        padding: theme.spacing(3),
+    },
+}));
 
 const studentNames = [
     "Daniel Austin Weber Longname", "Abraham", "Patrick", "Zion", "Bill",
@@ -46,44 +61,49 @@ const submitTeams = function () {
 };
 
 function TeamSelection(props) {
+    const classes = useStyles();
     return (
-        <div>
-            <TeamBox id="0box" className="nameBank" setTeam={setTeam}>
-                {studentNames.map((studentName, index) =>
-                    <Name key={index} id={index} className="name" draggable="true">
-                        <Card variant="outlined">
-                            <CardContent>
-                                {studentName}
-                            </CardContent>
-                        </Card>
-                    </Name>
-                )}
-            </TeamBox>
-
-            <Container className="disable-select">
-                <Box textAlign="center">
-                    <Typography>
-                        Drag your name to the top of the box for the team you want to join.
-                    </Typography>
-                </Box>
-                <Grid container spacing={3}>
-                    {letters.map((letter, index) =>
-                        index < numTeams && index !== 0 ?
-                            <Grid item key={0 - index-1} xs={3} ml={5}>
-                                <Card className="teamTile">
-                                    <TeamBox id={`${index}box`} setTeam={setTeam}>
-                                        <Typography variant="h6">Team {letter}</Typography>
-                                    </TeamBox>
-                                </Card>
-                            </Grid>
-                            : null
+        <div className={classes.root}>
+            <DashBoard/>
+            <main className={classes.content}>
+                <div className={classes.toolbar}/>
+                <TeamBox id="0box" className="nameBank" setTeam={setTeam}>
+                    {studentNames.map((studentName, index) =>
+                        <Name key={index} id={index} className="name" draggable="true">
+                            <Card variant="outlined">
+                                <CardContent>
+                                    {studentName}
+                                </CardContent>
+                            </Card>
+                        </Name>
                     )}
-                </Grid>
-            </Container>
-            <Button variant="contained" color="secondary" onClick={submitTeams}
-                    style={{'marginLeft': '30px', 'marginTop': '30px'}}>
-                Submit Teams
-            </Button>
+                </TeamBox>
+
+                <Container className="disable-select">
+                    <Box textAlign="center">
+                        <Typography>
+                            Drag your name to the top of the box for the team you want to join.
+                        </Typography>
+                    </Box>
+                    <Grid container spacing={3}>
+                        {letters.map((letter, index) =>
+                            index < numTeams && index !== 0 ?
+                                <Grid item key={0 - index - 1} xs={3} ml={5}>
+                                    <Card className="teamTile">
+                                        <TeamBox id={`${index}box`} setTeam={setTeam}>
+                                            <Typography variant="h6">Team {letter}</Typography>
+                                        </TeamBox>
+                                    </Card>
+                                </Grid>
+                                : null
+                        )}
+                    </Grid>
+                </Container>
+                <Button variant="contained" color="secondary" onClick={submitTeams}
+                        style={{'marginLeft': '30px', 'marginTop': '30px'}}>
+                    Submit Teams
+                </Button>
+            </main>
         </div>
     );
 }

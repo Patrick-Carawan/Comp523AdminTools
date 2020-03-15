@@ -19,14 +19,12 @@ import TeamSelection from "./TeamSelection";
 import ProposalsAdminView from "./ProposalsAdminView";
 import ComposeEmail from "./ComposeEmail";
 import Box from "@material-ui/core/Box";
+import {Link} from "react-router-dom";
 
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
-    root: {
-        display: 'flex',
-    },
     appBar: {
         width: `calc(100% - ${drawerWidth}px)`,
         marginLeft: drawerWidth,
@@ -39,11 +37,16 @@ const useStyles = makeStyles(theme => ({
         width: drawerWidth,
     },
     toolbar: theme.mixins.toolbar,
-    content: {
-        flexGrow: 1,
-        backgroundColor: theme.palette.background.default,
-        padding: theme.spacing(3),
+    listItem: {
+        padding: '0px'
     },
+    link: {
+        display: 'flex',
+        flexDirection: 'row',
+        width: '100%',
+        margin: 0,
+        padding: '10px'
+    }
 }));
 
 const pages = {
@@ -56,28 +59,11 @@ const pages = {
 
 export default function Dashboard() {
     const classes = useStyles();
-    const [page, setPage] = useState();
-
-
-    function renderPage() {
-        switch (page) {
-            case pages.TEAMS:
-                return <TeamSelection/>;
-            case pages.PROPOSALS:
-                return <ProposalsAdminView/>;
-            case pages.EMAIL:
-                return <ComposeEmail/>;
-            case undefined:
-                return <Box textAlign="center">
-                    <Typography variant="h6"> Welcome to your COMP 523 Administrator Dashboard</Typography>
-                </Box>
-        }
-    }
 
     return (
-        <div className={classes.root}>
-            <CssBaseline/>
-        <AppBar style={{'color':'white'}} position="fixed" className={classes.appBar}>
+        <div>
+
+            <AppBar style={{'color': 'white'}} position="fixed" className={classes.appBar}>
                 <Toolbar>
                     <Typography variant="h6" noWrap>
                         COMP 523 Admin Tools
@@ -95,37 +81,43 @@ export default function Dashboard() {
                 <div className={classes.toolbar}/>
                 <Divider/>
                 <List>
-                    <ListItem button key={1} onClick={() => setPage(pages.EMAIL)}>
-                        <ListItemIcon><MailIcon/></ListItemIcon>
-                        <ListItemText primary="Email Clients"/>
+                    <ListItem button key={1} className={classes.listItem}>
+                        <Link to="/composeEmail" className={classes.link}>
+                            <ListItemIcon><MailIcon/></ListItemIcon>
+                            <Typography>Email Clients</Typography>
+                        </Link>
                     </ListItem>
-                    <ListItem button key={2} onClick={() => setPage(pages.PROPOSALS)}>
-                        <ListItemIcon><Proposals/></ListItemIcon>
-                        <ListItemText primary="View Proposals"/>
+                    <ListItem button key={2} className={classes.listItem}>
+                        <Link to="/proposalsAdmin" className={classes.link}>
+                            <ListItemIcon><Proposals/></ListItemIcon>
+                            <Typography>View Proposals</Typography>
+                        </Link>
                     </ListItem>
                     <Divider/>
                     <ListItem button key={3} title="Change which students are in which teams"
-                              onClick={() => setPage(pages.TEAMS)}>
-                        <ListItemIcon><Team/></ListItemIcon>
-                        <ListItemText primary="Manage Teams"/>
+                              className={classes.listItem}>
+                        <Link to="/teamSelection" className={classes.link}>
+                            <ListItemIcon><Team/></ListItemIcon>
+                            <Typography>Manage Teams</Typography>
+                        </Link>
                     </ListItem>
-                    <ListItem button key={4} title="Keep track of teams' progress in coach meetings">
-                        <ListItemIcon><Calendar/></ListItemIcon>
-                        <ListItemText primary="Track Coach Meetings"/>
+                    <ListItem button key={4} className={classes.listItem}
+                              title="Keep track of teams' progress in coach meetings">
+                        <Link to="/nowhere" className={classes.link}>
+                            <ListItemIcon><Calendar/></ListItemIcon>
+                            <Typography>Track Coach Meetings</Typography>
+                        </Link>
                     </ListItem>
-                    <ListItem button key={5} title="Give feedback on team deliverables">
-                        <ListItemIcon><Deliverable/></ListItemIcon>
-                        <ListItemText primary="Rate Deliverables"/>
+                    <ListItem button key={5} className={classes.listItem} title="Give feedback on team deliverables">
+                        <Link to="/nowhere" className={classes.link}>
+                            <ListItemIcon><Deliverable/></ListItemIcon>
+                            <Typography>Rate Deliverables</Typography>
+                        </Link>
                     </ListItem>
                 </List>
                 <Divider/>
             </Drawer>
-            <main className={classes.content}>
-                <div className={classes.toolbar}/>
-                {renderPage()}
-            </main>
-            }
-            }
         </div>
+
     );
 }
