@@ -42,3 +42,40 @@
   margin-right: 20%;
   margin-top: 5%;
 }
+
+
+.name{
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.newNameArea{
+  width:95%;
+  background-color: rgba(245, 249, 95, 0.4);
+  border-radius: 2px;
+  box-shadow: #282c34;
+  text-align: center;
+  padding-bottom: 15px;
+}
+
+.nameBank{
+  background-color: gold;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  padding: 15px;
+  margin-top: 15px;
+}
+
+.teamTile{
+  background-color: aqua;
+  padding: 15px;
+    min-height: 30px;
+}
+
+.disable-select{
+  user-select:none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+}
