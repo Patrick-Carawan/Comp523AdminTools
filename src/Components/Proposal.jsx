@@ -1,21 +1,32 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
 
 function Proposal(props) {
+    const [collapsed, setCollapsed] = useState(true);
+    let index = props.index ? props.index + 1 + '.' : '';
     return (
-        <Grid item xs={8}>
-            <Typography variant="h2">{props.title}</Typography>
-            <Typography variant="h3">{`${props.firstName}  ${props.lastName}`}</Typography>
-            <Typography variant="h5">{props.description}</Typography>
-            <Typography variant="h5">
-                <a href={props.url}>{props.url}
-                </a>
-            </Typography>
-            <Typography variant="h5">{props.softwareReq}</Typography>
-            <Typography variant="h5">{props.hardwareReq}</Typography>
-
-        </Grid>
+        <>
+            <Grid container direction="row" justify="space-between">
+                <Typography variant="h5">{index} {props.title}</Typography>
+                <Button onClick={() => setCollapsed(!collapsed)}>{collapsed ? 'Expand' : 'Collapse'}</Button>
+            </Grid>
+            <Typography variant="h6">{`${props.firstName}  ${props.lastName}`}</Typography>
+            {
+                !collapsed ? <>
+                    <Typography>
+                        <a href={props.url}>{props.url}
+                        </a>
+                    </Typography>
+                    <Typography>{props.description}</Typography>
+                    <br/>
+                    <Typography>{props.softwareReq}</Typography>
+                    <br/>
+                    <Typography>{props.hardwareReq}</Typography>
+                </> : null
+            }
+        </>
     );
 }
 
