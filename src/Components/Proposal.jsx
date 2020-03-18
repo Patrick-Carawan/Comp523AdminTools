@@ -5,7 +5,7 @@ import Button from "@material-ui/core/Button";
 
 function Proposal(props) {
     const [collapsed, setCollapsed] = useState(true);
-    let index = props.index ? props.index + 1 + '.' : '';
+    let index = props.index || props.index === 0 ? props.index + 1 + '.' : '';
     return (
         <>
             <Grid container direction="row" justify="space-between">
