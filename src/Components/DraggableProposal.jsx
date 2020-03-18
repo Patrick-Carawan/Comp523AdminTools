@@ -4,10 +4,20 @@ import ItemTypes from './ItemTypes'
 import Proposal from "./Proposal";
 import Card from "@material-ui/core/Card";
 import {CardContent} from "@material-ui/core";
+import {makeStyles} from "@material-ui/core/styles";
 
+
+const useStyles = makeStyles(theme => ({
+   card :{
+       marginLeft: '3em',
+       marginRight: '3em',
+       marginTop: '1em',
+       marginBottom: '1em'
+   }
+}));
 
 const DraggableProposal = React.forwardRef(
-    ({title, firstName, lastName, url, description, hardwareReq, softwareReq, isDragging, connectDragSource, connectDropTarget}, ref) => {
+    ({title, index, firstName, lastName, url, description, hardwareReq, softwareReq, isDragging, connectDragSource, connectDropTarget}, ref) => {
         const elementRef = useRef(null);
         connectDragSource(elementRef);
         connectDropTarget(elementRef);
@@ -15,9 +25,10 @@ const DraggableProposal = React.forwardRef(
         useImperativeHandle(ref, () => ({
             getNode: () => elementRef.current,
         }));
+        const classes = useStyles();
         return (
             <div ref={elementRef} style={{opacity}}>
-                <Card>
+                <Card className={classes.card} variant="outlined">
                     <CardContent>
                         <Proposal title={title}
                                   firstName={firstName}
@@ -25,7 +36,9 @@ const DraggableProposal = React.forwardRef(
                                   url={url}
                                   description={description}
                                   hardwareReq={hardwareReq}
-                                  softwareReq={hardwareReq}/>
+                                  softwareReq={hardwareReq}
+                                  index={index}
+                        />
                     </CardContent>
                 </Card>
             </div>

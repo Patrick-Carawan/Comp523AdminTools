@@ -5,17 +5,7 @@ import Button from "@material-ui/core/Button";
 import {Link} from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
-import {makeStyles} from "@material-ui/core/styles";
 import ClearIcon from "@material-ui/icons/HighlightOff";
-
-const useStyles = makeStyles(theme => ({
-    root: {
-        flexGrow: 1
-    },
-    control: {
-        padding: theme.spacing(2)
-    }
-}));
 
 const clientAppState = {
     WELCOME: "welcome",

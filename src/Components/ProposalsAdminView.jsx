@@ -8,6 +8,7 @@ import TopNav from "./TopNav";
 import Proposal from "./Proposal";
 import {makeStyles} from "@material-ui/core/styles";
 import DashBoard from "./DashBoard";
+import Box from "@material-ui/core/Box";
 
 const proposals = [{
     title: 'iPhone App',
@@ -57,19 +58,23 @@ function ProposalsAdminView(props) {
                 {proposals.map((prop, i) =>
                     <Card className="MiddleText" variant="outlined" key={i}>
                         <CardContent>
-                            <Grid container spacing={3}>
-                                <Proposal title={prop.title}
-                                          firstName={prop.firstName}
-                                          lastName={prop.lastName}
-                                          url={prop.url}
-                                          description={prop.description}
-                                          hardwareReq={prop.hardwareReq}
-                                          softwareReq={prop.hardwareReq}
-                                />
-                                <Grid className="MiddleText" item>
-                                    <Button>Accept</Button>
-                                    <Button>Reject</Button>
+                            <Grid container direction="column" justify="space-between">
+                                <Grid item>
+                                    <Proposal title={prop.title}
+                                              firstName={prop.firstName}
+                                              lastName={prop.lastName}
+                                              url={prop.url}
+                                              description={prop.description}
+                                              hardwareReq={prop.hardwareReq}
+                                              softwareReq={prop.hardwareReq}
+                                    />
                                 </Grid>
+                                <Box mx="auto">
+                                    <Grid item>
+                                        <Button>Accept</Button>
+                                        <Button>Reject</Button>
+                                    </Grid>
+                                </Box>
                             </Grid>
                         </CardContent>
                     </Card>)}  </main>

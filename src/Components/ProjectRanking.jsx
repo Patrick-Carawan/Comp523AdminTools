@@ -1,14 +1,16 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 import DraggableProposal from './DraggableProposal'
 import update from 'immutability-helper'
-const style = {
-};
+import Grid from "@material-ui/core/Grid";
+import lorem from "../lorem";
+
+const style = {};
 
 const staticProposals = [{
     title: 'iPhone App',
     firstName: 'Jane',
     lastName: 'Doe',
-    description: 'This is the description of the first project. Hopefully some students would like to work on this project because it is really cool',
+    description: `This is the description of the first project. Hopefully some students would like to work on this project because it is really cool ${lorem}`,
     url: 'www.project1url.com',
     hardwareReq: 'These are the hardware restrictions for the first project. You have to use Apple, sheeple.',
     softwareReq: 'You can only code in fortran because I am a progressive professor.'
@@ -16,7 +18,7 @@ const staticProposals = [{
     title: 'Website',
     firstName: 'John',
     lastName: 'Smith',
-    description: 'This is the description of the second project. Hopefully some students would like to work on this project because it is really cool',
+    description: `This is the description of the second project. Hopefully some students would like to work on this project because it is really cool. ${lorem}`,
     url: 'www.project2url.com',
     hardwareReq: 'These are the hardware restrictions for the second project. You have to use Windows, #PCMasterRace.',
     softwareReq: 'You can use whatever language you want.'
@@ -24,7 +26,7 @@ const staticProposals = [{
     title: 'Android App',
     firstName: 'Sam',
     lastName: 'Sung',
-    description: 'This is the description of the third project. Hopefully some students would like to work on this project because it is really cool',
+    description: `This is the description of the third project. Hopefully some students would like to work on this project because it is really cool. ${lorem}`,
     url: 'www.project3url.com',
     hardwareReq: 'These are the hardware restrictions for the third project. Android dev, Oreo or newer.',
     softwareReq: 'Let\'s use Kotlin.'
@@ -46,19 +48,22 @@ const ProjectRanking = () => {
         return (
             <div style={style}>
                 {proposals.map((proposal, i) => (
-                    <DraggableProposal
-                        key={i}
-                        index={i}
-                        id={i}
-                        title={proposal.title}
-                        firstName={proposal.firstName}
-                        lastName={proposal.lastName}
-                        url={proposal.url}
-                        description={proposal.description}
-                        hardwareReq={proposal.hardwareReq}
-                        softwareReq={proposal.hardwareReq}
-                        moveCard={moveCard}
-                    />
+                    <Grid container direction="column" justify="flex-start" alignItems="stretch">
+                        <Grid item key={i}>
+                            <DraggableProposal
+                                index={i}
+                                id={i}
+                                title={proposal.title}
+                                firstName={proposal.firstName}
+                                lastName={proposal.lastName}
+                                url={proposal.url}
+                                description={proposal.description}
+                                hardwareReq={proposal.hardwareReq}
+                                softwareReq={proposal.hardwareReq}
+                                moveCard={moveCard}
+                            />
+                        </Grid>
+                    </Grid>
                 ))}
             </div>
         )

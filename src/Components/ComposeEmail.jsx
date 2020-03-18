@@ -9,6 +9,7 @@ import FormControl from "@material-ui/core/FormControl";
 import {makeStyles} from "@material-ui/core/styles";
 import DashBoard from "./DashBoard";
 
+//hit backend to get/proposals/emails, filter by acceptance status on front end
 
 const clientGroups = {
     ACCEPTED: 'accepted',
