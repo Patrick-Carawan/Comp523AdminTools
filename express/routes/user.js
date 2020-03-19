@@ -15,7 +15,7 @@ router.route('/students/add').post((req, res) => {
     const phone = req.body.phone;
     const email = req.body.email;
     const semester = req.body.semester;
-    const teamId = req.body.team_id;
+    const teamId = req.body.teamId;
     const admin = false;
     
     const newStudent = new User({

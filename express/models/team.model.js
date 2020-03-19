@@ -3,8 +3,9 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const teamSchema = new Schema({
-    team_name: { type: String, required: true },
-    project_id: { type: String, required: true, default: "Pending"}
+    teamName: { type: String, required: true },
+    projectId: { type: String, required: true, default: "Pending"},
+    teamMembers: { type: Array, required: true }
 }, {
     timestamps: true
 });

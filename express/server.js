@@ -19,11 +19,11 @@ connection.once('open', () => {
 })
 
 const userRouter = require('./routes/user');
-//const teamRouter = require('./routes/team');
+const teamRouter = require('./routes/team');
 const proposalRouter = require('./routes/proposal');
 
 app.use('/users', userRouter);
-//app.use('/teams', teamRouter);
+app.use('/teams', teamRouter);
 app.use('/proposals', proposalRouter);
 
 app.listen(port, () => {
