@@ -44,8 +44,18 @@ const useStyles = makeStyles(theme => ({
     content: {
         flexGrow: 1,
         backgroundColor: theme.palette.background.default,
-        padding: theme.spacing(3),
+        padding: theme.spacing(1),
     },
+    proposal:{
+        marginTop:'5px'
+    },
+    acceptButton:{
+        margin: '0px 5px',
+        color:'white'
+    },
+    rejectButton:{
+        margin: '0px 5px'
+    }
 }));
 
 function ProposalsAdminView(props) {
@@ -56,7 +66,7 @@ function ProposalsAdminView(props) {
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
                 {proposals.map((prop, i) =>
-                    <Card className="MiddleText" variant="outlined" key={i}>
+                    <Card variant="outlined" key={i} className={classes.proposal}>
                         <CardContent>
                             <Grid container direction="column" justify="space-between">
                                 <Grid item>
@@ -66,13 +76,13 @@ function ProposalsAdminView(props) {
                                               url={prop.url}
                                               description={prop.description}
                                               hardwareReq={prop.hardwareReq}
-                                              softwareReq={prop.hardwareReq}
+                                              softwareReq={prop.softwareReq}
                                     />
                                 </Grid>
                                 <Box mx="auto">
                                     <Grid item>
-                                        <Button>Accept</Button>
-                                        <Button>Reject</Button>
+                                        <Button variant="contained" color="primary" className={classes.acceptButton}>Accept</Button>
+                                        <Button variant="contained" color="secondary" className={classes.rejectButton}>Reject</Button>
                                     </Grid>
                                 </Box>
                             </Grid>
