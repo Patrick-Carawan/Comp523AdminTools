@@ -20,9 +20,16 @@ const useStyles = makeStyles(theme => ({
     toolbar: theme.mixins.toolbar,
     content: {
         flexGrow: 1,
-        backgroundColor: theme.palette.background.default,
+        // backgroundColor: theme.palette.background.default,
         padding: theme.spacing(3),
     },
+    nameBank: {
+        backgroundColor: theme.palette.secondary.main,
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        padding: '15px',
+    }
 }));
 
 const studentNames = [
@@ -67,7 +74,7 @@ function TeamSelection(props) {
             <DashBoard/>
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
-                <TeamBox id="0box" className="nameBank" setTeam={setTeam}>
+                <TeamBox id="0box" className={classes.nameBank} setTeam={setTeam}>
                     {studentNames.map((studentName, index) =>
                         <Name key={index} id={index} className="name" draggable="true">
                             <Card variant="outlined">
@@ -89,7 +96,7 @@ function TeamSelection(props) {
                         {letters.map((letter, index) =>
                             index < numTeams && index !== 0 ?
                                 <Grid item key={0 - index - 1} xs={3} ml={5}>
-                                    <Card className="teamTile">
+                                    <Card variant="outlined" className="teamTile">
                                         <TeamBox id={`${index}box`} setTeam={setTeam}>
                                             <Typography variant="h6">Team {letter}</Typography>
                                         </TeamBox>

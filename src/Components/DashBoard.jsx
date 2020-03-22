@@ -82,6 +82,7 @@ export default function Dashboard() {
             >
                 <div className={classes.toolbar}/>
                 <Divider/>
+                    <Divider/>
                 <List>
                     <ListItem button key={1} className={classes.listItem}>
                         <Link to="/composeEmail" className={classes.link}>

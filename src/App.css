@@ -59,14 +59,7 @@
   padding-bottom: 15px;
 }
 
-.nameBank{
-  background-color: gold;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  padding: 15px;
-  margin-top: 15px;
-}
+
 
 .teamTile{
   background-color: aqua;
