@@ -48,8 +48,8 @@ const ProjectRanking = () => {
         return (
             <div style={style}>
                 {proposals.map((proposal, i) => (
-                    <Grid container direction="column" justify="flex-start" alignItems="stretch">
-                        <Grid item key={i}>
+                    <Grid container direction="column" justify="flex-start" alignItems="stretch" key={i}>
+                        <Grid item>
                             <DraggableProposal
                                 index={i}
                                 id={i}
