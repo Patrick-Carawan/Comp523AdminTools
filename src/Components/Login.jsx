@@ -7,6 +7,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import {Link} from "react-router-dom";
 
 
 const useStyles = makeStyles(theme => ({
@@ -26,11 +27,29 @@ const useStyles = makeStyles(theme => ({
     },
     submit: {
         margin: theme.spacing(3, 0, 2),
+        color: 'white'
     },
+    link:{
+        margin: 'auto',
+        color: 'primary',
+        textDecoration:'none'
+    }
 }));
 
-export default function Login() {
+export default function Login(props) {
     const classes = useStyles();
+    let student = true;
+
+    function submit(e) {
+        e.preventDefault();
+        console.log('submitted');
+        if(student){
+            props.getUserStatus('student');
+        } else{
+            props.getUserStatus('admin');
+        }
+    }
+
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
@@ -41,7 +60,7 @@ export default function Login() {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                <form className={classes.form} noValidate>
+                <form method="post" className={classes.form} noValidate onSubmit={submit}>
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -73,6 +92,7 @@ export default function Login() {
                         Sign In
                     </Button>
                 </form>
+            <Link to="/createAccount" className={classes.link}>Create Account</Link>
             </div>
         </Container>
     );
