@@ -30,7 +30,7 @@ function ClientForm(props) {
             return Form();
         case clientAppState.SUBMITTED:
             return ThankYouScreen();
-        case undefined:
+        default:
             return Welcome();
     }
 

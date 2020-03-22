@@ -96,6 +96,8 @@ function ComposeEmail(props) {
                 break;
             case clientGroups.REJECTED:
                 setLetter(rejectionLetter);
+                break;
+            default: setLetter('');
         }
         //Also update the string for the list of clients to send to here.
         // currently being sent to dummyClientString

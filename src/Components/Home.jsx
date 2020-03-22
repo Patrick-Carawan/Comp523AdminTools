@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import Login from "./Login";
-import DashBoard from "./DashBoard";
 import {Redirect} from "react-router-dom";
 import StudentPage from "./StudentPage";
 
