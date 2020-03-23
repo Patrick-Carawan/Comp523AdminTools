@@ -17,11 +17,14 @@ const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
     },
-    toolbar: theme.mixins.toolbar,
+    toolbar: {
+        ...theme.mixins.toolbar,
+        padding: 0
+    },
     content: {
         flexGrow: 1,
         // backgroundColor: theme.palette.background.default,
-        padding: theme.spacing(3),
+        // padding: theme.spacing(3),
     },
     nameBank: {
         backgroundColor: theme.palette.secondary.main,
@@ -29,6 +32,7 @@ const useStyles = makeStyles(theme => ({
         flexDirection: 'row',
         flexWrap: 'wrap',
         padding: '15px',
+        justifyContent: 'space-around'
     }
 }));
 
