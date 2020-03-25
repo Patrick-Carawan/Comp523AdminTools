@@ -12,16 +12,25 @@ router.route('/').get((req, res) => {
 router.route('/add').post((req, res) => {
     const _teamName = req.body.teamName;
     const _teamMembers = req.body.teamMembers;
+    const _semester = req.body.semester;
 
     newTeam = new Team({
         teamName:  _teamName,
-        teamMembers: _teamMembers
+        teamMembers: _teamMembers,
+        semester: _semester
     });
 
     newTeam.save()
         .then(() => res.json("Team added."))
         .catch(err => res.status(400).json('Error: ' + err));
 });
+
+// Delete a team
+router.route('/:id').delete((req, res) => {
+    Team.findByIdAndDelete(req.params.id)
+        .then(() => res.json("Team deleted."))
+        .catch(err => res.status(400).json('Error: ' + err));
+})
 
 // Get all teams for a given semester
 router.route('/:semester').get((req, res) => {
@@ -37,11 +46,14 @@ router.route('/:id').get((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
-// Add a student to a team
-router.route('/:id/:onyen').post((req, res) => {
+// Update a team entry, to add or remove a student from a team, change proposal ranking, etc.
+router.route('/update/:id').post((req, res) => {
     Team.findById(req.params.id)
         .then(team => {
-            team.teamMembers.push(req.params.onyen);
+            team.teamName = req.body.teamName;
+            team.projectId = req.body.projectId;
+            team.teamMembers = req.body.teamMembers;
+            team.proposalRanks = req.body.proposalRanks;
             team.save()
                 .then(() => res.json("Team updated with new user."))
                 .catch(err => res.status(400).json('Error: ' + err));

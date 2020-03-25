@@ -6,7 +6,7 @@ var Letter = require('../models/letter.model');
 router.route('/').get((req, res) => {
     Proposal.find()
         .then(proposals => res.json(proposals))
-        .catch(err => res.status(400).json('Error: ' + err))
+        .catch(err => res.status(400).json('Error: ' + err));
 });
 
 // Get all proposal emails
