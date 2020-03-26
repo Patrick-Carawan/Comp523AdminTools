@@ -21,6 +21,7 @@ const DraggableProposal = React.forwardRef(
         const elementRef = useRef(null);
         connectDragSource(elementRef);
         connectDropTarget(elementRef);
+        //modify styling here with css objects
         const opacity = isDragging ? 0 : 1;
         useImperativeHandle(ref, () => ({
             getNode: () => elementRef.current,

@@ -12,7 +12,7 @@ function StudentPage(props) {
     const [studentState, setStudentState] = useState();
     useEffect(() => {
         //hit backend to get the student's status
-        setStudentState(state.HAS_TEAM)
+        setStudentState(state.HAS_PROJECT)
     }, []);
 
     const renderSwitch = function () {

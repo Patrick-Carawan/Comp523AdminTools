@@ -47,6 +47,8 @@ const ProjectRanking = () => {
         }
         return (
             <div style={style}>
+                {/*Maybe put app bar here for styling*/}
+                {/*Text explanation saying to rank to rank their top 7 preferences*/}
                 {proposals.map((proposal, i) => (
                     <Grid container direction="column" justify="flex-start" alignItems="stretch" key={i}>
                         <Grid item>
