@@ -21,12 +21,10 @@ connection.once('open', () => {
 const userRouter = require('./routes/user');
 const teamRouter = require('./routes/team');
 const proposalRouter = require('./routes/proposal');
-const seedRouter = require('./routes/seed');
 
 app.use('/users', userRouter);
 app.use('/teams', teamRouter);
 app.use('/proposals', proposalRouter);
-app.use('/seed', seedRouter);
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
