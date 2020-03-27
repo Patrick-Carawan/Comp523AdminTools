@@ -30,6 +30,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
+
 const dummyClientEmails = ['dan97w@ad.unc.edu', 'daniel.weber.443@gmail.com'];
 let dummyClientString = (() => {
     let concat = '';
@@ -39,12 +40,24 @@ let dummyClientString = (() => {
     return concat;
 })();
 
+
 function ComposeEmail(props) {
     const classes = useStyles();
     const [pendingLetter, setPendingLetter] = useState('');
     const [acceptanceLetter, setAcceptanceLetter] = useState('');
     const [rejectionLetter, setRejectionLetter] = useState('');
+    // const [emails, setEmails] = useState([]);
     useEffect(() => {
+        /*
+        axios.get( "http://localhost:5000/proposals/emails")
+            .then(response => {
+                console.log("emails", response.data[0])
+            })
+            .catch(function (error) {
+                console.log(error);
+                //
+            });
+         */
         axios.get("http://localhost:5000/proposals/pendingLetter")
             .then(response => {
                 response.data[0] ? setPendingLetter(response.data[0]['text']) :setPendingLetter('Your project proposal is still pending.');
@@ -78,7 +91,6 @@ function ComposeEmail(props) {
     }
 
     const [clientGroup, setClientGroup] = useState('');
-    const [body, setBody] = useState('');
     const [subject, setSubject] = useState('');
     const [letter, setLetter] = useState('');
 
@@ -108,7 +120,7 @@ function ComposeEmail(props) {
     }
 
     function changeBody(e) {
-        setBody(e.target.value);
+        setLetter(e.target.value);
     }
 
 
@@ -190,7 +202,7 @@ function ComposeEmail(props) {
                                 'borderRadius': '5px',
                                 'backgroundColor': '#003b9e'
                             }}
-                               href={`mailto:${dummyClientString}?body=${body}&subject=${subject}`}>
+                               href={`mailto:${dummyClientString}?body=${letter}&subject=${subject}`}>
                                 Email Clients
                             </a>
                         </Grid>

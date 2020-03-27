@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Grid from "@material-ui/core/Grid";
@@ -7,6 +7,7 @@ import Proposal from "./Proposal";
 import {makeStyles} from "@material-ui/core/styles";
 import DashBoard from "./DashBoard";
 import Box from "@material-ui/core/Box";
+import axios from 'axios';
 
 const proposals = [{
     title: 'iPhone App',
@@ -58,6 +59,20 @@ const useStyles = makeStyles(theme => ({
 
 function ProposalsAdminView(props) {
     const classes = useStyles();
+    const [emails, setEmails] = useState([]);
+    /*
+    useEffect( () =>{
+        axios.get( "http://localhost:5000/proposals/" )
+            .then(response => {
+                console.log(response)
+                setEmails(response)
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }, []);
+     */
+
     return (
         <div className={classes.root}>
             <DashBoard/>
@@ -80,6 +95,7 @@ function ProposalsAdminView(props) {
                                 <Box mx="auto">
                                     <Grid item>
                                         <Button variant="contained" color="primary" className={classes.acceptButton}>Accept</Button>
+                                        <Button variant="contained" className={classes.pendingButton}>Leave Pending</Button>
                                         <Button variant="contained" color="secondary" className={classes.rejectButton}>Reject</Button>
                                     </Grid>
                                 </Box>
