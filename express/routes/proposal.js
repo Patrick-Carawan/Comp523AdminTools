@@ -13,6 +13,7 @@ router.route('/').get((req, res) => {
 router.route('/').post((req, res) => {
     
     const _title = req.body.title;
+    const _email = req.body.email;
     const _prop_name = req.body.prop_name;
     const _semester = req.body.semester;
     const _description = req.body.description;
@@ -22,6 +23,7 @@ router.route('/').post((req, res) => {
 
     const proposal = new Proposal({
         title: _title,
+        email: _email,
         prop_name: _prop_name,
         semester: _semester,
         description: _description,

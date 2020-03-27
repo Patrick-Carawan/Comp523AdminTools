@@ -71,6 +71,7 @@ connection.once('open', () => {
 
     const prop1 = new Proposal({
         title: "JimBob's Catfishin' Bonanza Webapp",
+        email: "jimbob@yahoo.com",
         prop_name: "Jim 'JimBob' Bob",
         semester: "Spring2020",
         description: "Jim Bob needs a webapp to schedule his catfishing boat tours",
@@ -81,6 +82,7 @@ connection.once('open', () => {
 
     const prop2 = new Proposal({
         title: "Where in the World is Steve Harvey?",
+        email: "welovesteveharvey@steveharveyfanclub.org",
         prop_name: "The Steve Harvey Fan Club",
         semester: "Spring2020",
         description: "The Steve Harvey Fan Club wants to create an app that will use satelite technology to track the reflections of the sun off of Steve Harvey's teeth, thus enabling users to track his location in real time!",

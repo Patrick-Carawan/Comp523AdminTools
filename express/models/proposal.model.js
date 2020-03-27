@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 
 const proposalSchema = new Schema({
     title: { type: String, required: true },
+    email: { type: String, required: true },
     prop_name: { type: String, required: true },
     semester: { type: String, required: true },
     description: { type: String, required: true },
