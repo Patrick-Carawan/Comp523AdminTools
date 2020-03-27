@@ -14,7 +14,7 @@ router.route('/add').post((req, res) => {
     const _teamMembers = req.body.teamMembers;
     const _semester = req.body.semester;
 
-    newTeam = new Team({
+    const newTeam = new Team({
         teamName:  _teamName,
         teamMembers: _teamMembers,
         semester: _semester

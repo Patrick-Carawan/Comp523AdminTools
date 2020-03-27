@@ -9,6 +9,32 @@ router.route('/').get((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
+// Add a proposal
+router.route('/').post((req, res) => {
+    
+    const _title = req.body.title;
+    const _prop_name = req.body.prop_name;
+    const _semester = req.body.semester;
+    const _description = req.body.description;
+    const _info_url = req.body.info_url;
+    const _tech_requirements = req.body.tech_requirements;
+    const _hardware_requirements = req.body.hardware_requirements;
+
+    const proposal = new Proposal({
+        title: _title,
+        prop_name: _prop_name,
+        semester: _semester,
+        description: _description,
+        info_url:  _info_url,
+        tech_requirements: _tech_requirements,
+        hardware_requirements: _hardware_requirements,
+    });
+
+    proposal.save()
+        .then(() => res.json("Proposal added."))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+
 // Get all proposal emails
 router.route('/emails').get((req, res) => {
     Proposal.find("email")

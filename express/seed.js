@@ -76,7 +76,7 @@ connection.once('open', () => {
         description: "Jim Bob needs a webapp to schedule his catfishing boat tours",
         info_url:  "placeholderurl",
         tech_requirements: "Jim Bob is a techie so you'll be using only the most cutting edge technologies",
-        hardware_requirements: "Your typical catfisherman obviously has a very powerful home machine, so we can focus on performance",
+        hardware_requirements: "Your typical catfisherman obviously has a very powerful home machine, so we can focus on performance"
     });
 
     const prop2 = new Proposal({
@@ -86,7 +86,7 @@ connection.once('open', () => {
         description: "The Steve Harvey Fan Club wants to create an app that will use satelite technology to track the reflections of the sun off of Steve Harvey's teeth, thus enabling users to track his location in real time!",
         info_url:  "placeholderurl",
         tech_requirements: "Maintainable by the fan club, simple technologies that volunteers can learn and use easily",
-        hardware_requirements: "Runnable on any home or mobile machine",
+        hardware_requirements: "Runnable on any home or mobile machine"
     });
 
     Team.deleteMany({}, function(err, result) {
