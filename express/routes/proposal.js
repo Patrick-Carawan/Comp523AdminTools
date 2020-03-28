@@ -44,9 +44,9 @@ router.route('/').post((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
-// Get all proposal emails
+// Get all proposal emails and their status
 router.route('/emails').get((req, res) => {
-    Proposal.find({}, "email")
+    Proposal.find({}, "email status")
         .then(emails => res.json(emails))
         .catch(err => res.status(400).json('Error: ' + err));
 });
