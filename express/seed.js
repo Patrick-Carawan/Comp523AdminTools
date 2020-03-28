@@ -2,6 +2,7 @@ var Team = require("./models/team.model");
 var User = require("./models/user.model");
 var Letter = require("./models/letter.model");
 var Proposal = require("./models/proposal.model");
+var Report = require("./models/report.model");
 
 const express = require('express');
 const cors = require('cors');
@@ -102,9 +103,36 @@ connection.once('open', () => {
         hardware_requirements: "Runnable on any home or mobile machine"
     });
     
+    const pendingLetter = new Letter({
+        text: "Your proposal is pending.",
+        status: "pending"
+    });
+
+    const acceptedLetter = new Letter({
+        text: "Your proposal has been accepted!",
+        status: "accepted"
+    });
+
+    const rejectedLetter = new Letter({
+        text: "Your proposal has been rejected, however, we would still like to keep your information on file for future semesters.",
+        status: "rejected"
+    });
+
+    const report1 = new Report({
+        onyen: "pat1",
+        text:"This class was great, I learned so much!"
+    });
+
+    const report2 = new Report({
+        onyen: "dan97w",
+        text: "What a semester!"
+    });
+
     const users = [adminUser, user1, user2, user3, user4];
     const proposals = [prop1, prop2];
     const teams = [team1, team2];
+    const letters = [pendingLetter, acceptedLetter, rejectedLetter];
+    const reports = [report1, report2];
     
     Team.collection.deleteMany({}, function(err, result) {
         if (err) {
@@ -129,6 +157,22 @@ connection.once('open', () => {
             console.log(result);
         }
     });
+
+    Letter.collection.deleteMany({}, function (err, result) {
+        if (err) {
+            console.error(err);
+        } else {
+            console.log(result);
+        }
+    });
+
+    Report.collection.deleteMany({}, function (err, result) {
+        if (err) {
+            console.error(err);
+        } else {
+            console.log(result);
+        }
+    });
     
     console.log("Data cleared.");
     
@@ -141,6 +185,14 @@ connection.once('open', () => {
     });
 
     Proposal.collection.insertMany(proposals, function(err) {
+        console.error(err);
+    });
+
+    Letter.collection.insertMany(letters, function(err) {
+        console.error(err);
+    });
+
+    Report.collection.insertMany(reports, function(err) {
         console.error(err);
     });
 
