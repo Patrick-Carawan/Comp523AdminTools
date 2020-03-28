@@ -9,6 +9,13 @@ router.route('/').get((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
+// Delete a proposal
+router.route('/:id').delete((req, res) => {
+    Proposal.findByIdAndDelete(req.params.id)
+        .then(() => res.json("Proposal deleted."))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+
 // Add a proposal
 router.route('/').post((req, res) => {
     

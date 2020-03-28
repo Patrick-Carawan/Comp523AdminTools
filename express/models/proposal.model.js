@@ -11,7 +11,7 @@ const proposalSchema = new Schema({
     info_url:  { type: String },
     tech_requirements: { type: String },
     hardware_requirements: { type: String },
-    status: { type: String, default: "Pending" } 
+    status: { type: String, default: "New" } 
 }, {
     timestamps: true
 });

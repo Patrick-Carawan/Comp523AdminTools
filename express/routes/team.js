@@ -30,7 +30,7 @@ router.route('/:id').delete((req, res) => {
     Team.findByIdAndDelete(req.params.id)
         .then(() => res.json("Team deleted."))
         .catch(err => res.status(400).json('Error: ' + err));
-})
+});
 
 // Get all teams for a given semester
 router.route('/:semester').get((req, res) => {
