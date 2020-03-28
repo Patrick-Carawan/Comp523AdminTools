@@ -46,7 +46,7 @@ router.route('/').post((req, res) => {
 
 // Get all proposal emails
 router.route('/emails').get((req, res) => {
-    Proposal.find("email")
+    Proposal.find({}, "email")
         .then(emails => res.json(emails))
         .catch(err => res.status(400).json('Error: ' + err));
 });
@@ -87,14 +87,14 @@ router.route('/pendingLetter').post((req, res) => {
 
 // Get rejection letter
 router.route('/rejectionLetter').get((req, res) => {
-    Letter.find({status: 'rejection'})
+    Letter.find({status: 'rejected'})
         .then(rejection => res.json(rejection))
         .catch(err => res.status(400).json('Error: ' + err))
 });
 
 // Get acceptance letter
 router.route('/acceptanceLetter').get((req, res) => {
-    Letter.find({status: 'acceptance'})
+    Letter.find({status: 'accepted'})
         .then(acceptance => res.json(acceptance))
         .catch(err => res.status(400).json('Error: ' + err))
 });

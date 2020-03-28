@@ -55,7 +55,7 @@ router.route('/update/:id').post((req, res) => {
             team.teamMembers = req.body.teamMembers;
             team.proposalRanks = req.body.proposalRanks;
             team.save()
-                .then(() => res.json("Team updated with new user."))
+                .then(() => res.json("Team updated with new info."))
                 .catch(err => res.status(400).json('Error: ' + err));
         })
         .catch(err => res.status(400).json('Error: ' + err));

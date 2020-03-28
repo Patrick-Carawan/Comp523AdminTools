@@ -27,8 +27,6 @@ router.route('/students/add').post((req, res) => {
     const _teamId = req.body.teamId;
     const _admin = req.body.admin;
 
-    // Figure out how to handle request differently if admin and teamId fields are supplied
-    console.log(req.body.hasOwnProperty("admin"));
     
     const newStudent = new User({
         onyen: _onyen,
