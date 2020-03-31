@@ -96,11 +96,19 @@ function ProposalsAdminView(props) {
             });
     }, []);
 
-    const markAccepted = function (prevIndex, prevStatus) {
-        console.log(prevStatus);
+    const changeStatus = function (prevIndex, oldStatus, newStatus) {
+        if(oldStatus === newStatus){
+            return
+        }
+        //post to backend, wrap everything else in .then()
         let proposal;
         let copy;
-        switch (prevStatus) {
+        switch (oldStatus) {
+            case "Accepted":
+                copy = [...acceptedProposals];
+                proposal = copy.splice(prevIndex, 1)[0];
+                setAcceptedProposals(copy);
+                break;
             case "Rejected":
                 copy = [...rejectedProposals];
                 proposal = copy.splice(prevIndex, 1)[0];
@@ -117,16 +125,26 @@ function ProposalsAdminView(props) {
                 setNewProposals(copy);
                 break;
         }
-        copy = [...acceptedProposals];
-        copy.push(proposal);
-        setAcceptedProposals(copy);
+
+        switch (newStatus) {
+            case "Accepted":
+                copy = [...acceptedProposals];
+                copy.push(proposal);
+                setAcceptedProposals(copy);
+                break;
+            case "Rejected":
+                copy = [...rejectedProposals];
+                copy.push(proposal);
+                setRejectedProposals(copy);
+                break;
+            case "Pending":
+                copy = [...pendingProposals];
+                copy.push(proposal);
+                setPendingProposals(copy);
+                break;
+        }
     };
-    const markRejected = function (prevStatus, prevIndex) {
-        console.log('rejected');
-    };
-    const markPending = function (prevStatus, prevIndex) {
-        console.log('pended');
-    };
+
     const proposalGroup = function (propType, label, className) {
         return (
             <>
@@ -136,7 +154,7 @@ function ProposalsAdminView(props) {
                             expandIcon={<ExpandMoreIcon/>}
                             aria-controls="panel1a-content"
                         >
-                            <Typography className={classes.heading}>{label}</Typography>
+                            <Typography className={classes.heading}>{label} Proposals</Typography>
                         </ExpansionPanelSummary>
                         <ExpansionPanelDetails>
                             <Grid container direction="column">
@@ -158,13 +176,13 @@ function ProposalsAdminView(props) {
                                                     <Grid item>
                                                         <Button variant="contained" color="primary"
                                                                 className={classes.acceptButton}
-                                                                onClick={() => markAccepted(i, prop['status'])}>Accept</Button>
+                                                                onClick={() => changeStatus(i, label, "Accepted")}>Accept</Button>
                                                         <Button variant="contained" className={classes.pendingButton}
-                                                                onClick={markPending}>Leave
+                                                                onClick={() => changeStatus(i, label, "Pending")}>Leave
                                                             Pending</Button>
                                                         <Button variant="contained" color="secondary"
                                                                 className={classes.rejectButton}
-                                                                onClick={markRejected}>Reject</Button>
+                                                                onClick={() => changeStatus(i, label, "Rejected")}>Reject</Button>
                                                     </Grid>
                                                 </Box>
                                             </Grid>
@@ -185,10 +203,10 @@ function ProposalsAdminView(props) {
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
                 <Grid container direction="column">
-                    {proposalGroup(newProposals, 'New Proposals')}
-                    {proposalGroup(acceptedProposals, 'Accepted Proposals', classes.acceptedBackground)}
-                    {proposalGroup(rejectedProposals, 'Rejected Proposals', classes.rejectedBackground)}
-                    {proposalGroup(pendingProposals, 'Pending Proposals', classes.pendingBackground)}
+                    {proposalGroup(newProposals, 'New')}
+                    {proposalGroup(acceptedProposals, 'Accepted', classes.acceptedBackground)}
+                    {proposalGroup(rejectedProposals, 'Rejected', classes.rejectedBackground)}
+                    {proposalGroup(pendingProposals, 'Pending', classes.pendingBackground)}
                 </Grid>
 
 
