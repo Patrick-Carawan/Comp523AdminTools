@@ -8,6 +8,10 @@ import {makeStyles} from "@material-ui/core/styles";
 import DashBoard from "./DashBoard";
 import Box from "@material-ui/core/Box";
 import axios from 'axios';
+import {ExpansionPanel, ExpansionPanelDetails} from "@material-ui/core";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import Typography from "@material-ui/core/Typography";
 
 const proposals = [{
     title: 'iPhone App',
@@ -45,65 +49,153 @@ const useStyles = makeStyles(theme => ({
         // backgroundColor: theme.palette.background.default,
         padding: theme.spacing(1),
     },
-    proposal:{
-        marginTop:'5px'
+    proposal: {
+        marginTop: '5px'
     },
-    acceptButton:{
+    acceptButton: {
         margin: '0px 5px',
-        color:'white'
+        color: 'white'
     },
-    rejectButton:{
+    rejectButton: {
         margin: '0px 5px'
+    },
+    heading: {
+        fontSize: theme.typography.pxToRem(15),
+        fontWeight: theme.typography.fontWeightRegular,
+    },
+    acceptedBackground: {
+        backgroundColor: 'rgba(17,255,113,0.21)'
+    },
+    rejectedBackground: {
+        backgroundColor: 'rgba(255,58,82,0.35)'
+    },
+    pendingBackground: {
+        backgroundColor: 'rgba(183,183,175,0.34)'
     }
+
 }));
 
 function ProposalsAdminView(props) {
     const classes = useStyles();
-    const [emails, setEmails] = useState([]);
-    /*
-    useEffect( () =>{
-        axios.get( "http://localhost:5000/proposals/" )
+    const [acceptedProposals, setAcceptedProposals] = useState([]);
+    const [newProposals, setNewProposals] = useState([]);
+    const [pendingProposals, setPendingProposals] = useState([]);
+    const [rejectedProposals, setRejectedProposals] = useState([]);
+    useEffect(() => {
+        axios.get("http://localhost:5000/proposals/")
             .then(response => {
-                console.log(response)
-                setEmails(response)
+                console.log(response);
+                const proposals = response['data'];
+                setNewProposals(proposals.filter(prop => prop['status'] === "New"));
+                setAcceptedProposals(proposals.filter(prop => prop['status'] === "Accepted"));
+                setRejectedProposals(proposals.filter(prop => prop['status'] === "Rejected"));
+                setPendingProposals(proposals.filter(prop => prop['status'] === "Pending"));
             })
             .catch(function (error) {
                 console.log(error);
             });
     }, []);
-     */
+
+    const markAccepted = function (prevIndex, prevStatus) {
+        console.log(prevStatus);
+        let proposal;
+        let copy;
+        switch (prevStatus) {
+            case "Rejected":
+                copy = [...rejectedProposals];
+                proposal = copy.splice(prevIndex, 1)[0];
+                setRejectedProposals(copy);
+                break;
+            case "Pending":
+                copy = [...pendingProposals];
+                proposal = copy.splice(prevIndex, 1)[0];
+                setPendingProposals(copy);
+                break;
+            case "New":
+                copy = [...newProposals];
+                proposal = copy.splice(prevIndex, 1)[0];
+                setNewProposals(copy);
+                break;
+        }
+        copy = [...acceptedProposals];
+        copy.push(proposal);
+        setAcceptedProposals(copy);
+    };
+    const markRejected = function (prevStatus, prevIndex) {
+        console.log('rejected');
+    };
+    const markPending = function (prevStatus, prevIndex) {
+        console.log('pended');
+    };
+    const proposalGroup = function (propType, label, className) {
+        return (
+            <>
+                <Grid item style={{'marginBottom': '5px'}}>
+                    <ExpansionPanel className={className}>
+                        <ExpansionPanelSummary
+                            expandIcon={<ExpandMoreIcon/>}
+                            aria-controls="panel1a-content"
+                        >
+                            <Typography className={classes.heading}>{label}</Typography>
+                        </ExpansionPanelSummary>
+                        <ExpansionPanelDetails>
+                            <Grid container direction="column">
+                                {propType.map((prop, i) =>
+                                    <Card variant="outlined" key={i} className={classes.proposal}>
+                                        <CardContent>
+                                            <Grid container direction="column" justify="space-between">
+                                                <Grid item>
+                                                    <Proposal title={prop.title}
+                                                              firstName={prop.firstName}
+                                                              lastName={prop.lastName}
+                                                              url={prop.url}
+                                                              description={prop.description}
+                                                              hardwareReq={prop.hardwareReq}
+                                                              softwareReq={prop.softwareReq}
+                                                    />
+                                                </Grid>
+                                                <Box mx="auto">
+                                                    <Grid item>
+                                                        <Button variant="contained" color="primary"
+                                                                className={classes.acceptButton}
+                                                                onClick={() => markAccepted(i, prop['status'])}>Accept</Button>
+                                                        <Button variant="contained" className={classes.pendingButton}
+                                                                onClick={markPending}>Leave
+                                                            Pending</Button>
+                                                        <Button variant="contained" color="secondary"
+                                                                className={classes.rejectButton}
+                                                                onClick={markRejected}>Reject</Button>
+                                                    </Grid>
+                                                </Box>
+                                            </Grid>
+                                        </CardContent>
+                                    </Card>)}
+                            </Grid>
+                        </ExpansionPanelDetails>
+                    </ExpansionPanel>
+                </Grid>
+            </>
+        )
+    };
+
 
     return (
         <div className={classes.root}>
             <DashBoard/>
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
-                {proposals.map((prop, i) =>
-                    <Card variant="outlined" key={i} className={classes.proposal}>
-                        <CardContent>
-                            <Grid container direction="column" justify="space-between">
-                                <Grid item>
-                                    <Proposal title={prop.title}
-                                              firstName={prop.firstName}
-                                              lastName={prop.lastName}
-                                              url={prop.url}
-                                              description={prop.description}
-                                              hardwareReq={prop.hardwareReq}
-                                              softwareReq={prop.softwareReq}
-                                    />
-                                </Grid>
-                                <Box mx="auto">
-                                    <Grid item>
-                                        <Button variant="contained" color="primary" className={classes.acceptButton}>Accept</Button>
-                                        <Button variant="contained" className={classes.pendingButton}>Leave Pending</Button>
-                                        <Button variant="contained" color="secondary" className={classes.rejectButton}>Reject</Button>
-                                    </Grid>
-                                </Box>
-                            </Grid>
-                        </CardContent>
-                    </Card>)}  </main>
+                <Grid container direction="column">
+                    {proposalGroup(newProposals, 'New Proposals')}
+                    {proposalGroup(acceptedProposals, 'Accepted Proposals', classes.acceptedBackground)}
+                    {proposalGroup(rejectedProposals, 'Rejected Proposals', classes.rejectedBackground)}
+                    {proposalGroup(pendingProposals, 'Pending Proposals', classes.pendingBackground)}
+                </Grid>
+
+
+            </main>
         </div>
     );
 }
+
 
 export default ProposalsAdminView;
