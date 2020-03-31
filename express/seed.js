@@ -94,6 +94,7 @@ connection.once('open', () => {
     
     const prop2 = new Proposal({
         title: "Where in the World is Steve Harvey?",
+        status: "Pending",
         email: "welovesteveharvey@steveharveyfanclub.org",
         prop_name: "The Steve Harvey Fan Club",
         semester: "Spring2020",
@@ -101,6 +102,28 @@ connection.once('open', () => {
         info_url:  "placeholderurl",
         tech_requirements: "Maintainable by the fan club, simple technologies that volunteers can learn and use easily",
         hardware_requirements: "Runnable on any home or mobile machine"
+    });
+    const prop3 = new Proposal({
+        title: "Queso",
+        status: "Accepted",
+        email: "tasty@cheese.org",
+        prop_name: "Queso Coding",
+        semester: "Spring2020",
+        description: "Just want to make it easier to make queso.",
+        info_url:  "cheese.us",
+        tech_requirements: "Nacho problem",
+        hardware_requirements: "Must be crispy"
+    });
+    const prop4 = new Proposal({
+        title: "React experimental features",
+        status: "Rejected",
+        email: "rx@email.org",
+        prop_name: "Hello this is my name",
+        semester: "Spring2020",
+        description: "This project doesn't really have any purpose, but it is something to take up a whole semester for some students.",
+        info_url:  "dummyurl.com",
+        tech_requirements: "Simple technologies that volunteers can learn and use easily",
+        hardware_requirements: "None"
     });
     
     const pendingLetter = new Letter({
@@ -129,7 +152,7 @@ connection.once('open', () => {
     });
 
     const users = [adminUser, user1, user2, user3, user4];
-    const proposals = [prop1, prop2];
+    const proposals = [prop1, prop2, prop3, prop4];
     const teams = [team1, team2];
     const letters = [pendingLetter, acceptedLetter, rejectedLetter];
     const reports = [report1, report2];
