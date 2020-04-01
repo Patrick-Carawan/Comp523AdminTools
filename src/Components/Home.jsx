@@ -9,8 +9,6 @@ const status = {
     ADMIN: 'admin'
 };
 
-
-
 function Home(props) {
     const [userStatus, setUserStatus] = useState();
 

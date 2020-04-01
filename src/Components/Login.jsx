@@ -7,8 +7,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {Link} from "react-router-dom";
-
+import {Link, useHistory} from "react-router-dom";
+import auth from "../auth";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -43,13 +43,15 @@ export default function Login(props) {
     function submit(e) {
         e.preventDefault();
         console.log('submitted');
-        if(student){
+        /*if(student){
             props.getUserStatus('student');
         } else{
             props.getUserStatus('admin');
         }
+         */
     }
 
+    let history = useHistory();
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
@@ -90,6 +92,34 @@ export default function Login(props) {
                         className={classes.submit}
                     >
                         Sign In
+                    </Button>
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="secondary"
+                        className={classes.submit}
+                        onClick={() => {
+                            auth.loginAsStudent(() => {
+                                history.push("/teams")
+                            });
+                        }}
+                    >
+                        Grant student access
+                    </Button>
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="secondary"
+                        className={classes.submit}
+                        onClick={() => {
+                            auth.loginAsAdmin(() => {
+                                history.push("/dashboard");
+                            });
+                        }}
+                    >
+                        Grant admin access
                     </Button>
                 </form>
             <Link to="/createAccount" className={classes.link}>Create Account</Link>
