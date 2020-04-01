@@ -20,7 +20,7 @@ function AcceptedClientForm(props) {
             setShowError(true);
         } else {
             setShowError(false);
-            console.log('submitted');
+            //axios.
         }
     }
 
