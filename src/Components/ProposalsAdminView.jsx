@@ -100,7 +100,7 @@ function ProposalsAdminView(props) {
         if (oldStatus === newStatus) {
             return
         }
-        //post to backend, wrap everything else in .then()
+        // post to backend, wrap everything else in .then()
         axios.post(`http://localhost:5000/proposals/update/${id}`, {
             status: newStatus
         }).then(() => {
