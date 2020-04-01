@@ -19,6 +19,7 @@ import AcceptedClientForm from "./Components/AcceptedClientForm";
 import ComposeEmail from "./Components/ComposeEmail";
 import CreateAccount from "./Components/CreateAccount";
 import DashBoardContent from "./Components/DashBoardContent";
+import Meeting from "./Components/Meeting";
 
 const theme = createMuiTheme({
   palette: {
@@ -37,6 +38,7 @@ function App() {
           <Route path="/login" component={Login} exact={true} />
           <Route path="/createAccount" component={CreateAccount} exact={true} />
           <Route path="/dashboard" component={DashBoardContent} exact={true} />
+          <Route path="/meeting" component={Meeting} exact={true} />
           <Route
             path="/proposalsAdmin"
             component={ProposalsAdminView}

@@ -236,13 +236,14 @@ export default function Dashboard() {
             className={classes.listItem}
             title="Keep track of teams' progress in coach meetings"
           >
-            <Link to="/nowhere" className={classes.link}>
+            <Link to="/meeting" className={classes.link}>
               <ListItemIcon>
                 <Calendar />
               </ListItemIcon>
               <ListItemText primary="Track Meetings" />
             </Link>
           </ListItem>
+          <Divider />
           <ListItem
             button
             key={5}
@@ -253,7 +254,7 @@ export default function Dashboard() {
               <ListItemIcon>
                 <Deliverable />
               </ListItemIcon>
-              <ListItemText primary="Rate Deliverables" />
+              <ListItemText primary="Project Assignment" />
             </Link>
           </ListItem>
         </List>
