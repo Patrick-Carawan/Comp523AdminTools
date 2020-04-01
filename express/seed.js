@@ -128,17 +128,17 @@ connection.once('open', () => {
     
     const pendingLetter = new Letter({
         text: "Your proposal is pending.",
-        status: "pending"
+        status: "Pending"
     });
 
     const acceptedLetter = new Letter({
         text: "Your proposal has been accepted!",
-        status: "accepted"
+        status: "Accepted"
     });
 
     const rejectedLetter = new Letter({
         text: "Your proposal has been rejected, however, we would still like to keep your information on file for future semesters.",
-        status: "rejected"
+        status: "Rejected"
     });
 
     const report1 = new Report({
