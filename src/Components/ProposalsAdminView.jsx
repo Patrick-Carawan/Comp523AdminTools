@@ -96,53 +96,58 @@ function ProposalsAdminView(props) {
             });
     }, []);
 
-    const changeStatus = function (prevIndex, oldStatus, newStatus) {
-        if(oldStatus === newStatus){
+    const changeStatus = function (prevIndex, oldStatus, newStatus, id) {
+        if (oldStatus === newStatus) {
             return
         }
         //post to backend, wrap everything else in .then()
-        let proposal;
-        let copy;
-        switch (oldStatus) {
-            case "Accepted":
-                copy = [...acceptedProposals];
-                proposal = copy.splice(prevIndex, 1)[0];
-                setAcceptedProposals(copy);
-                break;
-            case "Rejected":
-                copy = [...rejectedProposals];
-                proposal = copy.splice(prevIndex, 1)[0];
-                setRejectedProposals(copy);
-                break;
-            case "Pending":
-                copy = [...pendingProposals];
-                proposal = copy.splice(prevIndex, 1)[0];
-                setPendingProposals(copy);
-                break;
-            case "New":
-                copy = [...newProposals];
-                proposal = copy.splice(prevIndex, 1)[0];
-                setNewProposals(copy);
-                break;
-        }
+        axios.post(`http://localhost:5000/proposals/update/${id}`, {
+            status: newStatus
+        }).then(() => {
 
-        switch (newStatus) {
-            case "Accepted":
-                copy = [...acceptedProposals];
-                copy.push(proposal);
-                setAcceptedProposals(copy);
-                break;
-            case "Rejected":
-                copy = [...rejectedProposals];
-                copy.push(proposal);
-                setRejectedProposals(copy);
-                break;
-            case "Pending":
-                copy = [...pendingProposals];
-                copy.push(proposal);
-                setPendingProposals(copy);
-                break;
-        }
+            let proposal;
+            let copy;
+            switch (oldStatus) {
+                case "Accepted":
+                    copy = [...acceptedProposals];
+                    proposal = copy.splice(prevIndex, 1)[0];
+                    setAcceptedProposals(copy);
+                    break;
+                case "Rejected":
+                    copy = [...rejectedProposals];
+                    proposal = copy.splice(prevIndex, 1)[0];
+                    setRejectedProposals(copy);
+                    break;
+                case "Pending":
+                    copy = [...pendingProposals];
+                    proposal = copy.splice(prevIndex, 1)[0];
+                    setPendingProposals(copy);
+                    break;
+                case "New":
+                    copy = [...newProposals];
+                    proposal = copy.splice(prevIndex, 1)[0];
+                    setNewProposals(copy);
+                    break;
+            }
+
+            switch (newStatus) {
+                case "Accepted":
+                    copy = [...acceptedProposals];
+                    copy.push(proposal);
+                    setAcceptedProposals(copy);
+                    break;
+                case "Rejected":
+                    copy = [...rejectedProposals];
+                    copy.push(proposal);
+                    setRejectedProposals(copy);
+                    break;
+                case "Pending":
+                    copy = [...pendingProposals];
+                    copy.push(proposal);
+                    setPendingProposals(copy);
+                    break;
+            }
+        }).catch(err => alert(err));
     };
 
     const proposalGroup = function (propType, label, className) {
@@ -176,13 +181,13 @@ function ProposalsAdminView(props) {
                                                     <Grid item>
                                                         <Button variant="contained" color="primary"
                                                                 className={classes.acceptButton}
-                                                                onClick={() => changeStatus(i, label, "Accepted")}>Accept</Button>
+                                                                onClick={() => changeStatus(i, label, "Accepted", prop['_id'])}>Accept</Button>
                                                         <Button variant="contained" className={classes.pendingButton}
-                                                                onClick={() => changeStatus(i, label, "Pending")}>Leave
+                                                                onClick={() => changeStatus(i, label, "Pending", prop['_id'])}>Leave
                                                             Pending</Button>
                                                         <Button variant="contained" color="secondary"
                                                                 className={classes.rejectButton}
-                                                                onClick={() => changeStatus(i, label, "Rejected")}>Reject</Button>
+                                                                onClick={() => changeStatus(i, label, "Rejected", prop['_id'])}>Reject</Button>
                                                     </Grid>
                                                 </Box>
                                             </Grid>
