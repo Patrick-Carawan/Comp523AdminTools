@@ -97,10 +97,10 @@ export default function Dashboard() {
                             <Typography>Track Coach Meetings</Typography>
                         </Link>
                     </ListItem>
-                    <ListItem button key={5} className={classes.listItem} title="Give feedback on team deliverables">
-                        <Link to="/nowhere" className={classes.link}>
+                    <ListItem button key={5} className={classes.listItem} title="View Team and Individual Final Reports">
+                        <Link to="/finalReports" className={classes.link}>
                             <ListItemIcon><Deliverable/></ListItemIcon>
-                            <Typography>Rate Deliverables</Typography>
+                            <Typography>Final Reports</Typography>
                         </Link>
                     </ListItem>
                 </List>
