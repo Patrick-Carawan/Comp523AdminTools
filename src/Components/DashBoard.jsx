@@ -98,7 +98,7 @@ export default function Dashboard() {
                         </Link>
                     </ListItem>
                     <ListItem button key={5} className={classes.listItem} title="View Team and Individual Final Reports">
-                        <Link to="/finalReports" className={classes.link}>
+                        <Link to="/viewFinalReports" className={classes.link}>
                             <ListItemIcon><Deliverable/></ListItemIcon>
                             <Typography>Final Reports</Typography>
                         </Link>

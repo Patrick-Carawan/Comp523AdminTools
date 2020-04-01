@@ -43,7 +43,7 @@ function App() {
                 <Route path="/studentProps" component={ProposalsStudentView} exact={true}/>
                 <Route path="/teams" component={TeamsGrid} exact={true}/>
                 <Route path="/rank" component={RankContainer} exact={true}/>
-                <Route path="/finalReports" component={FinalReports} exact={true}/>
+                <Route path="/viewFinalReports" component={FinalReports} exact={true}/>
                 <Route path="/composeEmail" component={ComposeEmail} exact={true}/>
                 <Route path="/teamSelection" component={TeamSelection} exact={true}/>
                 <Route path="/acceptedClientForm" component={AcceptedClientForm} exact={true}/>
