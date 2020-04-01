@@ -3,16 +3,33 @@ import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
+import NavPanel from "./NavPanel";
+import Card from "./Card";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
+import Container from "@material-ui/core/Container";
+import Drawer from "@material-ui/core/Drawer";
 import IconButton from "@material-ui/core/IconButton";
+
+import clsx from "clsx";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Box from "@material-ui/core/Box";
+import List from "@material-ui/core/List";
+import Divider from "@material-ui/core/Divider";
+import Badge from "@material-ui/core/Badge";
+import Link from "@material-ui/core/Link";
 import MenuIcon from "@material-ui/icons/Menu";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import NotificationsIcon from "@material-ui/icons/Notifications";
+import TopNav from "../TopNav";
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
-  //   appBar: {
-  //     width: `calc(100% - ${drawerWidth}px)`,
-  //     marginLeft: drawerWidth
-  //   },
+  appBar: {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerWidth
+  },
   drawer: {
     width: drawerWidth,
     flexShrink: 0
@@ -112,24 +129,50 @@ const useStyles = makeStyles(theme => ({
     height: 240
   }
 }));
-function TopNav() {
+
+export default function Dashboard() {
   const classes = useStyles();
+  const [open, setOpen] = React.useState(true);
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
   return (
-    <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography color="inherit">523 Admin</Typography>
-        </Toolbar>
-      </AppBar>
+    <div>
+      <TopNav />
+
+      <NavPanel />
+
+      <main className={classes.content}>
+        <div className={classes.appBarSpacer} />
+        <Container maxWidth="lg" className={classes.container}>
+          <Grid container spacing={3}>
+            {/* Card1 */}
+            <Grid item xs={12} md={8} lg={9}>
+              <Paper className={fixedHeightPaper}>
+                <Card />
+              </Paper>
+            </Grid>
+            {/* Card2 */}
+            <Grid item xs={12} md={4} lg={3}>
+              <Paper className={fixedHeightPaper}>
+                <Card />
+              </Paper>
+            </Grid>
+            {/* Card3 */}
+            <Grid item xs={12}>
+              <Paper className={classes.paper}>
+                <Card />
+              </Paper>
+            </Grid>
+          </Grid>
+          <Box pt={4}></Box>
+        </Container>
+      </main>
     </div>
   );
 }
-export default TopNav;

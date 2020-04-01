@@ -18,6 +18,7 @@ import { MuiThemeProvider } from "@material-ui/core";
 import AcceptedClientForm from "./Components/AcceptedClientForm";
 import ComposeEmail from "./Components/ComposeEmail";
 import CreateAccount from "./Components/CreateAccount";
+import DashBoardContent from "./Components/DashBoardContent";
 
 const theme = createMuiTheme({
   palette: {
@@ -35,7 +36,7 @@ function App() {
           <Route path="/clientForm" component={ClientForm} exact={true} />
           <Route path="/login" component={Login} exact={true} />
           <Route path="/createAccount" component={CreateAccount} exact={true} />
-          <Route path="/dashboard" component={DashBoard} exact={true} />
+          <Route path="/dashboard" component={DashBoardContent} exact={true} />
           <Route
             path="/proposalsAdmin"
             component={ProposalsAdminView}
