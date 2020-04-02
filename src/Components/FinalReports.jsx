@@ -68,9 +68,10 @@ function FinalReports() {
     const [tabIndex, setTabIndex] = useState(0);
     useEffect(() => {
         axios.get(`http://localhost:5000/teams`).then((res) => {
-            console.log(res['data']);
+            console.log('teams',res['data']);
             setTeams(res['data']);
         })
+
     }, []);
 
     const handleChange = (event) => {
@@ -101,7 +102,7 @@ function FinalReports() {
                                     MenuProps={MenuProps}
                                 >
                                     {teams.map((teamItem, i) => (
-                                        <MenuItem key={i} value>
+                                        <MenuItem key={i} value={teamItem['teamName']}>
                                             {teamItem['teamName']}
                                         </MenuItem>
                                     ))}
