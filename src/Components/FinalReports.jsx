@@ -64,12 +64,13 @@ const MenuProps = {
 function FinalReports() {
     const classes = useStyles();
     const [teams, setTeams] = useState([]);
-    const [currentTeam, setCurrentTeam] = useState('');
+    const [currentTeam, setCurrentTeam] = useState({});
     const [tabIndex, setTabIndex] = useState(0);
     useEffect(() => {
         axios.get(`http://localhost:5000/teams`).then((res) => {
-            console.log('teams',res['data']);
-            setTeams(res['data']);
+            console.log('teams', res['data']);
+            const myTeams = res['data'].sort((team1, team2) => team1['teamName'] < team2['teamName'] ? -1 : 1);
+            setTeams(myTeams);
         })
 
     }, []);
@@ -88,7 +89,6 @@ function FinalReports() {
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
                 <Container maxWidth="md">
-
                     <Grid container direction="row" justify="center">
                         <Grid item>
                             <h1>Select Team to View Reports</h1>
@@ -102,7 +102,7 @@ function FinalReports() {
                                     MenuProps={MenuProps}
                                 >
                                     {teams.map((teamItem, i) => (
-                                        <MenuItem key={i} value={teamItem['teamName']}>
+                                        <MenuItem key={i} value={teamItem}>
                                             {teamItem['teamName']}
                                         </MenuItem>
                                     ))}
@@ -116,18 +116,25 @@ function FinalReports() {
                         aria-label="simple tabs example"
                         centered
                     >
-                        <Tab label="Team's"/>
-                        <Tab label="Daniel's"/>
-                        <Tab label="Patrick's"/>
+                        <Tab label="Team">Team</Tab>
+                        {
+                            currentTeam['teamMembers'] ? currentTeam['teamMembers'].sort().map((student, index) =>
+                                <Tab label={student} key={index}/>) : null
+                        }
                     </Tabs>
 
-                    <TabPanel value={tabIndex} index={0}>
-                        <Box textAlign="center">
-                        <Typography>
-                            This is the team's report. It will have all of the info that teams need to report by the end of the year. {lorem}{lorem}
-                        </Typography>
-                        </Box>
-                    </TabPanel>
+                    {/*{*/}
+                    {/*    studentReports.sort((onyen1, onyen2) => onyen1 < onyen2 ? -1 : 1).map((report, index) =>*/}
+                    {/*        <TabPanel value={tabIndex} index={index}>*/}
+                    {/*            <Box textAlign="center">*/}
+                    {/*                <Typography>*/}
+                    {/*                    //the report text here*/}
+                    {/*                </Typography>*/}
+                    {/*            </Box>*/}
+                    {/*        </TabPanel>*/}
+                    {/*    )*/}
+                    {/*}*/}
+
                     <TabPanel value={tabIndex} index={1}>
                         <Typography>
                             This is Daniel's report{lorem}{lorem}
@@ -140,7 +147,8 @@ function FinalReports() {
                     </TabPanel>
                 </Container>
             </main>
-        </div>);
+        </div>
+    );
 }
 
 export default FinalReports;
