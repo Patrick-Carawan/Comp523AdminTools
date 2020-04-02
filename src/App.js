@@ -19,6 +19,7 @@ import AcceptedClientForm from "./Components/AcceptedClientForm";
 import ComposeEmail from "./Components/ComposeEmail";
 import CreateAccount from "./Components/CreateAccount";
 import {AdminProtectedRoute, StudentProtectedRoute} from "./protected.route";
+import ProposalAssignment from "./Components/ProposalAssignment";
 
 const theme = createMuiTheme({
     palette:{
@@ -50,6 +51,7 @@ function App() {
                 <StudentProtectedRoute path="/studentSetupPage" component={StudentSetupPage} exact={true}/>
                 <AdminProtectedRoute path="/teammateSelectionRules" component={TeammateSelectionRules} exact={true}/>
                 <AdminProtectedRoute path="/teamPreferences" component={TeamPreferences} exact={true}/>
+                <Route path="/proposalAssignment" component={ProposalAssignment} exact={true}/>
                 <Route path="*" component={() => "404 NOT FOUND"} />
             </Switch>
 
