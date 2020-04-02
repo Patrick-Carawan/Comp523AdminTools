@@ -9,6 +9,8 @@ import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -20,7 +22,7 @@ const useStyles = makeStyles(theme => ({
         // backgroundColor: theme.palette.background.default,
         padding: theme.spacing(3),
     },
-    card:{
+    card: {
         padding: '.5em',
         marginBottom: '1em',
         // maxWidth: '60%'
@@ -50,13 +52,12 @@ function ProposalAssignment(props) {
     const [proposals, setProposals] = useState([]);
     const [pairings, setPairings] = useState(new Map());
 
-    useEffect(()=> console.log(pairings),[pairings]);
     useEffect(() => {
         axios.get(`http://localhost:5000/teams/Spring2020`).then(res => {
             console.log('teams', res);
             const allTeams = res['data'];
             let teamMap = new Map();
-            allTeams.forEach(team => teamMap.set(team,'No Project'));
+            allTeams.forEach(team => teamMap.set(team, 'No Project'));
             setPairings(teamMap);
             const fillArray = new Array(allTeams.length);
             fillArray.fill(-1);
@@ -67,15 +68,30 @@ function ProposalAssignment(props) {
             console.log('proposals', res);
             let acceptedProps = res['data'].filter(proposal => proposal['status'] === "Accepted");
             setProposals(acceptedProps);
-            console.log(acceptedProps);
 
         })
     }, []);
 
-    function handleChange(e,index) {
+    function handleChange(e, index, team) {
         const copy = [...teamSelect];
         copy.splice(index, 1, e.target.value);
         setTeamSelect(copy);
+
+        const cloneMap = new Map(pairings);
+        cloneMap.set(team, e.target.value);
+        setPairings(cloneMap);
+    }
+
+    function submitAssignments() {
+        const newObj = {};
+        pairings.forEach((value, key)=>{
+            if(key['_id'] === undefined) key = "No Project Assigned"
+
+            newObj[`${key['_id']}`] = value['_id']
+        });
+        // axios.post(`http://localhost:5000/team/${teamID}`,{
+        //     projectId: proposalID
+        // })
     }
 
     return (
@@ -83,32 +99,37 @@ function ProposalAssignment(props) {
             <DashBoard/>
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
-                <Container maxWidth="xs">
+                <Container maxWidth="md">
                     <h1>Assign Projects to Teams</h1>
                     {
-                        teams.map((team, index)=>
-                        <Card className={classes.card} key={index}>
-                            {/*<CardContent>*/}
+                        teams.map((team, index) =>
+                            <Card className={classes.card} key={index}>
                                 <Typography>{team.teamName}</Typography>
-
-                            <FormControl className={classes.formControl}>
-                                <InputLabel>Select Project</InputLabel>
-                                <Select
-                                    value={teamSelect[index]}
-                                    onChange={(e)=>handleChange(e,index)}
-                                    MenuProps={MenuProps}
-                                >
-                                    {proposals.map((proposal, i) => (
-                                        <MenuItem key={i} value={proposal._id}>
-                                            {proposal.title}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                            {/*</CardContent>*/}
-                        </Card>
+                                <Grid container direction="row">
+                                    <Grid item>
+                                        <Typography>Ideal Rankings</Typography>
+                                    </Grid>
+                                    <Grid item>
+                                        <FormControl className={classes.formControl}>
+                                            <InputLabel>Select Project</InputLabel>
+                                            <Select
+                                                value={teamSelect[index]}
+                                                onChange={(e) => handleChange(e, index, team)}
+                                                MenuProps={MenuProps}
+                                            >
+                                                {proposals.map((proposal, i) => (
+                                                    <MenuItem key={i} value={proposal}>
+                                                        {proposal.title}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+                                </Grid>
+                            </Card>
                         )
                     }
+                    <Button variant="contained" onClick={submitAssignments}>Submit</Button>
                 </Container>
             </main>
         </div>
