@@ -6,13 +6,13 @@ import Home from "./Components/Home";
 import Login from "./Components/Login";
 import ProposalsAdminView from "./Components/ProposalsAdminView";
 import ProposalsStudentView from "./Components/ProposalsStudentView";
-import TeamsGrid from "./Components/TeamsGrid";
 import DashBoard from "./Components/DashBoard";
 import StudentSetupPage from "./Components/StudentSetupPage";
 import TeammateSelectionRules from "./Components/TeammateSelectionRules";
+import StudentTeamSelection from "./Components/StudentTeamSelection";
 import TeamPreferences from "./Components/TeamPreferences";
 import RankContainer from "./Components/RankContainer";
-import TeamSelection from "./Components/TeamSelection";
+import AdminTeamSelection from "./Components/AdminTeamSelection";
 import {createMuiTheme} from "@material-ui/core/styles";
 import {MuiThemeProvider} from "@material-ui/core";
 import AcceptedClientForm from "./Components/AcceptedClientForm";
@@ -42,10 +42,10 @@ function App() {
                 <AdminProtectedRoute path="/proposalsAdmin" component={ProposalsAdminView} exact={true}/>
                 <StudentProtectedRoute path="/studentProps" component={ProposalsStudentView} exact={true}/>
                 // TODO: Deal with student team selection page
-                <Route path="/teams" component={TeamsGrid} exact={true}/>
+                <Route path="/formTeams" component={StudentTeamSelection} exact={true}/>
                 <StudentProtectedRoute path="/rank" component={RankContainer} exact={true}/>
                 <AdminProtectedRoute path="/composeEmail" component={ComposeEmail} exact={true}/>
-                <AdminProtectedRoute path="/teamSelection" component={TeamSelection} exact={true}/>
+                <AdminProtectedRoute path="/teamSelection" component={AdminTeamSelection} exact={true}/>
                 <Route path="/acceptedClientForm" component={AcceptedClientForm} exact={true}/>
                 <StudentProtectedRoute path="/studentSetupPage" component={StudentSetupPage} exact={true}/>
                 <AdminProtectedRoute path="/teammateSelectionRules" component={TeammateSelectionRules} exact={true}/>
