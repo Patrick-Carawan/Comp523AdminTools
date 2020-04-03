@@ -10,10 +10,6 @@ import {makeStyles} from "@material-ui/core/styles";
 import DashBoard from "./DashBoard";
 import axios from 'axios';
 
-//This will need to come from the backend. Teacher should be able to set this parameter.
-const numTeams = 8;
-
-
 const useStyles = makeStyles(theme => ({
     root: {
         display: 'flex',
@@ -38,24 +34,16 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-
 function AdminTeamSelection(props) {
     const [students, setStudents] = useState([]);
     const [teams, setTeams] = useState([]);
     useEffect(() => {
         axios.get(`http://localhost:5000/users/students/Spring2020`).then(res => setStudents(res['data'].filter(student => student['admin'] === false)));
-        axios.get(`http://localhost:5000/teams/Spring2020`).then(res => setTeams(res['data'].sort((t1, t2) => t1['teamName'] < t2['teamName'] ? -1 : 1)))
+        axios.get(`http://localhost:5000/teams/Spring2020`).then(res => {
+            console.log(res['data']);
+            setTeams(res['data'].sort((t1, t2) => t1['teamName'] < t2['teamName'] ? -1 : 1))
+        })
     }, []);
-    const studentNames = [
-        "Daniel Austin Weber Longname", "Abraham", "Patrick", "Zion", "Bill",
-        "Jim", "Billy", "Bob", "Cory", "Josiah",
-        "Ezekial", "Al", "Fred", "Keaton", "Hector",
-        "Susie", "Rachael", "Taylor", "Jack", "Broheim",
-        "Jason", "Said", "Hank", "Sally", "Renee",
-        "Tim", "Chester", "Alex", "Rick", "Lewis",
-        "Jenna", "Ella", "Charles", "Julie", "Marcus",
-        "Barbara", "Judy", "Kate", "Bradley", "Circle"
-    ];
 
     // let nameTeamMap = new Map();
     // students.forEach((student, index) => nameTeamMap.set(index, -1));
@@ -69,17 +57,36 @@ function AdminTeamSelection(props) {
     letters.unshift('NONE');
 
     const setTeam = function (studentIndex, teamIndex) {
-        groupingArray[studentIndex]['team'] = letters[teamIndex];
+        groupingArray[studentIndex]['team'] = teams[teamIndex]['teamName'];
     };
 
     const submitTeams = function () {
-        console.log(groupingArray)
-        let groups = groupingArray.reduce((r, a) => {
-            r[a.team] = [...r[a.team] || [], a];
-            return r;
-        }, {});
-        //send to backend instead of just logging
-        console.log(groups);
+        console.log(groupingArray);
+
+        let payload = {};
+        groupingArray.forEach((name) => {
+            if (payload.hasOwnProperty(name['team'])) {
+                payload[name['team']].push(name['name'])
+            } else {
+                payload[name['team']] = [name['name']]
+            }
+        });
+        console.log('payload', payload);
+
+        for (let [key, value] of Object.entries(payload)) {
+            console.log(key, value)
+            axios.post(`http://localhost:5000/teams/add`, {
+                teamName: key,
+                teamMembers: value,
+                semester: 'Spring2020'
+            })
+        }
+
+        // let groups = groupingArray.reduce((r, a) => {
+        //     r[a.team] = [...r[a.team] || [], a];
+        //     return r;
+        // }, {});
+        // console.log(groups);
     };
 
 
@@ -108,16 +115,14 @@ function AdminTeamSelection(props) {
                         </Typography>
                     </Box>
                     <Grid container spacing={3}>
-                        {letters.map((letter, index) =>
-                            index < numTeams && index !== 0 ?
-                                <Grid item key={0 - index - 1} xs={3} ml={5}>
-                                    <Card variant="outlined" className="teamTile">
-                                        <TeamBox id={`${index}box`} setTeam={setTeam}>
-                                            <Typography variant="h6">Team {letter}</Typography>
-                                        </TeamBox>
-                                    </Card>
-                                </Grid>
-                                : null
+                        {teams.map((team, index) =>
+                            <Grid item key={0 - index - 1} xs={3} ml={5}>
+                                <Card variant="outlined" className="teamTile">
+                                    <TeamBox id={`${index}box`} setTeam={setTeam}>
+                                        <Typography variant="h6">{team['teamName']}</Typography>
+                                    </TeamBox>
+                                </Card>
+                            </Grid>
                         )}
                     </Grid>
                 </Container>
