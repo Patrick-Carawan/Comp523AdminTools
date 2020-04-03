@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import TeamBox from './TeamBox';
 import Name from './Name';
 import Grid from "@material-ui/core/Grid";
@@ -8,6 +8,7 @@ import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
 import {makeStyles} from "@material-ui/core/styles";
 import DashBoard from "./DashBoard";
+import axios from 'axios';
 
 //This will need to come from the backend. Teacher should be able to set this parameter.
 const numTeams = 8;
@@ -36,42 +37,52 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-const studentNames = [
-    "Daniel Austin Weber Longname", "Abraham", "Patrick", "Zion", "Bill",
-    "Jim", "Billy", "Bob", "Cory", "Josiah",
-    "Ezekial", "Al", "Fred", "Keaton", "Hector",
-    "Susie", "Rachael", "Taylor", "Jack", "Broheim",
-    "Jason", "Said", "Hank", "Sally", "Renee",
-    "Tim", "Chester", "Alex", "Rick", "Lewis",
-    "Jenna", "Ella", "Charles", "Julie", "Marcus",
-    "Barbara", "Judy", "Kate", "Bradley", "Circle"
-];
 
-let nameTeamMap = new Map();
-studentNames.forEach((name, index) => nameTeamMap.set(index, -1));
-let studentArray = [];
-studentNames.forEach(name => studentArray.push({
-    name: name,
-    group: 'NONE'
-}));
 
-const letters = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'];
-letters.unshift('NONE');
+function AdminTeamSelection(props) {
+    const [students, setStudents] = useState([]);
+    const [teams, setTeams] = useState([]);
+    useEffect(() => {
+        axios.get(`http://localhost:5000/users/students/Spring2020`).then(res => setStudents(res['data'].filter(student => student['admin'] === false)));
+        axios.get(`http://localhost:5000/teams/Spring2020`).then(res => setTeams(res['data'].sort((t1, t2) => t1['teamName'] < t2['teamName'] ? -1 : 1)))
+    }, []);
+    const studentNames = [
+        "Daniel Austin Weber Longname", "Abraham", "Patrick", "Zion", "Bill",
+        "Jim", "Billy", "Bob", "Cory", "Josiah",
+        "Ezekial", "Al", "Fred", "Keaton", "Hector",
+        "Susie", "Rachael", "Taylor", "Jack", "Broheim",
+        "Jason", "Said", "Hank", "Sally", "Renee",
+        "Tim", "Chester", "Alex", "Rick", "Lewis",
+        "Jenna", "Ella", "Charles", "Julie", "Marcus",
+        "Barbara", "Judy", "Kate", "Bradley", "Circle"
+    ];
 
-const setTeam = function (studentIndex, teamIndex) {
-    studentArray[studentIndex]['group'] = letters[teamIndex];
-};
+    // let nameTeamMap = new Map();
+    // students.forEach((student, index) => nameTeamMap.set(index, -1));
+    let groupingArray = [];
+    students.forEach(student => groupingArray.push({
+        name: student['onyen'],
+        group: 'NONE'
+    }));
 
-const submitTeams = function () {
-    let groups = studentArray.reduce((r, a) => {
-        r[a.group] = [...r[a.group] || [], a];
-        return r;
-    }, {});
-    //send to backend instead of just logging
-    console.log(groups);
-};
+    const letters = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'];
+    letters.unshift('NONE');
 
-function TeamSelection(props) {
+    const setTeam = function (studentIndex, teamIndex) {
+        groupingArray[studentIndex]['group'] = letters[teamIndex];
+    };
+
+    const submitTeams = function () {
+        console.log(groupingArray)
+        let groups = groupingArray.reduce((r, a) => {
+            r[a.group] = [...r[a.group] || [], a];
+            return r;
+        }, {});
+        //send to backend instead of just logging
+        console.log(groups);
+    };
+
+
     const classes = useStyles();
     return (
         <div className={classes.root}>
@@ -79,11 +90,11 @@ function TeamSelection(props) {
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
                 <TeamBox id="0box" className={classes.nameBank} setTeam={setTeam}>
-                    {studentNames.map((studentName, index) =>
+                    {students.map((student, index) =>
                         <Name key={index} id={index} className="name" draggable="true">
                             <Card variant="outlined">
                                 <CardContent>
-                                    {studentName}
+                                    {`${student['firstName']} ${student['lastName']}`}
                                 </CardContent>
                             </Card>
                         </Name>
@@ -119,4 +130,4 @@ function TeamSelection(props) {
     );
 }
 
-export default TeamSelection;
+export default AdminTeamSelection;
