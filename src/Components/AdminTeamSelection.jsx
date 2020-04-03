@@ -62,20 +62,20 @@ function AdminTeamSelection(props) {
     let groupingArray = [];
     students.forEach(student => groupingArray.push({
         name: student['onyen'],
-        group: 'NONE'
+        team: 'NONE'
     }));
 
     const letters = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'];
     letters.unshift('NONE');
 
     const setTeam = function (studentIndex, teamIndex) {
-        groupingArray[studentIndex]['group'] = letters[teamIndex];
+        groupingArray[studentIndex]['team'] = letters[teamIndex];
     };
 
     const submitTeams = function () {
         console.log(groupingArray)
         let groups = groupingArray.reduce((r, a) => {
-            r[a.group] = [...r[a.group] || [], a];
+            r[a.team] = [...r[a.team] || [], a];
             return r;
         }, {});
         //send to backend instead of just logging
