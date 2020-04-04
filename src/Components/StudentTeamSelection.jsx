@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import TeamBox from './TeamBox';
 import Name from './Name';
 import Grid from "@material-ui/core/Grid";
-import {Card, CardContent, Container} from "@material-ui/core";
+import {Card, CardContent, Container, TextField} from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
@@ -39,10 +39,13 @@ const useStyles = makeStyles(theme => ({
 
 
 function StudentTeamSelection(props) {
-    const [students, setStudents] = useState([]);
+    const [allStudents, setAllStudents] = useState([]);
     const [teams, setTeams] = useState([]);
+    const [onyenBoxes, setOnyenBoxes] = useState([]);
+    const [selectedStudents, setSelectedStudents] = useState([]);
+
     useEffect(() => {
-        axios.get(`http://localhost:5000/users/students/Spring2020`).then(res => setStudents(res['data'].filter(student => student['admin'] === false)));
+        axios.get(`http://localhost:5000/users/students/Spring2020`).then(res => setAllStudents(res['data'].filter(student => student['admin'] === false)));
         axios.get(`http://localhost:5000/teams/Spring2020`).then(res => {
             console.log(res['data']);
             setTeams(res['data'].sort((t1, t2) => t1['teamName'] < t2['teamName'] ? -1 : 1))
@@ -52,13 +55,24 @@ function StudentTeamSelection(props) {
     // let nameTeamMap = new Map();
     // students.forEach((student, index) => nameTeamMap.set(index, -1));
     let groupingArray = [];
-    students.forEach(student => groupingArray.push({
+    allStudents.forEach(student => groupingArray.push({
         name: student['onyen'],
         team: 'NONE'
     }));
 
     const setTeam = function (studentIndex, teamIndex) {
         groupingArray[studentIndex]['team'] = teams[teamIndex]['teamName'];
+        if(teamIndex > 0){
+            console.log('set team index > 0');
+            let temp = [...onyenBoxes];
+            temp.push(0);
+            setOnyenBoxes(temp);
+        } else{
+            let temp = [...onyenBoxes];
+            temp.pop();
+            setOnyenBoxes(temp);
+        }
+        console.log(onyenBoxes)
     };
 
     const submitTeams = function () {
@@ -84,15 +98,16 @@ function StudentTeamSelection(props) {
         }
     };
 
-
     const classes = useStyles();
+
+
     return (
         <div className={classes.root}>
             <DashBoard/>
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
                 <TeamBox id="0box" className={classes.nameBank} setTeam={setTeam}>
-                    {students.map((student, index) =>
+                    {allStudents.map((student, index) =>
                         <Name key={index} id={index} className="name" draggable="true">
                             <Card variant="outlined">
                                 <CardContent>
@@ -119,7 +134,14 @@ function StudentTeamSelection(props) {
                             </Card>
                         </Grid>
                         <Grid item>
-
+                            <Grid item>
+                                <Grid container direction="row" justify="center">
+                                    {onyenBoxes.map((box, index )=><Grid item key={index}>
+                                        <TextField variant="outlined" label="Onyen" style={{'marginLeft': '10px', 'marginTop': '30px'}}>>
+                                        </TextField>
+                                    </Grid>)}
+                                </Grid>
+                            </Grid>
                         </Grid>
                         <Grid item>
                             <Button variant="contained" color="secondary" onClick={submitTeams}
