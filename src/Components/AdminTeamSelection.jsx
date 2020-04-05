@@ -98,7 +98,7 @@ function AdminTeamSelection(props) {
                 <div className={classes.toolbar}/>
                 <TeamBox id="0box" className={classes.nameBank} setTeam={setTeam}>
                     {students.map((student, index) =>
-                        <Name key={index} id={index} className="name" draggable="true">
+                        <Name key={index} id={index} className="name" draggable="true" onyen={student['onyen']}>
                             <Card variant="outlined">
                                 <CardContent>
                                     {`${student['firstName']} ${student['lastName']}`}
