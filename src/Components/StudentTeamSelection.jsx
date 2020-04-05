@@ -41,8 +41,6 @@ const useStyles = makeStyles(theme => ({
 function StudentTeamSelection(props) {
     const [allStudents, setAllStudents] = useState([]);
     const [teams, setTeams] = useState([]);
-    const [onyenBoxes, setOnyenBoxes] = useState([]);
-    const [givenOnyens, setGivenOnyens] = useState([]);
     const [draggedOnyens, setDraggedOnyens] = useState([]);
     const [typedOnyens, setTypedOnyens] = useState([]);
 
@@ -58,45 +56,41 @@ function StudentTeamSelection(props) {
         })
     }, []);
 
-    // let nameTeamMap = new Map();
-    // students.forEach((student, index) => nameTeamMap.set(index, -1));
-    let groupingArray = [];
-    allStudents.forEach(student => groupingArray.push({
-        name: student['onyen'],
-        team: 'NONE'
-    }));
-
     // useEffect(() => console.log(draggedOnyens), [draggedOnyens]);
 
     const setTeam = function (studentIndex, teamIndex, onyen) {
-        groupingArray[studentIndex]['team'] = teams[teamIndex]['teamName'];
         if (teamIndex > 0) {
             // console.log('set team index > 0');
             let temp = [...draggedOnyens];
             temp.push(onyen);
             setDraggedOnyens(temp);
         } else {
-            let temp = [...draggedOnyens];
-            temp.splice(draggedOnyens.indexOf(onyen), 1);
-            setDraggedOnyens(temp);
+            let tempDragged = [...draggedOnyens];
+            tempDragged.splice(draggedOnyens.indexOf(onyen), 1);
+            setDraggedOnyens(tempDragged);
+            let tempTyped = [...typedOnyens];
+            tempTyped.splice(typedOnyens.indexOf(onyen), 1);
+            setTypedOnyens(tempTyped)
+            ;tempTyped.splice(typedOnyens.indexOf(onyen), 1);
         }
     };
 
-    const submitTeams = function () {
+    const submitTeams = function (e) {
+        e.preventDefault();
         console.log('draggedOnyens', draggedOnyens);
         console.log('typedOnyens', typedOnyens);
         if (!typedOnyens.every((onyen) =>
             draggedOnyens.includes(onyen)
-        )) {
+        ) || typedOnyens.length !== draggedOnyens.length || typedOnyens.length === 0) {
             alert(`Onyens must all match their student's names to submit your team.`)
         } else {
-            axios.post(`http://localhost:5000/teams/add`,{
-                teamName: '12:30 test',
-                teamMembers: draggedOnyens,
-                semester: 'Spring2020'
-            }).then(alert('Team successfully submitted'))
+            // axios.post(`http://localhost:5000/teams/add`,{
+            //     teamName: '12:30 test',
+            //     teamMembers: draggedOnyens,
+            //     semester: 'Spring2020'
+            // }).then(alert('Team successfully submitted'))
             //need to redirect to another component here
-            // alert('good')
+            alert('good')
         }
     };
 
@@ -127,39 +121,50 @@ function StudentTeamSelection(props) {
                 </TeamBox>
 
                 <Container className="disable-select">
-                    <Grid container
-                          direction="column"
-                          justify="center"
-                          alignItems="center"
-                          className={classes.teamBox}>
-                        <Grid item>
-                            <Card variant="outlined" className="teamTile">
-                                <TeamBox id={`-1box`} setTeam={setTeam}>
-                                    <Box textAlign="center">
-                                        <Typography variant="h6">Drag Names Onto This Text</Typography>
-                                    </Box>
-                                </TeamBox>
-                            </Card>
-                        </Grid>
-                        <Grid item>
+                    <form onSubmit={submitTeams}>
+                        <Grid container
+                              direction="column"
+                              justify="center"
+                              alignItems="center"
+                              className={classes.teamBox}>
                             <Grid item>
-                                <Grid container direction="row" justify="center">
-                                    {draggedOnyens.map((box, index) => <Grid item key={index}>
-                                        <TextField variant="outlined" label="Onyen"
-                                                   style={{'marginLeft': '10px', 'marginTop': '30px'}}
-                                                   onChange={(e) => updateTypedOnyens(e, index)}>
-                                        </TextField>
-                                    </Grid>)}
+                                <Typography variant="h6" style={{'marginBottom':'10px'}}>Drag the names of the people you want in your team into the box
+                                    below.</Typography>
+                            </Grid>
+                            <Grid item>
+                                <Card variant="outlined" className="teamTile">
+                                    <TeamBox id={`-1box`} setTeam={setTeam}>
+                                        <Box textAlign="center">
+                                            <Typography>Drag Names Onto This Text</Typography>
+                                        </Box>
+                                    </TeamBox>
+                                </Card>
+                            </Grid>
+                            <Grid item>
+                                <Grid item>
+                                    <Typography style={{'marginTop':'10px'}}>Type the onyens for the people you are choosing to be on your team in the boxes below.
+                                    (They will appear once you drag the names)
+                                        </Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Grid container direction="row" justify="center">
+                                        {draggedOnyens.map((box, index) => <Grid item key={index}>
+                                            <TextField variant="outlined" label="Onyen"
+                                                       style={{'marginLeft': '10px', 'marginTop': '30px'}}
+                                                       onChange={(e) => updateTypedOnyens(e, index)}>
+                                            </TextField>
+                                        </Grid>)}
+                                    </Grid>
                                 </Grid>
                             </Grid>
+                            <Grid item>
+                                <Button variant="contained" color="secondary" onClick={submitTeams}
+                                        style={{'marginLeft': '30px', 'marginTop': '30px'}}>
+                                    Submit Team
+                                </Button>
+                            </Grid>
                         </Grid>
-                        <Grid item>
-                            <Button variant="contained" color="secondary" onClick={submitTeams}
-                                    style={{'marginLeft': '30px', 'marginTop': '30px'}}>
-                                Submit Team
-                            </Button>
-                        </Grid>
-                    </Grid>
+                    </form>
                 </Container>
             </main>
         </div>
