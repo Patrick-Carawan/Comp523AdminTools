@@ -62,17 +62,19 @@ Assign projects to teams, request should look like
         ]
     }    
 */
-router.route('/assignments').post((req, res) => {
+router.route('/assignments').post( (req, res) => {
     var assignments = req.body.assignments;
     for (let i = 0; i < assignments.length; i++) {
-        Team.findById(req.body.teamId)
-            .then(team => {
-                team.projectId = req.body.projectId;
+        
+        Team.findById(assignments[i].teamId)
+            .then( (team) => {
+                team.projectId = assignments[i].projectId;
                 team.save()
                     .then(() => res.json(`Team ${i} assignment updated`))
                     .catch(err => res.status(400).json('Error: ' + err));
             })
             .catch(err => res.status(400).json('Error: ' + err));
+        
     }
 });
 
