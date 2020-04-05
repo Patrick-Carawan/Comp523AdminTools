@@ -43,6 +43,9 @@ function StudentTeamSelection(props) {
     const [teams, setTeams] = useState([]);
     const [onyenBoxes, setOnyenBoxes] = useState([]);
     const [givenOnyens, setGivenOnyens] = useState([]);
+    const [draggedOnyens, setDraggedOnyens] = useState([]);
+    const [typedOnyens, setTypedOnyens] = useState([]);
+
 
     useEffect(() => {
         axios.get(`http://localhost:5000/users/students/Spring2020`).then(res => {
@@ -63,52 +66,47 @@ function StudentTeamSelection(props) {
         team: 'NONE'
     }));
 
-    const setTeam = function (studentIndex, teamIndex) {
+    // useEffect(() => console.log(draggedOnyens), [draggedOnyens]);
+
+    const setTeam = function (studentIndex, teamIndex, onyen) {
         groupingArray[studentIndex]['team'] = teams[teamIndex]['teamName'];
         if (teamIndex > 0) {
-            console.log('set team index > 0');
-            let temp = [...onyenBoxes];
-            temp.push(0);
-            setOnyenBoxes(temp);
+            // console.log('set team index > 0');
+            let temp = [...draggedOnyens];
+            temp.push(onyen);
+            setDraggedOnyens(temp);
         } else {
-            let temp = [...onyenBoxes];
-            temp.pop();
-            setOnyenBoxes(temp);
+            let temp = [...draggedOnyens];
+            temp.splice(draggedOnyens.indexOf(onyen), 1);
+            setDraggedOnyens(temp);
         }
-        console.log(onyenBoxes)
     };
 
     const submitTeams = function () {
-        console.log(groupingArray);
-
-        let payload = {};
-        groupingArray.forEach((name) => {
-            if (payload.hasOwnProperty(name['team'])) {
-                payload[name['team']].push(name['name'])
-            } else {
-                payload[name['team']] = [name['name']]
-            }
-        });
-        console.log('payload', payload);
-
-        for (let [key, value] of Object.entries(payload)) {
-            console.log(key, value)
-            axios.post(`http://localhost:5000/teams/add`, {
-                teamName: key,
-                teamMembers: value,
+        console.log('draggedOnyens', draggedOnyens);
+        console.log('typedOnyens', typedOnyens);
+        if (!typedOnyens.every((onyen) =>
+            draggedOnyens.includes(onyen)
+        )) {
+            alert(`Onyens must all match their student's names to submit your team.`)
+        } else {
+            axios.post(`http://localhost:5000/teams/add`,{
+                teamName: '12:30 test',
+                teamMembers: draggedOnyens,
                 semester: 'Spring2020'
-            })
+            }).then(alert('Team successfully submitted'))
+            //need to redirect to another component here
+            // alert('good')
         }
     };
 
     const classes = useStyles();
 
 
-    function updateGivenOnyens(e, index) {
-        let copy = [...givenOnyens];
+    function updateTypedOnyens(e, index) {
+        let copy = [...typedOnyens];
         copy[index] = e.target.value;
-        console.log(copy[index]);
-        setGivenOnyens(copy);
+        setTypedOnyens(copy);
     }
 
     return (
@@ -146,10 +144,10 @@ function StudentTeamSelection(props) {
                         <Grid item>
                             <Grid item>
                                 <Grid container direction="row" justify="center">
-                                    {onyenBoxes.map((box, index) => <Grid item key={index}>
+                                    {draggedOnyens.map((box, index) => <Grid item key={index}>
                                         <TextField variant="outlined" label="Onyen"
                                                    style={{'marginLeft': '10px', 'marginTop': '30px'}}
-                                                   onChange={(e) => updateGivenOnyens(e, index)}>
+                                                   onChange={(e) => updateTypedOnyens(e, index)}>
                                         </TextField>
                                     </Grid>)}
                                 </Grid>
