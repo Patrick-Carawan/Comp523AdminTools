@@ -42,12 +42,15 @@ function StudentTeamSelection(props) {
     const [allStudents, setAllStudents] = useState([]);
     const [teams, setTeams] = useState([]);
     const [onyenBoxes, setOnyenBoxes] = useState([]);
-    const [selectedStudents, setSelectedStudents] = useState([]);
+    const [givenOnyens, setGivenOnyens] = useState([]);
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/users/students/Spring2020`).then(res => setAllStudents(res['data'].filter(student => student['admin'] === false)));
+        axios.get(`http://localhost:5000/users/students/Spring2020`).then(res => {
+            console.log('allStudents', res['data'].filter(student => student['admin'] === false));
+            setAllStudents(res['data'].filter(student => student['admin'] === false))
+        });
         axios.get(`http://localhost:5000/teams/Spring2020`).then(res => {
-            console.log(res['data']);
+            console.log('teams', res['data']);
             setTeams(res['data'].sort((t1, t2) => t1['teamName'] < t2['teamName'] ? -1 : 1))
         })
     }, []);
@@ -62,12 +65,12 @@ function StudentTeamSelection(props) {
 
     const setTeam = function (studentIndex, teamIndex) {
         groupingArray[studentIndex]['team'] = teams[teamIndex]['teamName'];
-        if(teamIndex > 0){
+        if (teamIndex > 0) {
             console.log('set team index > 0');
             let temp = [...onyenBoxes];
             temp.push(0);
             setOnyenBoxes(temp);
-        } else{
+        } else {
             let temp = [...onyenBoxes];
             temp.pop();
             setOnyenBoxes(temp);
@@ -101,6 +104,13 @@ function StudentTeamSelection(props) {
     const classes = useStyles();
 
 
+    function updateGivenOnyens(e, index) {
+        let copy = [...givenOnyens];
+        copy[index] = e.target.value;
+        console.log(copy[index]);
+        setGivenOnyens(copy);
+    }
+
     return (
         <div className={classes.root}>
             <DashBoard/>
@@ -108,7 +118,7 @@ function StudentTeamSelection(props) {
                 <div className={classes.toolbar}/>
                 <TeamBox id="0box" className={classes.nameBank} setTeam={setTeam}>
                     {allStudents.map((student, index) =>
-                        <Name key={index} id={index} className="name" draggable="true">
+                        <Name key={index} id={index} className="name" draggable="true" onyen={student['onyen']}>
                             <Card variant="outlined">
                                 <CardContent>
                                     {`${student['firstName']} ${student['lastName']}`}
@@ -136,8 +146,10 @@ function StudentTeamSelection(props) {
                         <Grid item>
                             <Grid item>
                                 <Grid container direction="row" justify="center">
-                                    {onyenBoxes.map((box, index )=><Grid item key={index}>
-                                        <TextField variant="outlined" label="Onyen" style={{'marginLeft': '10px', 'marginTop': '30px'}}>>
+                                    {onyenBoxes.map((box, index) => <Grid item key={index}>
+                                        <TextField variant="outlined" label="Onyen"
+                                                   style={{'marginLeft': '10px', 'marginTop': '30px'}}
+                                                   onChange={(e) => updateGivenOnyens(e, index)}>
                                         </TextField>
                                     </Grid>)}
                                 </Grid>
