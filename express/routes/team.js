@@ -10,7 +10,7 @@ router.route('/').get((req, res) => {
 
 // Get all teams proposal ranks
 router.route('/rankings').get((req, res) => {
-    Team.find({}, "proposalRanks")
+    Team.find({}, "teamName proposalRanks")
         .then(teams => res.json(teams))
         .catch(err => res.status(400).json('Error: ' + err));
 });
