@@ -84,11 +84,11 @@ function StudentTeamSelection(props) {
         ) || typedOnyens.length !== draggedOnyens.length || typedOnyens.length === 0) {
             alert(`Onyens must all match their student's names to submit your team.`)
         } else {
-            // axios.post(`http://localhost:5000/teams/add`,{
-            //     teamName: '12:30 test',
-            //     teamMembers: draggedOnyens,
-            //     semester: 'Spring2020'
-            // }).then(alert('Team successfully submitted'))
+            axios.post(`http://localhost:5000/teams/add`,{
+                teamName: '12:30 test',
+                teamMembers: draggedOnyens,
+                semester: 'Spring2020'
+            }).then(alert('Team successfully submitted'))
             //need to redirect to another component here
             alert('good')
         }
