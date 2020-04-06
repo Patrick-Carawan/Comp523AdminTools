@@ -69,6 +69,22 @@ connection.once('open', () => {
         email: "amclose@live.unc.edu",
         semester: "Spring2020"
     });
+    const user5 = new User({
+        onyen: "jdoe",
+        firstName: "Jane",
+        lastName: "Doe",
+        phone: "123-456-7890",
+        email: "jdoe@live.unc.edu",
+        semester: "Spring2020"
+    });
+    const user6 = new User({
+        onyen: "tsmith",
+        firstName: "Tom",
+        lastName: "Smith",
+        phone: "098-765-4321",
+        email: "tsmith@live.unc.edu",
+        semester: "Spring2020"
+    });
     
     const team1 = new Team({
         teamName:  "Team 1",
@@ -164,7 +180,7 @@ connection.once('open', () => {
         text: "Best experience of our young lives"
     });
 
-    const users = [adminUser, user1, user2, user3, user4];
+    const users = [adminUser, user1, user2, user3, user4, user5, user6];
     const proposals = [prop1, prop2, prop3, prop4];
     const teams = [team1, team2];
     const letters = [pendingLetter, acceptedLetter, rejectedLetter];
