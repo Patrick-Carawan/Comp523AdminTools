@@ -32,6 +32,9 @@ const useStyles = makeStyles(theme => ({
         margin: theme.spacing(1),
         minWidth: 120,
         maxWidth: 340
+    },
+    redBackground: {
+        backgroundColor: '#ff3a52 !important'
     }
 }));
 
@@ -48,44 +51,41 @@ const MenuProps = {
 
 function ProposalAssignment(props) {
     const classes = useStyles();
-    const [teams, setTeams] = useState([]);
     const [rankings, setRankings] = useState([]);
-    const [teamSelect, setTeamSelect] = useState([]);
-    const [proposals, setProposals] = useState([]);
-    const [pairings, setPairings] = useState(new Map());
+    const [titleMap, setTitleMap] = useState(new Map());
+
+    const [selectedProjects, setSelectedProjects] = useState([]);
+    const [remainingProjects, setRemainingProjects] = useState([]);
+    // const [pairings, setPairings] = useState(new Map());
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/teams/Spring2020`).then(res => {
-            console.log('teams', res);
-            const allTeams = res['data'];
-            let teamMap = new Map();
-            allTeams.forEach(team => teamMap.set(team, 'No Project'));
-            setPairings(teamMap);
-            const fillArray = new Array(allTeams.length);
-            fillArray.fill(-1);
-            setTeamSelect(fillArray);
-            setTeams(allTeams);
+        axios.get(`http://localhost:5000/teams/rankings`).then(res => {
+            console.log('rankings', res);
+            setRankings(res.data);
+            const fillArray = new Array(res.data.length);
+            fillArray.fill('None Selected');
+            setSelectedProjects(fillArray)
         });
+
         axios.get(`http://localhost:5000/proposals`).then(res => {
             console.log('proposals', res);
             let acceptedProps = res['data'].filter(proposal => proposal['status'] === "Accepted");
-            setProposals(acceptedProps);
+            setRemainingProjects(acceptedProps.map(project => project['title']));
+            let tempMap = new Map();
+            acceptedProps.forEach(project => tempMap.set(project['title'], project));
+            setTitleMap(tempMap)
+            console.log('in setup useeffect', tempMap)
 
         });
-        axios.get(`http://localhost:5000/teams/rankings`).then(res => {
-            console.log('rankings', res)
-            setRankings(res.data);
-        });
+
     }, []);
 
-    function handleChange(e, index, team) {
-        const copy = [...teamSelect];
-        copy.splice(index, 1, e.target.value);
-        setTeamSelect(copy);
 
-        const cloneMap = new Map(pairings);
-        cloneMap.set(team, e.target.value);
-        setPairings(cloneMap);
+    function handleChange(e, index, team) {
+        let temp;
+        temp = [...selectedProjects];
+        temp[index] = e.target.value;
+        setSelectedProjects(temp);
     }
 
     function submitAssignments() {
@@ -97,20 +97,20 @@ function ProposalAssignment(props) {
         // });
         // console.log(newObj)
 
-        let assignmentsArray = [];
-        pairings.forEach((v, k) => {
-            let tempObj = {}
-            if (k['_id'] === undefined) {
-                tempObj['teamId'] = `${k['_id']}`;
-                tempObj['projectId'] = "Pending";
-            } else {
-                tempObj['teamId'] = `${k['_id']}`;
-                tempObj['projectId'] = v['_id'];
-            }
-            assignmentsArray.push(tempObj);
-
-        });
-        console.log(assignmentsArray);
+        // let assignmentsArray = [];
+        // pairings.forEach((v, k) => {
+        //     let tempObj = {}
+        //     if (k['_id'] === undefined) {
+        //         tempObj['teamId'] = `${k['_id']}`;
+        //         tempObj['projectId'] = "Pending";
+        //     } else {
+        //         tempObj['teamId'] = `${k['_id']}`;
+        //         tempObj['projectId'] = v['_id'];
+        //     }
+        //     assignmentsArray.push(tempObj);
+        //
+        // });
+        // console.log(assignmentsArray);
     }
 
     return (
@@ -123,7 +123,7 @@ function ProposalAssignment(props) {
                     {
                         rankings.map((team, index) =>
                             <Card className={classes.card} key={index} variant="outlined">
-                                <Typography>{team._id}</Typography>
+                                <Typography>{team.teamName}</Typography>
                                 <Divider/>
                                 <Grid container direction="row">
                                     <Grid item>
@@ -137,20 +137,24 @@ function ProposalAssignment(props) {
                                         </Grid>
                                     </Grid>
                                     <Grid item style={{'marginLeft': '20%', 'marginTop': '1%'}}>
-                                        <FormControl className={classes.formControl}>
-                                            <InputLabel>Select Project</InputLabel>
-                                            <Select
-                                                value={teamSelect[index]}
-                                                onChange={(e) => handleChange(e, index, team)}
-                                                MenuProps={MenuProps}
-                                            >
-                                                {proposals.map((proposal, i) => (
-                                                    <MenuItem key={i} value={proposal}>
-                                                        {proposal.title}
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
-                                        </FormControl>
+                                        {selectedProjects.length > 0 ?
+                                            <FormControl className={classes.formControl}>
+                                                <InputLabel>Select Project</InputLabel>
+                                                <Select
+                                                    value={selectedProjects[index]}
+                                                    onChange={(e) => handleChange(e, index, team)}
+                                                    MenuProps={MenuProps}
+                                                >
+                                                    {remainingProjects.map((proposal, i) => (
+                                                        <MenuItem key={i} value={proposal} className={
+                                                            selectedProjects.includes(proposal) ? classes.redBackground: 'none'
+                                                        }>
+                                                            {proposal}
+                                                        </MenuItem>
+                                                    ))}
+                                                </Select>
+                                            </FormControl>
+                                            : null}
                                     </Grid>
                                 </Grid>
                             </Card>
