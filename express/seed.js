@@ -171,12 +171,12 @@ connection.once('open', () => {
     });
 
     const teamReport1 = new TeamReport({
-        team: "team1",
+        team: "Team 1",
         text: "I have never been so fulfilled"
     });
 
     const teamReport2 = new TeamReport({
-        team: "team 2",
+        team: "Team 2",
         text: "Best experience of our young lives"
     });
 
