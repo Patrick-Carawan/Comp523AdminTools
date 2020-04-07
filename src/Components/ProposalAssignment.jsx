@@ -60,7 +60,7 @@ function ProposalAssignment(props) {
 
     useEffect(() => {
         axios.get(`http://localhost:5000/teams/rankings`).then(res => {
-            console.log('rankings', res);
+            // console.log('rankings', res);
             setRankings(res.data);
             const fillArray = new Array(res.data.length);
             fillArray.fill('None Selected');
@@ -68,13 +68,12 @@ function ProposalAssignment(props) {
         });
 
         axios.get(`http://localhost:5000/proposals`).then(res => {
-            console.log('proposals', res);
+            // console.log('proposals', res);
             let acceptedProps = res['data'].filter(proposal => proposal['status'] === "Accepted");
             setRemainingProjects(acceptedProps.map(project => project['title']));
             let tempMap = new Map();
             acceptedProps.forEach(project => tempMap.set(project['title'], project));
             setTitleMap(tempMap)
-            console.log('in setup useeffect', tempMap)
 
         });
 
@@ -89,28 +88,16 @@ function ProposalAssignment(props) {
     }
 
     function submitAssignments() {
-        // const newObj = {};
-        // pairings.forEach((value, key)=>{
-        //     if(key['_id'] === undefined) key = "No Project Assigned"
-        //
-        //     newObj[`${key['_id']}`] = value['_id']
-        // });
-        // console.log(newObj)
+        let assignmentArray = []
+        rankings.forEach((team,index) =>{
+            const teamId = team['_id'];
+            const projectId = titleMap.get(selectedProjects[index])['_id'];
+            assignmentArray.push({'teamId':teamId, 'projectId': projectId});
+        });
+        axios.post(`http://localhost:5000/teams/assignments`, {
+            assignments: assignmentArray
+        }).then(alert('Assignments submitted'));
 
-        // let assignmentsArray = [];
-        // pairings.forEach((v, k) => {
-        //     let tempObj = {}
-        //     if (k['_id'] === undefined) {
-        //         tempObj['teamId'] = `${k['_id']}`;
-        //         tempObj['projectId'] = "Pending";
-        //     } else {
-        //         tempObj['teamId'] = `${k['_id']}`;
-        //         tempObj['projectId'] = v['_id'];
-        //     }
-        //     assignmentsArray.push(tempObj);
-        //
-        // });
-        // console.log(assignmentsArray);
     }
 
     return (
