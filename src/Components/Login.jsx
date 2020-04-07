@@ -8,7 +8,6 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {Link, useHistory} from "react-router-dom";
-import auth from "../auth";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -37,6 +36,9 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Login(props) {
+    window.localStorage.setItem("adminUser", "false");
+    window.localStorage.setItem("studentUser", "false");
+
     const classes = useStyles();
     let student = true;
 
@@ -100,9 +102,8 @@ export default function Login(props) {
                         color="secondary"
                         className={classes.submit}
                         onClick={() => {
-                            auth.loginAsStudent(() => {
-                                history.push("/teams")
-                            });
+                            window.localStorage.setItem("studentUser", "true");
+                            history.push("/teams");
                         }}
                     >
                         Grant student access
@@ -114,9 +115,8 @@ export default function Login(props) {
                         color="secondary"
                         className={classes.submit}
                         onClick={() => {
-                            auth.loginAsAdmin(() => {
-                                history.push("/dashboard");
-                            });
+                            window.localStorage.setItem("adminUser", "true");
+                            history.push("/dashboard")
                         }}
                     >
                         Grant admin access

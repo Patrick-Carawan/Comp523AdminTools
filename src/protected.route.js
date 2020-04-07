@@ -1,6 +1,5 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
-import auth from "./auth";
 
 export const StudentProtectedRoute = ({
     component: Component,
@@ -10,7 +9,7 @@ export const StudentProtectedRoute = ({
         <Route
             {...rest}
             render={props => {
-                if (auth.isAuthenticatedAsStudent()) {
+                if (window.localStorage.getItem("studentUser")==="true") {
                     return <Component {...props} />;
                 } else {
                     return (
@@ -37,7 +36,7 @@ export const AdminProtectedRoute = ({
         <Route
             {...rest}
             render={props => {
-                if (auth.isAuthenticatedAsAdmin()) {
+                if (window.localStorage.getItem("adminUser")==="true") {
                     return <Component {...props} />;
                 } else {
                     return (
