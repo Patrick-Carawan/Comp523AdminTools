@@ -49,7 +49,7 @@ function App() {
                 <StudentProtectedRoute path="/studentSetupPage" component={StudentSetupPage} exact={true}/>
                 <AdminProtectedRoute path="/teammateSelectionRules" component={TeammateSelectionRules} exact={true}/>
                 <AdminProtectedRoute path="/teamPreferences" component={TeamPreferences} exact={true}/>
-                <Route path="/proposalAssignment" component={ProposalAssignment} exact={true}/>
+                <AdminProtectedRoute path="/proposalAssignment" component={ProposalAssignment} exact={true}/>
                 <Route path="*" component={() => "404 NOT FOUND"} />
             </Switch>
 

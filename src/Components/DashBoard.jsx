@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
+import AssignIcon from '@material-ui/icons/ExitToApp';
 import Proposals from '@material-ui/icons/Description';
 import MailIcon from '@material-ui/icons/Mail';
 import Team from '@material-ui/icons/Group';
@@ -98,9 +99,9 @@ export default function Dashboard() {
                         </Link>
                     </ListItem>
                     <ListItem button key={5} className={classes.listItem} title="Give feedback on team deliverables">
-                        <Link to="/nowhere" className={classes.link}>
-                            <ListItemIcon><Deliverable/></ListItemIcon>
-                            <Typography>Rate Deliverables</Typography>
+                        <Link to="proposalAssignment" className={classes.link}>
+                            <ListItemIcon><AssignIcon/></ListItemIcon>
+                            <Typography>Assign Team Projects</Typography>
                         </Link>
                     </ListItem>
                 </List>
