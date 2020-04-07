@@ -18,6 +18,7 @@ import lorem from "../lorem";
 
 
 function TabPanel(props) {
+    console.log(props)
     const {children, value, index, ...other} = props;
 
     return (
@@ -71,6 +72,13 @@ function FinalReports() {
             console.log('teams', res['data']);
             const myTeams = res['data'].sort((team1, team2) => team1['teamName'] < team2['teamName'] ? -1 : 1);
             setTeams(myTeams);
+        });
+        axios.get(`http://localhost:5000/finalReports/students`).then((res) => {
+            console.log('student reports', res['data']);
+        });
+        axios.get(`http://localhost:5000/finalReports/teams`).then((res) => {
+            console.log('team reports', res['data']);
+
         })
 
     }, []);
