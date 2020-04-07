@@ -11,6 +11,7 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
+import Divider from "@material-ui/core/Divider";
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -30,7 +31,7 @@ const useStyles = makeStyles(theme => ({
     formControl: {
         margin: theme.spacing(1),
         minWidth: 120,
-        marginLeft: '5%'
+        maxWidth: 340
     }
 }));
 
@@ -48,6 +49,7 @@ const MenuProps = {
 function ProposalAssignment(props) {
     const classes = useStyles();
     const [teams, setTeams] = useState([]);
+    const [rankings, setRankings] = useState([]);
     const [teamSelect, setTeamSelect] = useState([]);
     const [proposals, setProposals] = useState([]);
     const [pairings, setPairings] = useState(new Map());
@@ -69,7 +71,11 @@ function ProposalAssignment(props) {
             let acceptedProps = res['data'].filter(proposal => proposal['status'] === "Accepted");
             setProposals(acceptedProps);
 
-        })
+        });
+        axios.get(`http://localhost:5000/teams/rankings`).then(res => {
+            console.log('rankings', res)
+            setRankings(res.data);
+        });
     }, []);
 
     function handleChange(e, index, team) {
@@ -83,15 +89,28 @@ function ProposalAssignment(props) {
     }
 
     function submitAssignments() {
-        const newObj = {};
-        pairings.forEach((value, key)=>{
-            if(key['_id'] === undefined) key = "No Project Assigned"
+        // const newObj = {};
+        // pairings.forEach((value, key)=>{
+        //     if(key['_id'] === undefined) key = "No Project Assigned"
+        //
+        //     newObj[`${key['_id']}`] = value['_id']
+        // });
+        // console.log(newObj)
 
-            newObj[`${key['_id']}`] = value['_id']
+        let assignmentsArray = [];
+        pairings.forEach((v, k) => {
+            let tempObj = {}
+            if (k['_id'] === undefined) {
+                tempObj['teamId'] = `${k['_id']}`;
+                tempObj['projectId'] = "Pending";
+            } else {
+                tempObj['teamId'] = `${k['_id']}`;
+                tempObj['projectId'] = v['_id'];
+            }
+            assignmentsArray.push(tempObj);
+
         });
-        // axios.post(`http://localhost:5000/team/${teamID}`,{
-        //     projectId: proposalID
-        // })
+        console.log(assignmentsArray);
     }
 
     return (
@@ -102,14 +121,22 @@ function ProposalAssignment(props) {
                 <Container maxWidth="md">
                     <h1>Assign Projects to Teams</h1>
                     {
-                        teams.map((team, index) =>
-                            <Card className={classes.card} key={index}>
-                                <Typography>{team.teamName}</Typography>
+                        rankings.map((team, index) =>
+                            <Card className={classes.card} key={index} variant="outlined">
+                                <Typography>{team._id}</Typography>
+                                <Divider/>
                                 <Grid container direction="row">
                                     <Grid item>
-                                        <Typography>Ideal Rankings</Typography>
+                                        <Grid container direction="column">
+                                            <Grid item>
+                                                <Typography>Ideal Rankings</Typography>
+                                            </Grid>
+                                            {team.proposalRanks.map((t, i) => <Grid item key={i}>
+                                                <Typography>{t}</Typography>
+                                            </Grid>)}
+                                        </Grid>
                                     </Grid>
-                                    <Grid item>
+                                    <Grid item style={{'marginLeft': '20%', 'marginTop': '1%'}}>
                                         <FormControl className={classes.formControl}>
                                             <InputLabel>Select Project</InputLabel>
                                             <Select
