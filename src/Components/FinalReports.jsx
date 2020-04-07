@@ -18,7 +18,6 @@ import lorem from "../lorem";
 
 
 function TabPanel(props) {
-    console.log(props)
     const {children, value, index, ...other} = props;
 
     return (
@@ -64,26 +63,35 @@ const MenuProps = {
 
 function FinalReports() {
     const classes = useStyles();
-    const [teams, setTeams] = useState([]);
+    const [teamReports, setTeamReports] = useState([]);
+    const [studentReports, setStudentReports] = useState([]);
+    const [teams, setTeams] = useState([])
     const [currentTeam, setCurrentTeam] = useState({});
     const [tabIndex, setTabIndex] = useState(0);
+    const [teamMap, setTeamMap] = useState(new Map());
     useEffect(() => {
         axios.get(`http://localhost:5000/teams`).then((res) => {
             console.log('teams', res['data']);
             const myTeams = res['data'].sort((team1, team2) => team1['teamName'] < team2['teamName'] ? -1 : 1);
             setTeams(myTeams);
+            let tempMap = new Map();
+            myTeams.forEach(team => tempMap.set(team['teamName'], team['teamMembers']));
+            console.log(tempMap);
+            setTeamMap(tempMap);
         });
         axios.get(`http://localhost:5000/finalReports/students`).then((res) => {
             console.log('student reports', res['data']);
+            setStudentReports(res['data'].sort((team1, team2) => team1['team'] < team2['team'] ? -1 : 1));
         });
         axios.get(`http://localhost:5000/finalReports/teams`).then((res) => {
             console.log('team reports', res['data']);
-
+            setTeamReports(res['data'].sort((team1, team2) => team1['team'] < team2['team'] ? -1 : 1));
         })
 
     }, []);
 
     const handleChange = (event) => {
+        console.log('will be current team', event.target.value)
         setCurrentTeam(event.target.value);
     };
 
@@ -109,50 +117,48 @@ function FinalReports() {
                                     onChange={handleChange}
                                     MenuProps={MenuProps}
                                 >
-                                    {teams.map((teamItem, i) => (
+                                    {teamReports.map((teamItem, i) => (
                                         <MenuItem key={i} value={teamItem}>
-                                            {teamItem['teamName']}
+                                            {teamItem['team']}
                                         </MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
                         </Grid>
                     </Grid>
-                    <Tabs
-                        value={tabIndex}
-                        onChange={handleTabClick}
-                        aria-label="simple tabs example"
-                        centered
-                    >
-                        <Tab label="Team">Team</Tab>
-                        {
-                            currentTeam['teamMembers'] ? currentTeam['teamMembers'].sort().map((student, index) =>
-                                <Tab label={student} key={index}/>) : null
-                        }
-                    </Tabs>
-
-                    {/*{*/}
-                    {/*    studentReports.sort((onyen1, onyen2) => onyen1 < onyen2 ? -1 : 1).map((report, index) =>*/}
-                    {/*        <TabPanel value={tabIndex} index={index}>*/}
-                    {/*            <Box textAlign="center">*/}
-                    {/*                <Typography>*/}
-                    {/*                    //the report text here*/}
-                    {/*                </Typography>*/}
-                    {/*            </Box>*/}
-                    {/*        </TabPanel>*/}
-                    {/*    )*/}
-                    {/*}*/}
-
-                    <TabPanel value={tabIndex} index={1}>
+                    {
+                        teamMap.get(currentTeam['team']) ?
+                            <Tabs
+                                value={tabIndex}
+                                onChange={handleTabClick}
+                                aria-label="simple tabs example"
+                                centered
+                            >
+                                <Tab label="Team">Team</Tab>
+                                {
+                                    studentReports.filter(rep => teamMap.get(currentTeam['team']).includes(rep['onyen'])).map((report, index) =>
+                                        <Tab label={report['onyen']} key={index}>{report['onyen']}</Tab>)
+                                }
+                            </Tabs>
+                            : null
+                    }
+                    <TabPanel value={tabIndex} index={0}>
                         <Typography>
-                            This is Daniel's report{lorem}{lorem}
+                            {currentTeam['text']}
                         </Typography>
                     </TabPanel>
-                    <TabPanel value={tabIndex} index={2}>
-                        <Typography>
-                            This is the Patrick's report{lorem}{lorem}
-                        </Typography>
-                    </TabPanel>
+                    {
+                        teamMap.get(currentTeam['team']) ?
+                            studentReports.filter(report => teamMap.get(currentTeam['team']).includes(report['onyen'])).map((rep, i) =>
+                                <TabPanel value={tabIndex} index={i + 1}>
+                                    <Typography>
+                                        {rep['text']}
+                                    </Typography>
+                                </TabPanel>
+                            )
+                            : null
+                    }
+
                 </Container>
             </main>
         </div>
