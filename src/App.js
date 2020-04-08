@@ -23,6 +23,7 @@ import Meeting from "./Components/Meeting";
 import FinalReports from "./Components/FinalReports";
 import { AdminProtectedRoute, StudentProtectedRoute } from "./protected.route";
 import ProposalAssignment from "./Components/ProposalAssignment";
+import CssBaseline from "@material-ui/core/CssBaseline";
 
 const theme = createMuiTheme({
   palette: {
@@ -33,80 +34,87 @@ const theme = createMuiTheme({
 });
 function App() {
   return (
-    <MuiThemeProvider theme={theme}>
-      <BrowserRouter>
-        <Switch>
-          <Route path="/" component={Home} exact={true} />
-          <Route path="/clientForm" component={ClientForm} exact={true} />
-          <Route path="/login" component={Login} exact={true} />
-          <Route path="/createAccount" component={CreateAccount} exact={true} />
-          <Route path="/meeting" component={Meeting} exact={true} />
-          <AdminProtectedRoute
-            path="/dashboard"
-            component={DashBoard}
-            exact={true}
-          />
-          <AdminProtectedRoute
-            path="/proposalsAdmin"
-            component={ProposalsAdminView}
-            exact={true}
-          />
-          <StudentProtectedRoute
-            path="/studentProps"
-            component={ProposalsStudentView}
-            exact={true}
-          />
-          // TODO: Deal with student team selection page
-          <Route path="/teams" component={TeamsGrid} exact={true} />
-          <StudentProtectedRoute
-            path="/rank"
-            component={RankContainer}
-            exact={true}
-          />
-          <AdminProtectedRoute
-            path="/composeEmail"
-            component={ComposeEmail}
-            exact={true}
-          />
-          <AdminProtectedRoute
-            path="/teamSelection"
-            component={TeamSelection}
-            exact={true}
-          />
-          <AdminProtectedRoute
-            path="/viewFinalReports"
-            component={FinalReports}
-            exact={true}
-          />
-          <Route
-            path="/acceptedClientForm"
-            component={AcceptedClientForm}
-            exact={true}
-          />
-          <StudentProtectedRoute
-            path="/studentSetupPage"
-            component={StudentSetupPage}
-            exact={true}
-          />
-          <AdminProtectedRoute
-            path="/teammateSelectionRules"
-            component={TeammateSelectionRules}
-            exact={true}
-          />
-          <AdminProtectedRoute
-            path="/teamPreferences"
-            component={TeamPreferences}
-            exact={true}
-          />
-          <AdminProtectedRoute
-            path="/proposalAssignment"
-            component={ProposalAssignment}
-            exact={true}
-          />
-          <Route path="*" component={() => "404 NOT FOUND"} />
-        </Switch>
-      </BrowserRouter>
-    </MuiThemeProvider>
+    <React.Fragment>
+      <CssBaseline />
+      <MuiThemeProvider theme={theme}>
+        <BrowserRouter>
+          <Switch>
+            <Route path="/" component={Home} exact={true} />
+            <Route path="/clientForm" component={ClientForm} exact={true} />
+            <Route path="/login" component={Login} exact={true} />
+            <Route
+              path="/createAccount"
+              component={CreateAccount}
+              exact={true}
+            />
+            <Route path="/meeting" component={Meeting} exact={true} />
+            <AdminProtectedRoute
+              path="/dashboard"
+              component={DashBoardContent}
+              exact={true}
+            />
+            <AdminProtectedRoute
+              path="/proposalsAdmin"
+              component={ProposalsAdminView}
+              exact={true}
+            />
+            <StudentProtectedRoute
+              path="/studentProps"
+              component={ProposalsStudentView}
+              exact={true}
+            />
+            // TODO: Deal with student team selection page
+            <Route path="/teams" component={TeamsGrid} exact={true} />
+            <StudentProtectedRoute
+              path="/rank"
+              component={RankContainer}
+              exact={true}
+            />
+            <AdminProtectedRoute
+              path="/composeEmail"
+              component={ComposeEmail}
+              exact={true}
+            />
+            <AdminProtectedRoute
+              path="/teamSelection"
+              component={TeamSelection}
+              exact={true}
+            />
+            <AdminProtectedRoute
+              path="/viewFinalReports"
+              component={FinalReports}
+              exact={true}
+            />
+            <Route
+              path="/acceptedClientForm"
+              component={AcceptedClientForm}
+              exact={true}
+            />
+            <StudentProtectedRoute
+              path="/studentSetupPage"
+              component={StudentSetupPage}
+              exact={true}
+            />
+            <AdminProtectedRoute
+              path="/teammateSelectionRules"
+              component={TeammateSelectionRules}
+              exact={true}
+            />
+            <AdminProtectedRoute
+              path="/teamPreferences"
+              component={TeamPreferences}
+              exact={true}
+            />
+            <AdminProtectedRoute
+              path="/proposalAssignment"
+              component={ProposalAssignment}
+              exact={true}
+            />
+            <Route path="*" component={() => "404 NOT FOUND"} />
+          </Switch>
+        </BrowserRouter>
+      </MuiThemeProvider>
+    </React.Fragment>
   );
 }
 
