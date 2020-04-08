@@ -46,10 +46,7 @@ function App() {
                 <StudentProtectedRoute path="/rank" component={RankContainer} exact={true}/>
                 <AdminProtectedRoute path="/composeEmail" component={ComposeEmail} exact={true}/>
                 <AdminProtectedRoute path="/teamSelection" component={TeamSelection} exact={true}/>
-                <Route path="/rank" component={RankContainer} exact={true}/>
-                <Route path="/viewFinalReports" component={FinalReports} exact={true}/>
-                <Route path="/composeEmail" component={ComposeEmail} exact={true}/>
-                <Route path="/teamSelection" component={TeamSelection} exact={true}/>
+                <AdminProtectedRoute path="/viewFinalReports" component={FinalReports} exact={true}/>
                 <Route path="/acceptedClientForm" component={AcceptedClientForm} exact={true}/>
                 <StudentProtectedRoute path="/studentSetupPage" component={StudentSetupPage} exact={true}/>
                 <AdminProtectedRoute path="/teammateSelectionRules" component={TeammateSelectionRules} exact={true}/>
