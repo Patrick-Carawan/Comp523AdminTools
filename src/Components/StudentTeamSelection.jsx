@@ -108,6 +108,7 @@ function StudentTeamSelection(props) {
             <DashBoard/>
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
+
                 <TeamBox id="0box" className={classes.nameBank} setTeam={setTeam}>
                     {allStudents.map((student, index) =>
                         <Name key={index} id={index} className="name" draggable="true" onyen={student['onyen']}>
@@ -121,49 +122,61 @@ function StudentTeamSelection(props) {
                 </TeamBox>
 
                 <Container className="disable-select">
+
                     <form onSubmit={submitTeams}>
-                        <Grid container
-                              direction="column"
-                              justify="center"
-                              alignItems="center"
-                              className={classes.teamBox}>
-                            <Grid item>
-                                <Typography variant="h6" style={{'marginBottom':'10px'}}>Drag the names of the people you want in your team into the box
-                                    below.</Typography>
-                            </Grid>
-                            <Grid item>
-                                <Card variant="outlined" className="teamTile">
-                                    <TeamBox id={`-1box`} setTeam={setTeam}>
-                                        <Box textAlign="center">
-                                            <Typography>Drag Names Onto This Text</Typography>
-                                        </Box>
-                                    </TeamBox>
-                                </Card>
-                            </Grid>
-                            <Grid item>
+                    <Grid container direction="row">
+                        <Grid item style={{'maxWidth':'50%'}}>
+                            <Grid container
+                                  direction="column"
+                                  justify="center"
+                                  alignItems="center"
+                                  className={classes.teamBox}>
                                 <Grid item>
-                                    <Typography style={{'marginTop':'10px'}}>Type the onyens for the people you are choosing to be on your team in the boxes below.
-                                    (They will appear once you drag the names)
-                                        </Typography>
+                                    <Typography variant="h6" style={{'marginBottom':'10px'}}>Drag the names of the people you want in your team into the box
+                                        below.</Typography>
                                 </Grid>
                                 <Grid item>
-                                    <Grid container direction="row" justify="center">
-                                        {draggedOnyens.map((box, index) => <Grid item key={index}>
-                                            <TextField variant="outlined" label="Onyen"
-                                                       style={{'marginLeft': '10px', 'marginTop': '30px'}}
-                                                       onChange={(e) => updateTypedOnyens(e, index)}>
-                                            </TextField>
-                                        </Grid>)}
-                                    </Grid>
+                                    <Card variant="outlined" className="teamTile">
+                                        <TeamBox id={`-1box`} setTeam={setTeam}>
+                                            <Box textAlign="center">
+                                                <Typography>Drag Names Onto This Text</Typography>
+                                            </Box>
+                                        </TeamBox>
+                                    </Card>
                                 </Grid>
-                            </Grid>
-                            <Grid item>
-                                <Button variant="contained" color="secondary" onClick={submitTeams}
-                                        style={{'marginLeft': '30px', 'marginTop': '30px'}}>
-                                    Submit Team
-                                </Button>
                             </Grid>
                         </Grid>
+                        <Grid item style={{'maxWidth':'50%'}} className={classes.teamBox}>
+                            <Grid container direction="column">
+                                <Grid item>
+                                    <Grid item>
+                                        <Typography >Type the onyens for the people you are choosing to be on your team in the boxes below.
+                                            (They will appear once you drag the names)
+                                        </Typography>
+                                    </Grid>
+                                    <Grid item>
+                                        <Grid container direction="row" justify="center">
+                                            {draggedOnyens.map((box, index) => <Grid item key={index}>
+                                                <TextField variant="outlined" label="Onyen"
+                                                           style={{'marginLeft': '10px', 'marginTop': '30px'}}
+                                                           onChange={(e) => updateTypedOnyens(e, index)}>
+                                                </TextField>
+                                            </Grid>)}
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                                <Grid item>
+                                    <Button variant="contained" color="secondary" onClick={submitTeams}
+                                            style={{'marginLeft': '30px', 'marginTop': '30px'}}>
+                                        Submit Team
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+
+
+
                     </form>
                 </Container>
             </main>
