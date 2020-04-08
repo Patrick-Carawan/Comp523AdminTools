@@ -1,198 +1,242 @@
 import React from "react";
-import clsx from "clsx";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Input from "@material-ui/core/Input";
+import { makeStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
+import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
-import ListItemText from "@material-ui/core/ListItemText";
 import Select from "@material-ui/core/Select";
-import Checkbox from "@material-ui/core/Checkbox";
-import Chip from "@material-ui/core/Chip";
+import Button from "@material-ui/core/Button";
+import Title from "./Title";
+import Typography from "@material-ui/core/Typography";
+import { green } from "@material-ui/core/colors";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Snackbar from "@material-ui/core/Snackbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
+  root: {
+    "& > *": {
+      margin: theme.spacing(1),
+      marginTop: theme.spacing(2),
+    },
+  },
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
-    maxWidth: 300
   },
-  chips: {
-    display: "flex",
-    flexWrap: "wrap"
+  selectEmpty: {
+    marginTop: theme.spacing(2),
   },
-  chip: {
-    margin: 2
-  },
-  noLabel: {
-    marginTop: theme.spacing(3)
-  }
 }));
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250
-    }
-  }
-};
+// For Radio Components
+const GreenRadio = withStyles({
+  root: {
+    color: green[400],
+    "&$checked": {
+      color: green[600],
+    },
+  },
+  checked: {},
+})((props) => <Radio color="default" {...props} />);
 
-const names = ["Daniel", "Zion", "Abraham", "Patrick"];
-
-function getStyles(name, personName, theme) {
-  return {
-    fontWeight:
-      personName.indexOf(name) === -1
-        ? theme.typography.fontWeightRegular
-        : theme.typography.fontWeightMedium
-  };
-}
-
-export default function MultipleSelect() {
+export default function SimpleSelect(props) {
   const classes = useStyles();
-  const theme = useTheme();
-  const [personName, setPersonName] = React.useState([]);
+  // console.log("Property: " + props.teams["data"]);
+  // console.log(typeof props.teams);
+  const [week, setWeek] = React.useState("");
+  const [team, setTeam] = React.useState("");
 
-  const handleChange = event => {
-    setPersonName(event.target.value);
+  const handleWeekChange = (event) => {
+    setWeek(event.target.value);
   };
 
-  const handleChangeMultiple = event => {
-    const { options } = event.target;
-    const value = [];
-    for (let i = 0, l = options.length; i < l; i += 1) {
-      if (options[i].selected) {
-        value.push(options[i].value);
-      }
+  const handleTeamChange = (event) => {
+    setTeam(event.target.value);
+  };
+
+  //   Radio
+  const [selectedValue, setSelectedValue] = React.useState("a");
+
+  const handleRadioChange = (event) => {
+    setSelectedValue(event.target.value);
+  };
+
+  // Record all attended
+  const handleAllAttended = (event) => {
+    setSelectedValue(event.target.value);
+  };
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
     }
-    setPersonName(value);
+
+    setOpen(false);
   };
 
   return (
-    <div>
-      <FormControl className={classes.formControl}>
-        <InputLabel id="demo-mutiple-name-label">Name</InputLabel>
-        <Select
-          labelId="demo-mutiple-name-label"
-          id="demo-mutiple-name"
-          multiple
-          value={personName}
-          onChange={handleChange}
-          input={<Input />}
-          MenuProps={MenuProps}
-        >
-          {names.map(name => (
-            <MenuItem
-              key={name}
-              value={name}
-              style={getStyles(name, personName, theme)}
+    <div className={classes.root}>
+      <Button variant="contained" color="primary">
+        All attended
+      </Button>
+      <Button variant="contained" color="secondary" onClick={handleClick}>
+        Save
+      </Button>
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message="Successfully saved!"
+        action={
+          <React.Fragment>
+            <Button color="secondary" size="small" onClick={handleClose}>
+              UNDO
+            </Button>
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={handleClose}
             >
-              {name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl className={classes.formControl}>
-        <InputLabel id="demo-mutiple-checkbox-label">Tag</InputLabel>
-        <Select
-          labelId="demo-mutiple-checkbox-label"
-          id="demo-mutiple-checkbox"
-          multiple
-          value={personName}
-          onChange={handleChange}
-          input={<Input />}
-          renderValue={selected => selected.join(", ")}
-          MenuProps={MenuProps}
-        >
-          {names.map(name => (
-            <MenuItem key={name} value={name}>
-              <Checkbox checked={personName.indexOf(name) > -1} />
-              <ListItemText primary={name} />
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl className={classes.formControl}>
-        <InputLabel id="demo-mutiple-chip-label">Chip</InputLabel>
-        <Select
-          labelId="demo-mutiple-chip-label"
-          id="demo-mutiple-chip"
-          multiple
-          value={personName}
-          onChange={handleChange}
-          input={<Input id="select-multiple-chip" />}
-          renderValue={selected => (
-            <div className={classes.chips}>
-              {selected.map(value => (
-                <Chip key={value} label={value} className={classes.chip} />
-              ))}
-            </div>
-          )}
-          MenuProps={MenuProps}
-        >
-          {names.map(name => (
-            <MenuItem
-              key={name}
-              value={name}
-              style={getStyles(name, personName, theme)}
-            >
-              {name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl className={clsx(classes.formControl, classes.noLabel)}>
-        <Select
-          multiple
-          displayEmpty
-          value={personName}
-          onChange={handleChange}
-          input={<Input />}
-          renderValue={selected => {
-            if (selected.length === 0) {
-              return <em>Placeholder</em>;
-            }
-
-            return selected.join(", ");
-          }}
-          MenuProps={MenuProps}
-        >
-          <MenuItem disabled value="">
-            <em>Placeholder</em>
-          </MenuItem>
-          {names.map(name => (
-            <MenuItem
-              key={name}
-              value={name}
-              style={getStyles(name, personName, theme)}
-            >
-              {name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      <FormControl className={classes.formControl}>
-        <InputLabel shrink htmlFor="select-multiple-native">
-          Native
-        </InputLabel>
-        <Select
-          multiple
-          native
-          value={personName}
-          onChange={handleChangeMultiple}
-          inputProps={{
-            id: "select-multiple-native"
-          }}
-        >
-          {names.map(name => (
-            <option key={name} value={name}>
-              {name}
-            </option>
-          ))}
-        </Select>
-      </FormControl>
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </React.Fragment>
+        }
+      />
+      <div className="teamMember">
+        <Title>Daniel</Title>
+        <FormControl component="fieldset">
+          <RadioGroup
+            row
+            aria-label="position"
+            name="position"
+            defaultValue="top"
+          >
+            <FormControlLabel
+              value="attended"
+              control={<Radio color="primary" />}
+              label="attended"
+              labelPlacement="start"
+            />{" "}
+            <FormControlLabel
+              value="absent unexcused"
+              control={<Radio color="secondary" />}
+              label="absent unexcused"
+              labelPlacement="start"
+            />{" "}
+            <FormControlLabel
+              value="excused"
+              control={<Radio color="default" />}
+              label="excused"
+              labelPlacement="start"
+            />
+          </RadioGroup>
+        </FormControl>
+      </div>
+      <div>
+        <Title>Zion</Title>{" "}
+        <FormControl component="fieldset">
+          <RadioGroup
+            row
+            aria-label="position"
+            name="position"
+            defaultValue="top"
+          >
+            <FormControlLabel
+              value="attended"
+              control={<Radio color="primary" />}
+              label="attended"
+              labelPlacement="start"
+            />{" "}
+            <FormControlLabel
+              value="absent unexcused"
+              control={<Radio color="secondary" />}
+              label="absent unexcused"
+              labelPlacement="start"
+            />{" "}
+            <FormControlLabel
+              value="excused"
+              control={<Radio color="default" />}
+              label="excused"
+              labelPlacement="start"
+            />
+          </RadioGroup>
+        </FormControl>
+      </div>
+      <div>
+        <Title>Abraham</Title>
+        <FormControl component="fieldset">
+          <RadioGroup
+            row
+            aria-label="position"
+            name="position"
+            defaultValue="top"
+          >
+            <FormControlLabel
+              value="attended"
+              control={<Radio color="primary" />}
+              label="attended"
+              labelPlacement="start"
+            />{" "}
+            <FormControlLabel
+              value="absent unexcused"
+              control={<Radio color="secondary" />}
+              label="absent unexcused"
+              labelPlacement="start"
+            />{" "}
+            <FormControlLabel
+              value="excused"
+              control={<Radio color="default" />}
+              label="excused"
+              labelPlacement="start"
+            />
+          </RadioGroup>
+        </FormControl>
+      </div>
+      <div>
+        <Title>Patrick</Title>{" "}
+        <FormControl component="fieldset">
+          <RadioGroup
+            row
+            aria-label="position"
+            name="position"
+            defaultValue="top"
+          >
+            <FormControlLabel
+              value="attended"
+              control={<Radio color="primary" />}
+              label="attended"
+              labelPlacement="start"
+            />{" "}
+            <FormControlLabel
+              value="absent unexcused"
+              control={<Radio color="secondary" />}
+              label="absent unexcused"
+              labelPlacement="start"
+            />{" "}
+            <FormControlLabel
+              value="excused"
+              control={<Radio color="default" />}
+              label="excused"
+              labelPlacement="start"
+            />
+          </RadioGroup>
+        </FormControl>
+      </div>
     </div>
   );
 }

@@ -5,28 +5,17 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import Card from "./Card";
+import Card from "./FunctionalCard/Card";
 import { Link } from "react-router-dom";
 import DashBoard from "./DashBoard";
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import WelcomeCard from "./FunctionalCard/WelcomeCard";
+import FutureEventCard from "./FunctionalCard/FutureEventCard";
 
 const drawerWidth = 260;
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex"
+    display: "flex",
   },
 
   drawerPaper: {
@@ -35,38 +24,38 @@ const useStyles = makeStyles(theme => ({
     width: drawerWidth,
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen
-    })
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
   drawerPaperClose: {
     overflowX: "hidden",
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
+      duration: theme.transitions.duration.leavingScreen,
     }),
     width: theme.spacing(7),
     [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9)
-    }
+      width: theme.spacing(9),
+    },
   },
   appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
     height: "100vh",
-    overflow: "auto"
+    overflow: "auto",
   },
   container: {
     paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4)
+    paddingBottom: theme.spacing(4),
   },
   paper: {
     padding: theme.spacing(2),
     display: "flex",
     overflow: "auto",
-    flexDirection: "column"
+    flexDirection: "column",
   },
   fixedHeight: {
-    height: 240
+    height: 520,
   },
   link: {
     display: "flex",
@@ -76,8 +65,8 @@ const useStyles = makeStyles(theme => ({
     padding: "10px",
     textDecoration: "none",
     color: "black",
-    decoration: "none"
-  }
+    decoration: "none",
+  },
 }));
 
 export default function Dashboard() {
@@ -98,16 +87,16 @@ export default function Dashboard() {
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>
           <Grid container spacing={3}>
-            {/* Chart */}
-            <Grid item xs={12} md={8} lg={9}>
+            {/* WelcomeCard */}
+            <Grid item xs={12} md={7} lg={7}>
               <Paper className={fixedHeightPaper}>
-                <Card />
+                <WelcomeCard />
               </Paper>
             </Grid>
-            {/* Recent Deposits */}
-            <Grid item xs={12} md={4} lg={3}>
+            {/* FutureEventCard */}
+            <Grid item xs={12} md={5} lg={5}>
               <Paper className={fixedHeightPaper}>
-                <Card />
+                <FutureEventCard />
               </Paper>
             </Grid>
             {/* Recent Orders */}
