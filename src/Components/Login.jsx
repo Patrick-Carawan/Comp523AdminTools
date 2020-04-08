@@ -7,8 +7,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {Link} from "react-router-dom";
-
+import {Link, useHistory} from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -37,19 +36,24 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Login(props) {
+    window.localStorage.setItem("adminUser", "false");
+    window.localStorage.setItem("studentUser", "false");
+
     const classes = useStyles();
     let student = true;
 
     function submit(e) {
         e.preventDefault();
         console.log('submitted');
-        if(student){
+        /*if(student){
             props.getUserStatus('student');
         } else{
             props.getUserStatus('admin');
         }
+         */
     }
 
+    let history = useHistory();
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
@@ -90,6 +94,32 @@ export default function Login(props) {
                         className={classes.submit}
                     >
                         Sign In
+                    </Button>
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="secondary"
+                        className={classes.submit}
+                        onClick={() => {
+                            window.localStorage.setItem("studentUser", "true");
+                            history.push("/teams");
+                        }}
+                    >
+                        Grant student access
+                    </Button>
+                    <Button
+                        type="submit"
+                        fullWidth
+                        variant="contained"
+                        color="secondary"
+                        className={classes.submit}
+                        onClick={() => {
+                            window.localStorage.setItem("adminUser", "true");
+                            history.push("/dashboard")
+                        }}
+                    >
+                        Grant admin access
                     </Button>
                 </form>
             <Link to="/createAccount" className={classes.link}>Create Account</Link>

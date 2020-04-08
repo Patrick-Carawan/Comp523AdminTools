@@ -106,7 +106,6 @@ export default function CreateAccount() {
                     <TextField
                         variant="outlined"
                         margin="normal"
-                        required
                         fullWidth
                         name="password"
                         label="Admin Key"

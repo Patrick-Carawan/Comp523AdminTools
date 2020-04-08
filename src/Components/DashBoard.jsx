@@ -16,7 +16,7 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-
+import AssignIcon from "@material-ui/icons/ExitToApp";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -27,22 +27,10 @@ import Team from "@material-ui/icons/Group";
 import Calendar from "@material-ui/icons/DateRange";
 import Deliverable from "@material-ui/icons/ListAlt";
 import DashboardContent from "./DashBoardContent";
+import AssignmentIcon from "@material-ui/icons/ExitToApp";
 
 import NavPanel from "./NavPanel";
 import { Link } from "react-router-dom";
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
 
 const drawerWidth = 260;
 
@@ -227,7 +215,7 @@ export default function Dashboard() {
               <ListItemIcon>
                 <Team />
               </ListItemIcon>
-              <ListItemText primary="Manage Teams" />
+              <ListItemText primary="Regroup Teams" />
             </Link>
           </ListItem>
           <ListItem
@@ -248,9 +236,22 @@ export default function Dashboard() {
             button
             key={5}
             className={classes.listItem}
+            title="View Team and Individual Final Reports"
+          >
+            <Link to="/viewFinalReports" className={classes.link}>
+              <ListItemIcon>
+                <AssignmentIcon />
+              </ListItemIcon>
+              <ListItemText primary="Final Reports" />
+            </Link>
+          </ListItem>
+          <ListItem
+            button
+            key={6}
+            className={classes.listItem}
             title="Give feedback on team deliverables"
           >
-            <Link to="/nowhere" className={classes.link}>
+            <Link to="/proposalAssignment" className={classes.link}>
               <ListItemIcon>
                 <Deliverable />
               </ListItemIcon>
