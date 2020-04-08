@@ -10,7 +10,6 @@ import {makeStyles} from "@material-ui/core/styles";
 import DashBoard from "./DashBoard";
 import axios from 'axios';
 
-//hit backend to get/proposals/emails, filter by acceptance status on front end
 
 const clientGroups = {
     ACCEPTED: 'Accepted',
@@ -30,34 +29,39 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-
-const dummyClientEmails = ['dan97w@ad.unc.edu', 'daniel.weber.443@gmail.com'];
-let dummyClientString = (() => {
-    let concat = '';
-    dummyClientEmails.forEach((email, index) => {
-        concat += index < dummyClientEmails.length - 1 ? `${email},` : email;
-    });
-    return concat;
-})();
-
-
 function ComposeEmail(props) {
     const classes = useStyles();
     const [pendingLetter, setPendingLetter] = useState('');
     const [acceptanceLetter, setAcceptanceLetter] = useState('');
     const [rejectionLetter, setRejectionLetter] = useState('');
-    // const [emails, setEmails] = useState([]);
+    const [acceptedEmails, setAcceptedEmails] = useState([]);
+    const [pendingEmails, setPendingEmails] = useState([]);
+    const [rejectedEmails, setRejectedEmails] = useState([]);
     useEffect(() => {
-        /*
         axios.get( "http://localhost:5000/proposals/emails")
             .then(response => {
-                console.log("emails", response.data[0])
+                console.log("emails", response.data)
+                let tempAcc = [];
+                let tempPend = [];
+                let tempRej = [];
+                response.data.forEach(obj => {
+                    if(obj.status.toLowerCase() === "accepted"){
+                        tempAcc.push(obj.email)
+                    } else if(obj.status.toLowerCase() === "pending"){
+                        tempPend.push(obj.email)
+                    } else if(obj.status.toLowerCase() === "rejected"){
+                        tempRej.push(obj.email)
+                    }
+                });
+                setAcceptedEmails(tempAcc);
+                setPendingEmails(tempPend);
+                setRejectedEmails(tempRej);
+
+
             })
             .catch(function (error) {
                 console.log(error);
-                //
             });
-         */
         axios.get("http://localhost:5000/proposals/pendingLetter")
             .then(response => {
                 response.data[0] ? setPendingLetter(response.data[0]['text']) :setPendingLetter('Your project proposal is still pending.');
@@ -96,6 +100,28 @@ function ComposeEmail(props) {
 
     const handleChange = event => {
         setClientGroup(event.target.value);
+    };
+
+    const arrToStringList = function(){
+        let arr;
+        switch (clientGroup) {
+            case clientGroups.ACCEPTED:
+                arr = acceptedEmails;
+                break;
+            case clientGroups.REJECTED:
+                arr = rejectedEmails;
+                break;
+            case clientGroups.PENDING:
+                arr = pendingEmails;
+                break;
+            default:
+                arr = [];
+        }
+        let concat = '';
+        arr.forEach((email, index) => {
+            concat += index < arr.length - 1 ? `${email},` : email;
+        });
+        return concat;
     };
 
     useEffect(()=>{
@@ -202,7 +228,7 @@ function ComposeEmail(props) {
                                 'borderRadius': '5px',
                                 'backgroundColor': '#003b9e'
                             }}
-                               href={`mailto:${dummyClientString}?body=${letter}&subject=${subject}`}>
+                               href={`mailto:${arrToStringList()}?body=${letter}&subject=${subject}`}>
                                 Email Clients
                             </a>
                         </Grid>
