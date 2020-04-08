@@ -104,7 +104,7 @@ export default function Dashboard() {
                             <Typography>Final Reports</Typography>
                         </Link>
                     </ListItem>
-                    <ListItem button key={5} className={classes.listItem} title="Give feedback on team deliverables">
+                    <ListItem button key={6} className={classes.listItem} title="Give feedback on team deliverables">
                         <Link to="proposalAssignment" className={classes.link}>
                             <ListItemIcon><AssignIcon/></ListItemIcon>
                             <Typography>Assign Team Projects</Typography>
