@@ -19,6 +19,8 @@ import AcceptedClientForm from "./Components/AcceptedClientForm";
 import ComposeEmail from "./Components/ComposeEmail";
 import CreateAccount from "./Components/CreateAccount";
 import FinalReports from "./Components/FinalReports";
+import {AdminProtectedRoute, StudentProtectedRoute} from "./protected.route";
+import ProposalAssignment from "./Components/ProposalAssignment";
 
 const theme = createMuiTheme({
     palette:{
@@ -28,8 +30,6 @@ const theme = createMuiTheme({
     }
 });
 function App() {
-
-
     return (
         <MuiThemeProvider theme={theme}>
         <BrowserRouter>
@@ -38,30 +38,24 @@ function App() {
                 <Route path="/clientForm" component={ClientForm} exact={true}/>
                 <Route path="/login" component={Login} exact={true}/>
                 <Route path="/createAccount" component={CreateAccount} exact={true}/>
-                <Route path="/dashboard" component={DashBoard} exact={true} />
-                <Route path="/proposalsAdmin" component={ProposalsAdminView} exact={true}/>
-                <Route path="/studentProps" component={ProposalsStudentView} exact={true}/>
+                <AdminProtectedRoute path="/dashboard" component={DashBoard} exact={true} />
+                <AdminProtectedRoute path="/proposalsAdmin" component={ProposalsAdminView} exact={true}/>
+                <StudentProtectedRoute path="/studentProps" component={ProposalsStudentView} exact={true}/>
+                // TODO: Deal with student team selection page
                 <Route path="/teams" component={TeamsGrid} exact={true}/>
+                <StudentProtectedRoute path="/rank" component={RankContainer} exact={true}/>
+                <AdminProtectedRoute path="/composeEmail" component={ComposeEmail} exact={true}/>
+                <AdminProtectedRoute path="/teamSelection" component={TeamSelection} exact={true}/>
                 <Route path="/rank" component={RankContainer} exact={true}/>
                 <Route path="/viewFinalReports" component={FinalReports} exact={true}/>
                 <Route path="/composeEmail" component={ComposeEmail} exact={true}/>
                 <Route path="/teamSelection" component={TeamSelection} exact={true}/>
                 <Route path="/acceptedClientForm" component={AcceptedClientForm} exact={true}/>
-                <Route
-                path="/studentSetupPage"
-                component={StudentSetupPage}
-                exact={true}
-            />
-                <Route
-                    path="/teammateSelectionRules"
-                    component={TeammateSelectionRules}
-                    exact={true}
-                />
-                <Route
-                    path="/teamPreferences"
-                    component={TeamPreferences}
-                    exact={true}
-                />
+                <StudentProtectedRoute path="/studentSetupPage" component={StudentSetupPage} exact={true}/>
+                <AdminProtectedRoute path="/teammateSelectionRules" component={TeammateSelectionRules} exact={true}/>
+                <AdminProtectedRoute path="/teamPreferences" component={TeamPreferences} exact={true}/>
+                <AdminProtectedRoute path="/proposalAssignment" component={ProposalAssignment} exact={true}/>
+                <Route path="*" component={() => "404 NOT FOUND"} />
             </Switch>
 
         </BrowserRouter>
