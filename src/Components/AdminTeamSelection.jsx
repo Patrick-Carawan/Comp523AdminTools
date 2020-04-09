@@ -38,7 +38,10 @@ function AdminTeamSelection(props) {
     const [students, setStudents] = useState([]);
     const [teams, setTeams] = useState([]);
     useEffect(() => {
-        axios.get(`http://localhost:5000/users/students/Spring2020`).then(res => setStudents(res['data'].filter(student => student['admin'] === false)));
+        axios.get(`http://localhost:5000/users/students/Spring2020`).then(res => {
+            console.log('students', res['data']);
+            setStudents(res['data'].filter(student => student['admin'] === false))
+        });
         axios.get(`http://localhost:5000/teams/Spring2020`).then(res => {
             console.log(res['data']);
             setTeams(res['data'].sort((t1, t2) => t1['teamName'] < t2['teamName'] ? -1 : 1))
@@ -97,7 +100,7 @@ function AdminTeamSelection(props) {
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
                 <TeamBox id="0box" className={classes.nameBank} setTeam={setTeam}>
-                    {students.map((student, index) =>
+                    {students.filter(student => student['teamId'] === "Pending").map((student, index) =>
                         <Name key={index} id={index} className="name" draggable="true" onyen={student['onyen']}>
                             <Card variant="outlined">
                                 <CardContent>
@@ -120,6 +123,16 @@ function AdminTeamSelection(props) {
                                 <Card variant="outlined" className="teamTile">
                                     <TeamBox id={`${index}box`} setTeam={setTeam}>
                                         <Typography variant="h6">{team['teamName']}</Typography>
+                                        {students.filter(student => student['teamId'] === team['_id']).map((student, index) =>
+                                            <Name key={index} id={index} className="name" draggable="true"
+                                                  onyen={student['onyen']}>
+                                                <Card variant="outlined">
+                                                    <CardContent>
+                                                        {`${student['firstName']} ${student['lastName']}`}
+                                                    </CardContent>
+                                                </Card>
+                                            </Name>
+                                        )}
                                     </TeamBox>
                                 </Card>
                             </Grid>
