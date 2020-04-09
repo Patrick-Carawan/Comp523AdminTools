@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
   },
-
   drawerPaper: {
     position: "relative",
     whiteSpace: "nowrap",

@@ -160,6 +160,7 @@ function ComposeEmail(props) {
   return (
     <div className={classes.root}>
       <DashBoard />
+      {console.log(window.innerHeight)}
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Container maxWidth="sm">
