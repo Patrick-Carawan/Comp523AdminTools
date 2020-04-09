@@ -15,6 +15,18 @@ router.route('/students/:semester').get((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
+//Update team for a given student
+router.route('/updateTeam/:onyen').post((req,res)=> {
+    User.findOne({onyen: req.params.onyen})
+        .then(student => {
+            student.teamId = req.body.teamId;
+            student.save()
+                .then(() => res.json("Student's teamId updated"))
+                .catch(err => res.status(400).json('Error in saving student: ' + err));
+        })
+        .catch(err => res.status(400).json('Error in finding student: ' + err));
+});
+
 // Add students
 router.route('/students/add').post((req, res) => {
     
