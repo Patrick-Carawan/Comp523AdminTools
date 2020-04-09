@@ -28,7 +28,7 @@ router.route('/add').post((req, res) => {
     });
 
     newTeam.save()
-        .then((team) => res.json({ msg: "Hello", id: team._id}))
+        .then((team) => res.json({id: team._id}))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
