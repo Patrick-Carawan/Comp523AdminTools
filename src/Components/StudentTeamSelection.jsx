@@ -34,7 +34,11 @@ const useStyles = makeStyles(theme => ({
     },
     teamBox: {
         marginTop: '3em'
+    },
+    columnPad: {
+        padding: '15px'
     }
+
 }));
 
 
@@ -43,7 +47,7 @@ function StudentTeamSelection(props) {
     const [teams, setTeams] = useState([]);
     const [draggedOnyens, setDraggedOnyens] = useState([]);
     const [typedOnyens, setTypedOnyens] = useState([]);
-
+    const [studentsAlreadyInTeam,setStudentsAlreadyInTeam] = useState([]);
 
     useEffect(() => {
         axios.get(`http://localhost:5000/users/students/Spring2020`).then(res => {
@@ -53,6 +57,9 @@ function StudentTeamSelection(props) {
         axios.get(`http://localhost:5000/teams/Spring2020`).then(res => {
             console.log('teams', res['data']);
             setTeams(res['data'].sort((t1, t2) => t1['teamName'] < t2['teamName'] ? -1 : 1))
+            let tempStudents = []
+            res['data'].forEach(team => team['teamMembers'].forEach(student => tempStudents.push(student)));
+            setStudentsAlreadyInTeam(tempStudents);
         })
     }, []);
 
@@ -79,13 +86,22 @@ function StudentTeamSelection(props) {
         e.preventDefault();
         console.log('draggedOnyens', draggedOnyens);
         console.log('typedOnyens', typedOnyens);
+
+
+        for (let i = 0; i< draggedOnyens.length; i++) {
+            if (studentsAlreadyInTeam.includes(draggedOnyens[i])) {
+                alert(`${draggedOnyens[i]} is already in another team. Please have your teacher manually move you to the new team.`);
+                return;
+            }
+        }
+
         if (!typedOnyens.every((onyen) =>
             draggedOnyens.includes(onyen)
         ) || typedOnyens.length !== draggedOnyens.length || typedOnyens.length === 0) {
             alert(`Onyens must all match their student's names to submit your team.`)
         } else {
-            axios.post(`http://localhost:5000/teams/add`,{
-                teamName: '12:30 test',
+            axios.post(`http://localhost:5000/teams/add`, {
+                teamName: `Team ${Math.floor(Math.random()*100)}`,
                 teamMembers: draggedOnyens,
                 semester: 'Spring2020'
             }).then(alert('Team successfully submitted'))
@@ -122,59 +138,63 @@ function StudentTeamSelection(props) {
                 </TeamBox>
 
                 <Container className="disable-select">
-
                     <form onSubmit={submitTeams}>
-                    <Grid container direction="row">
-                        <Grid item style={{'maxWidth':'50%'}}>
-                            <Grid container
-                                  direction="column"
-                                  justify="center"
-                                  alignItems="center"
-                                  className={classes.teamBox}>
-                                <Grid item>
-                                    <Typography variant="h6" style={{'marginBottom':'10px'}}>Drag the names of the people you want in your team into the box
-                                        below.</Typography>
-                                </Grid>
-                                <Grid item>
-                                    <Card variant="outlined" className="teamTile">
-                                        <TeamBox id={`-1box`} setTeam={setTeam}>
-                                            <Box textAlign="center">
-                                                <Typography>Drag Names Onto This Text</Typography>
-                                            </Box>
-                                        </TeamBox>
-                                    </Card>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid item style={{'maxWidth':'50%'}} className={classes.teamBox}>
-                            <Grid container direction="column">
-                                <Grid item>
+                        <Grid container direction="row" justify="space-between">
+                            <Grid item style={{'maxWidth': '45%', 'marginRight': '5%'}} className={classes.teamBox}>
+                                <Card className={classes.columnPad} variant="outlined">
+
+                                <Grid container
+                                      direction="column"
+                                      justify="center"
+                                      alignItems="center"
+                                      >
                                     <Grid item>
-                                        <Typography >Type the onyens for the people you are choosing to be on your team in the boxes below.
-                                            (They will appear once you drag the names)
-                                        </Typography>
+                                        <Typography variant="h6" style={{'marginBottom': '10px'}}>Drag the names of the
+                                            people you want in your team into the box
+                                            below.</Typography>
                                     </Grid>
                                     <Grid item>
-                                        <Grid container direction="row" justify="center">
-                                            {draggedOnyens.map((box, index) => <Grid item key={index}>
-                                                <TextField variant="outlined" label="Onyen"
-                                                           style={{'marginLeft': '10px', 'marginTop': '30px'}}
-                                                           onChange={(e) => updateTypedOnyens(e, index)}>
-                                                </TextField>
-                                            </Grid>)}
+                                        <Card variant="outlined" className="teamTile">
+                                            <TeamBox id={`-1box`} setTeam={setTeam}>
+                                                <Box textAlign="center">
+                                                    <Typography>Drag Names Onto This Text</Typography>
+                                                </Box>
+                                            </TeamBox>
+                                        </Card>
+                                    </Grid>
+                                </Grid>
+                                </Card>
+                            </Grid>
+                            <Grid item style={{'maxWidth': '50%'}} className={classes.teamBox}>
+                                <Card variant="outlined" className={classes.columnPad}>
+                                    <Grid container direction="column" justify="space-around" alignItems="center">
+                                        <Grid item>
+                                            <Typography>Type the onyens for the people you are choosing to be on your
+                                                team
+                                                in the boxes below.
+                                                (They will appear once you drag the names)
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <Grid container direction="row" justify="center">
+                                                {draggedOnyens.map((box, index) => <Grid item key={index}>
+                                                    <TextField variant="outlined" label="Onyen"
+                                                               style={{'marginLeft': '10px', 'marginTop': '30px'}}
+                                                               onChange={(e) => updateTypedOnyens(e, index)}>
+                                                    </TextField>
+                                                </Grid>)}
+                                            </Grid>
+                                        </Grid>
+                                        <Grid item>
+                                            <Button variant="contained" color="secondary" onClick={submitTeams}
+                                                    style={{'marginTop': '30px'}}>
+                                                Submit Team
+                                            </Button>
                                         </Grid>
                                     </Grid>
-                                </Grid>
-                                <Grid item>
-                                    <Button variant="contained" color="secondary" onClick={submitTeams}
-                                            style={{'marginLeft': '30px', 'marginTop': '30px'}}>
-                                        Submit Team
-                                    </Button>
-                                </Grid>
+                                </Card>
                             </Grid>
                         </Grid>
-                    </Grid>
-
 
 
                     </form>
