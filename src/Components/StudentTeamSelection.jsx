@@ -47,7 +47,7 @@ function StudentTeamSelection(props) {
     const [teams, setTeams] = useState([]);
     const [draggedOnyens, setDraggedOnyens] = useState([]);
     const [typedOnyens, setTypedOnyens] = useState([]);
-    const [studentsAlreadyInTeam,setStudentsAlreadyInTeam] = useState([]);
+    const [studentsAlreadyInTeam, setStudentsAlreadyInTeam] = useState([]);
 
     useEffect(() => {
         axios.get(`http://localhost:5000/users/students/Spring2020`).then(res => {
@@ -88,7 +88,7 @@ function StudentTeamSelection(props) {
         console.log('typedOnyens', typedOnyens);
 
 
-        for (let i = 0; i< draggedOnyens.length; i++) {
+        for (let i = 0; i < draggedOnyens.length; i++) {
             if (studentsAlreadyInTeam.includes(draggedOnyens[i])) {
                 alert(`${draggedOnyens[i]} is already in another team. Please have your teacher manually move you to the new team.`);
                 return;
@@ -101,12 +101,22 @@ function StudentTeamSelection(props) {
             alert(`Onyens must all match their student's names to submit your team.`)
         } else {
             axios.post(`http://localhost:5000/teams/add`, {
-                teamName: `Team ${Math.floor(Math.random()*100)}`,
+                teamName: `Team ${Math.floor(Math.random() * 100)}`,
                 teamMembers: draggedOnyens,
                 semester: 'Spring2020'
-            }).then(alert('Team successfully submitted'))
+            }).then((res) => {
+                draggedOnyens.forEach((onyen, i) => {
+                    axios.post(`http://localhost:5000/users/updateTeam/${onyen}`, {
+                        teamId: res['data']['id']
+                    }).then(() => {
+                        if (i === draggedOnyens.length-1) {
+                            alert('Team successfully submitted')
+                        }
+                    }).catch(err => alert(err))
+                })
+            })
             //need to redirect to another component here
-            alert('good')
+            // alert('good')
         }
     };
 
@@ -143,26 +153,27 @@ function StudentTeamSelection(props) {
                             <Grid item style={{'maxWidth': '45%', 'marginRight': '5%'}} className={classes.teamBox}>
                                 <Card className={classes.columnPad} variant="outlined">
 
-                                <Grid container
-                                      direction="column"
-                                      justify="center"
-                                      alignItems="center"
-                                      >
-                                    <Grid item>
-                                        <Typography variant="h6" style={{'marginBottom': '10px'}}>Drag the names of the
-                                            people you want in your team into the box
-                                            below.</Typography>
+                                    <Grid container
+                                          direction="column"
+                                          justify="center"
+                                          alignItems="center"
+                                    >
+                                        <Grid item>
+                                            <Typography variant="h6" style={{'marginBottom': '10px'}}>Drag the names of
+                                                the
+                                                people you want in your team into the box
+                                                below.</Typography>
+                                        </Grid>
+                                        <Grid item>
+                                            <Card variant="outlined" className="teamTile">
+                                                <TeamBox id={`-1box`} setTeam={setTeam}>
+                                                    <Box textAlign="center">
+                                                        <Typography>Drag Names Onto This Text</Typography>
+                                                    </Box>
+                                                </TeamBox>
+                                            </Card>
+                                        </Grid>
                                     </Grid>
-                                    <Grid item>
-                                        <Card variant="outlined" className="teamTile">
-                                            <TeamBox id={`-1box`} setTeam={setTeam}>
-                                                <Box textAlign="center">
-                                                    <Typography>Drag Names Onto This Text</Typography>
-                                                </Box>
-                                            </TeamBox>
-                                        </Card>
-                                    </Grid>
-                                </Grid>
                                 </Card>
                             </Grid>
                             <Grid item style={{'maxWidth': '50%'}} className={classes.teamBox}>
