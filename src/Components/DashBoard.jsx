@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   drawerPaper: {
-    height: window.innerHeight,
+    height: `calc(100vh)`,
     position: "relative",
     whiteSpace: "nowrap",
     width: drawerWidth,
