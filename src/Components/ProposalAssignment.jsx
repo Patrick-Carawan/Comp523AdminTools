@@ -64,30 +64,37 @@ function ProposalAssignment(props) {
     const [disableButton, setDisableButton] = useState(true);
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/teams`).then((res) => {
-            console.log('teams', res);
-            setTeams(res.data);
-            const fillArray = new Array(res.data.length);
-            fillArray.fill("None Selected");
-            setSelectedProjects(fillArray);
-        });
-        // axios.get(`http://localhost:5000/teams`).then((res) => {
-        //     console.log('teams', res);
-        // });
-
         axios.get(`http://localhost:5000/proposals`).then((res) => {
-            // console.log('proposals', res);
             let acceptedProps = res["data"].filter(
                 (proposal) => proposal["status"] === "Accepted"
             );
             setRemainingProjects(acceptedProps.map((project) => project["title"]));
             let tempMap = new Map();
-            acceptedProps.forEach((project) =>
-                tempMap.set(project["title"], project)
+            let tempIdMap = new Map();
+            acceptedProps.forEach((project) => {
+                    tempMap.set(project["title"], project);
+                    tempIdMap.set(project["_id"], project);
+                }
             );
             setTitleMap(tempMap);
         });
+        axios.get(`http://localhost:5000/teams`).then((res) => {
+            // console.log('teams', res);
+            setTeams(res.data);
+            const fillArray = new Array(res.data.length);
+            fillArray.fill("None Selected");
+            setSelectedProjects(fillArray);
+            let localPairingArray = [];
+            for (let i = 0; i < res.data.length; i++) {
+                localPairingArray.push({teamName: res.data[i].teamName, projectTitle: res.data[i].projectTitle});
+                if (res.data[i].projectId !== "Pending") {
+                    setShowPairings(true);
+                }
+            }
+            setPairings(localPairingArray)
+        });
     }, []);
+
 
     function handleChange(e, index, team) {
         let temp;
@@ -103,11 +110,10 @@ function ProposalAssignment(props) {
         teams.forEach((team, index) => {
             const teamId = team["_id"];
             const projectId = titleMap.get(selectedProjects[index])["_id"];
-            assignmentArray.push({teamId: teamId, projectId: projectId});
+            const projectTitle = titleMap.get(selectedProjects[index])["title"];
+            assignmentArray.push({teamId: teamId, projectId: projectId, projectTitle: projectTitle});
 
             const teamName = team["teamName"];
-            let projectTitle;
-            projectTitle = titleMap.get(selectedProjects[index])["title"];
             localPairingsArray.push({teamName: teamName, projectTitle: projectTitle});
         });
         setPairings(localPairingsArray);
@@ -131,11 +137,12 @@ function ProposalAssignment(props) {
                         {
                             showPairings ?
                                 <Card>
-                                    {pairings.map((pairing, i) => <><ListItem key={i}>
-                                            <ListItemText>{pairing.teamName} : {pairing.projectTitle}</ListItemText>
-                                        </ListItem>
+                                    {pairings.map((pairing, i) => <React.Fragment key={i}>
+                                            <ListItem>
+                                                <ListItemText>{pairing.teamName} : {pairing.projectTitle}</ListItemText>
+                                            </ListItem>
                                             <Divider/>
-                                        </>
+                                        </React.Fragment>
                                     )
                                     }
                                 </Card>
