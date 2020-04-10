@@ -136,16 +136,19 @@ function ProposalAssignment(props) {
                     <List>
                         {
                             showPairings ?
-                                <Card>
-                                    {pairings.map((pairing, i) => <React.Fragment key={i}>
-                                            <ListItem>
-                                                <ListItemText>{pairing.teamName} : {pairing.projectTitle}</ListItemText>
-                                            </ListItem>
-                                            <Divider/>
-                                        </React.Fragment>
-                                    )
-                                    }
-                                </Card>
+                                <><Typography variant="h4">Current Assignments</Typography>
+                                    <Card>
+                                        {pairings.map((pairing, i) => <React.Fragment key={i}>
+                                                <ListItem>
+                                                    <ListItemText>{pairing.teamName} : {pairing.projectTitle}</ListItemText>
+                                                </ListItem>
+                                                <Divider/>
+                                            </React.Fragment>
+                                        )
+                                        }
+
+                                    </Card>
+                                </>
                                 : null}
                     </List>
                     <h1>Assign Projects to Teams</h1>
