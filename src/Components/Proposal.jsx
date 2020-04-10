@@ -12,7 +12,7 @@ function Proposal(props) {
                 <Typography variant="h5">{index} {props.title}</Typography>
                 <Button onClick={() => setCollapsed(!collapsed)}>{collapsed ? 'Expand' : 'Collapse'}</Button>
             </Grid>
-            <Typography variant="h6">{`${props.firstName}  ${props.lastName}`}</Typography>
+            <Typography variant="h6">{`${props.prop_name}`}</Typography>
             {
                 !collapsed ? <>
                     <Typography>
