@@ -69,6 +69,7 @@ router.route('/assignments').post( (req, res) => {
         Team.findById(assignments[i].teamId)
             .then( (team) => {
                 team.projectId = assignments[i].projectId;
+                team.projectTitle = assignments[i].projectTitle;
                 team.save()
                     .then(() => res.json(`Team ${i} assignment updated`))
                     .catch(err => res.status(400).json('Error: ' + err));
@@ -84,6 +85,7 @@ router.route('/update/:id').post((req, res) => {
         .then(team => {
             team.teamName = req.body.teamName;
             team.projectId = req.body.projectId;
+            team.projectTitle = req.body.projectTitle;
             team.teamMembers = req.body.teamMembers;
             team.proposalRanks = req.body.proposalRanks;
             team.save()
