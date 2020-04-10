@@ -5,12 +5,14 @@ function TeamBox(props) {
         e.preventDefault();
         let data = e.dataTransfer.getData('data');
         data = JSON.parse(data);
+        console.log(data);
         const name_id = data['id'];
         const onyen = data['onyen'];
         const name = document.getElementById(name_id);
         name.style.display = 'block';
         e.target.appendChild(name);
-        const boxID = parseInt(props.id.match(/[0-9]+/)[0]);
+        // const boxID = parseInt(props.id.match(/[0-9]+/)[0]);
+        const boxID = props.id;
         props.setTeam(name_id, boxID, onyen);
     };
 

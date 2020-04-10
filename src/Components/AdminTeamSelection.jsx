@@ -37,6 +37,7 @@ const useStyles = makeStyles(theme => ({
 function AdminTeamSelection(props) {
     const [students, setStudents] = useState([]);
     const [teams, setTeams] = useState([]);
+    const [newTeams, setNewTeams] = useState([]);
     useEffect(() => {
         axios.get(`http://localhost:5000/users/students/Spring2020`).then(res => {
             console.log('students', res['data']);
@@ -60,7 +61,11 @@ function AdminTeamSelection(props) {
     letters.unshift('NONE');
 
     const setTeam = function (studentIndex, teamIndex) {
-        groupingArray[studentIndex]['team'] = teams[teamIndex]['teamName'];
+        // console.log('teams',teams);
+        // console.log('students', students);
+        console.log('student', students[studentIndex]);
+        console.log('team', teams[teamIndex]);
+        // groupingArray[studentIndex]['team'] = teams[teamIndex]['teamName'];
     };
 
     const submitTeams = function () {
@@ -84,23 +89,28 @@ function AdminTeamSelection(props) {
                 semester: 'Spring2020'
             })
         }
-
-        // let groups = groupingArray.reduce((r, a) => {
-        //     r[a.team] = [...r[a.team] || [], a];
-        //     return r;
-        // }, {});
-        // console.log(groups);
     };
 
 
     const classes = useStyles();
+
+    function addNewTeam() {
+        let temp = [...newTeams];
+        temp.push(0);
+        setNewTeams(temp);
+    }
+
+    function getBoxsStudents(teamId){
+        return students.filter(student => student['teamId'] === teamId);
+    }
+
     return (
         <div className={classes.root}>
             <DashBoard/>
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
                 <TeamBox id="0box" className={classes.nameBank} setTeam={setTeam}>
-                    {students.filter(student => student['teamId'] === "Pending").map((student, index) =>
+                    {getBoxsStudents("Pending").map((student, index) =>
                         <Name key={index} id={index} className="name" draggable="true" onyen={student['onyen']}>
                             <Card variant="outlined">
                                 <CardContent>
@@ -114,16 +124,16 @@ function AdminTeamSelection(props) {
                 <Container className="disable-select">
                     <Box textAlign="center">
                         <Typography>
-                            Drag your name to the top of the box for the team you want to join.
+                            Drag student name to the top of the box for the team you want to place him or her in.
                         </Typography>
                     </Box>
                     <Grid container spacing={3}>
                         {teams.map((team, index) =>
                             <Grid item key={0 - index - 1} xs={3} ml={5}>
                                 <Card variant="outlined" className="teamTile">
-                                    <TeamBox id={`${index}box`} setTeam={setTeam}>
+                                    <TeamBox id={`${team['_id']}`} setTeam={setTeam}>
                                         <Typography variant="h6">{team['teamName']}</Typography>
-                                        {students.filter(student => student['teamId'] === team['_id']).map((student, index) =>
+                                        {getBoxsStudents(team['_id']).map((student, index) =>
                                             <Name key={index} id={index} className="name" draggable="true"
                                                   onyen={student['onyen']}>
                                                 <Card variant="outlined">
@@ -139,6 +149,16 @@ function AdminTeamSelection(props) {
                         )}
                     </Grid>
                 </Container>
+                <Button variant="outlined" onClick={addNewTeam}>Add new Team</Button>
+                {/*{newTeams.length > 0 ?*/}
+                {/*    newTeams.map((team, index) =>*/}
+                {/*    <Card variant="outlined" className="teamTile">*/}
+                {/*        <TeamBox id={`${0-index}box`} setTeam={setTeam}>*/}
+                {/*            <Typography variant="h6">New Team</Typography>*/}
+                {/*        </TeamBox>*/}
+                {/*    </Card>*/}
+                {/*    )*/}
+                {/*    : null}*/}
                 <Button variant="contained" color="secondary" onClick={submitTeams}
                         style={{'marginLeft': '30px', 'marginTop': '30px'}}>
                     Submit Teams
