@@ -24,6 +24,7 @@ import FinalReports from "./Components/FinalReports";
 import { AdminProtectedRoute, StudentProtectedRoute } from "./protected.route";
 import ProposalAssignment from "./Components/ProposalAssignment";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import Roster from "./Components/Roster";
 
 const theme = createMuiTheme({
   palette: {
@@ -110,6 +111,11 @@ function App() {
               component={ProposalAssignment}
               exact={true}
             />
+            <AdminProtectedRoute
+              path="/roster"
+              component={Roster}
+              exact={true}
+          />
             <Route path="*" component={() => "404 NOT FOUND"} />
           </Switch>
         </BrowserRouter>
