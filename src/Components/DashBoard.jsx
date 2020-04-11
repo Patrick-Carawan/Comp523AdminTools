@@ -16,6 +16,7 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import Roster from '@material-ui/icons/PermContactCalendar';
 import AssignIcon from "@material-ui/icons/ExitToApp";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -257,6 +258,19 @@ export default function Dashboard() {
                 <Deliverable />
               </ListItemIcon>
               <ListItemText primary="Project Assignment" />
+            </Link>
+          </ListItem>
+          <ListItem
+              button
+              key={7}
+              className={classes.listItem}
+              title="View or upload current roster"
+          >
+            <Link to="/roster" className={classes.link}>
+              <ListItemIcon>
+                <Roster />
+              </ListItemIcon>
+              <ListItemText primary="Roster" />
             </Link>
           </ListItem>
         </List>
