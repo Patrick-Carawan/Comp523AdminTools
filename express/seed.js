@@ -241,6 +241,10 @@ connection.once('open', () => {
         console.error(err);
     });
     
+    for (let user of users) {
+        user.setPassword("password");
+    }
+
     User.collection.insertMany(users, function(err) {
         console.error(err);
     });
