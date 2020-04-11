@@ -1,12 +1,15 @@
-import React from "react";
+import React, {useState} from "react";
 import ReactDOM from "react-dom";
 import '../App.css'
 import CSVReader from "react-csv-reader";
 import {makeStyles} from "@material-ui/core/styles";
 import DashBoard from "./DashBoard";
 import Container from "@material-ui/core/Container";
-
-const handleForce = (data) => console.log(data);
+import Card from "@material-ui/core/Card";
+import Typography from "@material-ui/core/Typography";
+import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -42,6 +45,12 @@ const parseOptions = {
 
 function Roster() {
     const classes = useStyles();
+    const [roster, setRoster] = useState([]);
+
+    const readfile = (data) => {
+        console.log(data);
+        setRoster(data)
+    };
 
     return (
         <div className={classes.root}>
@@ -49,18 +58,43 @@ function Roster() {
             {console.log(window.innerHeight)}
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
-                <Container maxWidth="sm">
-                    <div className={classes.uploadContainer}>
-                    <p>Follow this example's formatting</p>
-                    <img alt="Example CSV"  src={require("../Images/exampleCSV.PNG")}/>
-                        <CSVReader
-                            cssClass="react-csv-input"
-                            label="Upload Roster CSV (comma delimited, NOT XSLX or XSL) here. "
-                            onFileLoaded={handleForce}
-                            parserOptions={parseOptions}
-                        />
-                    </div>
-                </Container>
+                {/*<Container maxWidth="md">*/}
+                    <Grid container direction="row">
+                        <Grid item style={{'width':'50%'}}>
+                            <div className={classes.uploadContainer}>
+                                <p>Follow this example's formatting</p>
+                                <img alt="Example CSV" src={require("../Images/exampleCSV.PNG")}/>
+                                <CSVReader
+                                    cssClass="react-csv-input"
+                                    label="Upload Roster CSV (comma delimited, NOT XSLX or XSL) here. "
+                                    onFileLoaded={readfile}
+                                    parserOptions={parseOptions}
+                                />
+                            <Button variant="contained" color="secondary">Submit Roster</Button>
+                            </div>
+                        </Grid>
+                        <Grid item style={{'width':'50%'}}>
+                            {
+                                roster.length > 0 ? <Card style={{'padding': '10px'}}>
+                                    {roster.map((roster, index) =>
+                                        <Grid container key={index} direction="row" justify="space-around">
+                                            <Grid item style={{'width': '50%'}}>
+                                                <Typography align="left">
+                                                    {roster.name}
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item style={{'width': '50%'}}>
+                                                <Typography align="left">
+                                                    {roster.onyen}
+                                                </Typography>
+                                            </Grid>
+                                        </Grid>
+                                    )}
+                                </Card> : null
+                            }
+                        </Grid>
+                    </Grid>
+                {/*</Container>*/}
             </main>
         </div>
     );
