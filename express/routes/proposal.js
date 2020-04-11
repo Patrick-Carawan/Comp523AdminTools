@@ -100,7 +100,7 @@ router.route('/acceptanceLetter').get((req, res) => {
 });
 
 // Only updates status of proposal, can be changed to update other elements
-router.route('update/:id').post((req, res) => {
+router.route('/update/:id').post((req, res) => {
     Proposal.findById(req.params.id)
         .then(proposal => {
             proposal.status = req.body.status;

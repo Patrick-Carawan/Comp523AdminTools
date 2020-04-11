@@ -8,6 +8,13 @@ router.route('/').get((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
+// Get all teams proposal ranks
+router.route('/rankings').get((req, res) => {
+    Team.find({}, "teamName proposalRanks")
+        .then(teams => res.json(teams))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+
 // Add a new team to the database
 router.route('/add').post((req, res) => {
     const _teamName = req.body.teamName;
@@ -21,7 +28,7 @@ router.route('/add').post((req, res) => {
     });
 
     newTeam.save()
-        .then(() => res.json("Team added."))
+        .then((team) => res.json({id: team._id}))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
@@ -46,21 +53,58 @@ router.route('/:id').get((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
+/*  
+Assign projects to teams, request should look like
+    {
+        "assignments": [
+            {"teamId": "abc", "projectId": "def"},
+            {"teamId": "ghi", "projectId": "jkl"}
+        ]
+    }    
+*/
+router.route('/assignments').post( (req, res) => {
+    var assignments = req.body.assignments;
+    for (let i = 0; i < assignments.length; i++) {
+        
+        Team.findById(assignments[i].teamId)
+            .then( (team) => {
+                team.projectId = assignments[i].projectId;
+                team.projectTitle = assignments[i].projectTitle;
+                team.save()
+                    .then(() => res.json(`Team ${i} assignment updated`))
+                    .catch(err => res.status(400).json('Error: ' + err));
+            })
+            .catch(err => res.status(400).json('Error: ' + err));
+        
+    }
+});
+
 // Update a team entry, to add or remove a student from a team, change proposal ranking, etc.
 router.route('/update/:id').post((req, res) => {
     Team.findById(req.params.id)
         .then(team => {
             team.teamName = req.body.teamName;
             team.projectId = req.body.projectId;
+            team.projectTitle = req.body.projectTitle;
             team.teamMembers = req.body.teamMembers;
             team.proposalRanks = req.body.proposalRanks;
             team.save()
                 .then(() => res.json("Team updated with new info."))
                 .catch(err => res.status(400).json('Error: ' + err));
-        })
-        .catch(err => res.status(400).json('Error: ' + err));
+         })
+         .catch(err => res.status(400).json('Error: ' + err));
 });
 
-
+// Update a team's members
+router.route('/updateMembers/:id').post((req, res) => {
+    Team.findById(req.params.id)
+        .then(team => {
+            team.teamMembers = req.body.teamMembers;
+            team.save()
+                .then(() => res.json("Team updated with new members"))
+                .catch(err => res.status(400).json('Error: ' + err));
+        })
+        .catch(err => res.status(400).json('Error: ' + err));
+})
 
 module.exports = router;
