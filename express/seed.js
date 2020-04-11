@@ -4,6 +4,7 @@ var Letter = require("./models/letter.model");
 var Proposal = require("./models/proposal.model");
 var StudentReport = require("./models/studentReport.model");
 var TeamReport = require("./models/teamReport.model");
+var Roster = require("./models/roster.model");
 
 const express = require('express');
 const cors = require('cors');
@@ -196,6 +197,14 @@ connection.once('open', () => {
     });
     
     User.collection.deleteMany({}, function(err, result) {
+        if (err) {
+            return console.error(err);
+        } else {
+            console.log(result);
+        }
+    });
+
+    Roster.collection.deleteMany({}, function(err, result) {
         if (err) {
             return console.error(err);
         } else {
