@@ -40,7 +40,7 @@ function AdminTeamSelection(props) {
     const [newTeams, setNewTeams] = useState([]);
     useEffect(() => {
         axios.get(`http://localhost:5000/users/students/Spring2020`).then(res => {
-            console.log('students', res['data']);
+            console.log('students', res['data'].filter(student=> student['admin'] === false));
             setStudents(res['data'].filter(student => student['admin'] === false))
         });
         axios.get(`http://localhost:5000/teams/Spring2020`).then(res => {
@@ -60,17 +60,21 @@ function AdminTeamSelection(props) {
     const letters = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'];
     letters.unshift('NONE');
 
-    const setTeam = function (studentIndex, teamIndex) {
-        // console.log('teams',teams);
-        // console.log('students', students);
-        console.log('student', students[studentIndex]);
-        console.log('team', teams[teamIndex]);
+    const setTeam = function (oldTeamId, newTeamId, onyen, studentIndex) {
+        let tempStudents = [...students];
+        console.log('students',students)
+        tempStudents[studentIndex]['teamId'] = newTeamId;
+        console.log('tempStudents', tempStudents);
+        console.log('teams',teams)
+
         // groupingArray[studentIndex]['team'] = teams[teamIndex]['teamName'];
     };
 
     const submitTeams = function () {
-        console.log(groupingArray);
-
+        console.log(students);
+        console.log(teams);
+        // console.log(groupingArray);
+        //
         let payload = {};
         groupingArray.forEach((name) => {
             if (payload.hasOwnProperty(name['team'])) {
@@ -109,15 +113,16 @@ function AdminTeamSelection(props) {
             <DashBoard/>
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
-                <TeamBox id="0box" className={classes.nameBank} setTeam={setTeam}>
-                    {getBoxsStudents("Pending").map((student, index) =>
-                        <Name key={index} id={index} className="name" draggable="true" onyen={student['onyen']}>
+                <TeamBox id="Pending" className={classes.nameBank} setTeam={setTeam}>
+                    {students.map((student, index) =>
+                        student.teamId === "Pending" ?
+                        <Name key={index} id={index} className="name" draggable="true" onyen={student['onyen']} studentIndex={index} teamId={student['teamId']}>
                             <Card variant="outlined">
                                 <CardContent>
                                     {`${student['firstName']} ${student['lastName']}`}
                                 </CardContent>
                             </Card>
-                        </Name>
+                        </Name> : null
                     )}
                 </TeamBox>
 
@@ -133,15 +138,16 @@ function AdminTeamSelection(props) {
                                 <Card variant="outlined" className="teamTile">
                                     <TeamBox id={`${team['_id']}`} setTeam={setTeam}>
                                         <Typography variant="h6">{team['teamName']}</Typography>
-                                        {getBoxsStudents(team['_id']).map((student, index) =>
+                                        {students.map((student, index) =>
+                                            student['teamId'] === team['_id'] ?
                                             <Name key={index} id={index} className="name" draggable="true"
-                                                  onyen={student['onyen']}>
+                                                  onyen={student['onyen']} studentIndex={index} teamId={student['teamId']} >
                                                 <Card variant="outlined">
                                                     <CardContent>
                                                         {`${student['firstName']} ${student['lastName']}`}
                                                     </CardContent>
                                                 </Card>
-                                            </Name>
+                                            </Name> : null
                                         )}
                                     </TeamBox>
                                 </Card>

@@ -5,8 +5,11 @@ function Name(props) {
         const target = e.target;
         let data = {
             id: target.id,
-            onyen: props.onyen
+            onyen: props.onyen,
+            teamId: props.teamId,
+            studentIndex: props.studentIndex
         };
+        // console.log('in name dragStart, data',data)
         data = JSON.stringify(data);
         e.dataTransfer.setData('data', data);
         // e.dataTransfer.setData('name_id', target.id);

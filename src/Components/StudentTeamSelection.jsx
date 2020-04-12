@@ -65,8 +65,9 @@ function StudentTeamSelection(props) {
 
     // useEffect(() => console.log(draggedOnyens), [draggedOnyens]);
 
-    const setTeam = function (studentIndex, teamIndex, onyen) {
-        if (teamIndex > 0) {
+    const setTeam = function (oldBoxId, newBoxId, onyen, studentIndex, boxId) {
+        console.log('newBoxId', newBoxId)
+        if (newBoxId !== '0box') {
             // console.log('set team index > 0');
             let temp = [...draggedOnyens];
             temp.push(onyen);
@@ -109,7 +110,7 @@ function StudentTeamSelection(props) {
                     axios.post(`http://localhost:5000/users/updateTeam/${onyen}`, {
                         teamId: res['data']['id']
                     }).then(() => {
-                        if (i === draggedOnyens.length-1) {
+                        if (i === draggedOnyens.length - 1) {
                             alert('Team successfully submitted')
                         }
                     }).catch(err => alert(err))
@@ -137,7 +138,8 @@ function StudentTeamSelection(props) {
 
                 <TeamBox id="0box" className={classes.nameBank} setTeam={setTeam}>
                     {allStudents.map((student, index) =>
-                        <Name key={index} id={index} className="name" draggable="true" onyen={student['onyen']}>
+                        <Name key={index} id={index} className="name" draggable="true" onyen={student['onyen']}
+                              teamId={student['teamId']}>
                             <Card variant="outlined">
                                 <CardContent>
                                     {`${student['firstName']} ${student['lastName']}`}
