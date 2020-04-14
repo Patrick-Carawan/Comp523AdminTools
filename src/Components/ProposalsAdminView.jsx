@@ -75,12 +75,17 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
+
 function ProposalsAdminView(props) {
+
     const classes = useStyles();
     const [acceptedProposals, setAcceptedProposals] = useState([]);
     const [newProposals, setNewProposals] = useState([]);
     const [pendingProposals, setPendingProposals] = useState([]);
     const [rejectedProposals, setRejectedProposals] = useState([]);
+    useEffect(()=>{
+        console.log(acceptedProposals)
+    },[acceptedProposals])
     useEffect(() => {
         axios.get("http://localhost:5000/proposals/")
             .then(response => {
@@ -169,9 +174,8 @@ function ProposalsAdminView(props) {
                                             <Grid container direction="column" justify="space-between">
                                                 <Grid item>
                                                     <Proposal title={prop.title}
-                                                              firstName={prop.firstName}
-                                                              lastName={prop.lastName}
-                                                              url={prop.url}
+                                                              prop_name={prop.prop_name}
+                                                              url={prop.info_url}
                                                               description={prop.description}
                                                               hardwareReq={prop.hardwareReq}
                                                               softwareReq={prop.softwareReq}
