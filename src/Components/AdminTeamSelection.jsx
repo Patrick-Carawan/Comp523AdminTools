@@ -43,7 +43,7 @@ function AdminTeamSelection(props) {
 
     useEffect(() => {
         axios.get(`http://localhost:5000/users/students/Spring2020`).then(res => {
-            console.log('students', res['data'].filter(student => student['admin'] === false));
+            // console.log('students', res['data'].filter(student => student['admin'] === false));
             setStudents(res['data'].filter(student => student['admin'] === false))
         });
         axios.get(`http://localhost:5000/teams/semester/Spring2020`).then(res => {
@@ -60,15 +60,23 @@ function AdminTeamSelection(props) {
 
     const setTeam = function (oldTeamId, newTeamId, onyen, studentIndex) {
         let tempStudents = [...students];
-        console.log('students', students);
+        // console.log('students', students);
         tempStudents[studentIndex]['teamId'] = newTeamId;
+        // console.log('newTeamId', newTeamId);
+        // console.log('tempStudents[index]', tempStudents[studentIndex]);
+
         setStudents(tempStudents);
-        console.log('tempStudents', tempStudents);
-        console.log('teams', teams);
-        modifiedTeams.add(oldTeamId);
-        modifiedTeams.add(newTeamId);
-        reassignedStudents.add(students[studentIndex]);
-        console.log('reassignedStudents', reassignedStudents);
+
+        if (!newTeamId.includes('new')) {
+            // console.log('tempStudents', tempStudents);
+            // console.log('teams', teams);
+            modifiedTeams.add(oldTeamId);
+            modifiedTeams.add(newTeamId);
+            reassignedStudents.add(students[studentIndex]);
+            // console.log('reassignedStudents', reassignedStudents);
+        } else{
+            // console.log('moved to new team')
+        }
     };
 
     const submitTeams = function () {
@@ -80,11 +88,11 @@ function AdminTeamSelection(props) {
                 teamMemberMap.set(student['teamId'], [student['onyen']]);
             }
         });
-        console.log('teamMemberMap', teamMemberMap);
+        // console.log('teamMemberMap', teamMemberMap);
         let axiosPromises = [];
         modifiedTeams.forEach(team => {
             if (team !== "Pending") {
-                console.log('teamMembers', teamMemberMap.get(team))
+                // console.log('teamMembers', teamMemberMap.get(team))
                 axiosPromises.push(axios.post(`http://localhost:5000/teams/updateMembers/${team}`, {
                     teamMembers: teamMemberMap.get(team) ? teamMemberMap.get(team) : [""]
                 }));
@@ -95,6 +103,33 @@ function AdminTeamSelection(props) {
                 teamId: student.teamId
             }));
         });
+        let tempNewTeams = [...newTeams];
+        tempNewTeams.forEach((newTeam,index) => tempNewTeams[index] =[]);
+        students.filter(student => student['teamId'].includes('new')).forEach(student =>{
+            let regex = /[0-9]+/;
+           let index = student['teamId'].match(regex);
+           // console.log(index);
+           tempNewTeams[index-1].push(student['onyen']);
+        });
+        tempNewTeams.forEach(team =>{
+            axiosPromises.push(axios.post(`http://localhost:5000/teams/add`, {
+                teamName: `Team ${Math.floor(Math.random() * 100)}`,
+                teamMembers: team,
+                semester: 'Spring2020'
+            }).then((res) => {
+                team.forEach((onyen, i) => {
+                    axios.post(`http://localhost:5000/users/updateTeam/${onyen}`, {
+                        teamId: res['data']['id']
+                    }).then(() => {
+                        // if (i === team.length - 1) {
+                        //     alert('Team successfully submitted')
+                        // }
+                    }).catch(err => alert(err))
+                })
+            }))
+        });
+        setNewTeams(tempNewTeams);
+
         Promise.all(axiosPromises).then(() => alert('teams updated')).catch(err => alert(err))
     };
 
@@ -129,7 +164,8 @@ function AdminTeamSelection(props) {
                 <Container className="disable-select">
                     <Box textAlign="center">
                         <Typography>
-                            Drag student name to the top of the box for the team you want to place him or her in.
+                            Drag student name to the top of the box for the team you want to place him or her in. Drag
+                            him or her to the navy box to remove them from all teams.
                         </Typography>
                     </Box>
                     <Grid container spacing={3}>
@@ -155,8 +191,34 @@ function AdminTeamSelection(props) {
                             </Grid>
                         )}
                     </Grid>
+
+                    <Button variant="outlined" style={{'marginBottom': '2em', 'marginTop':'2em'}} onClick={addNewTeam}>Add new
+                        Team</Button>
+                    <Grid container spacing={3}>
+                        {newTeams.map((team, index) =>
+                            <Grid item key={0 - index - 1} xs={3} ml={5}>
+                                <Card variant="outlined" className="teamTile">
+                                    <TeamBox id={`new${index + 1}`} setTeam={setTeam}>
+                                        <Typography variant="h6">{`New Team ${index + 1}`}</Typography>
+                                        {students.map((student, i) =>
+                                            student['teamId'] === `new${index + 1}` ?
+                                                <Name key={i} id={i} className="name" draggable="true"
+                                                      onyen={student['onyen']} studentIndex={i}
+                                                      teamId={student['teamId']}>
+                                                    <Card variant="outlined">
+                                                        <CardContent>
+                                                            {`${student['firstName']} ${student['lastName']}`}
+                                                        </CardContent>
+                                                    </Card>
+                                                </Name>
+                                                : null
+                                        )}
+                                    </TeamBox>
+                                </Card>
+                            </Grid>
+                        )}
+                    </Grid>
                 </Container>
-                <Button variant="outlined" onClick={addNewTeam}>Add new Team</Button>
                 <Button variant="contained" color="secondary" onClick={submitTeams}
                         style={{'marginLeft': '30px', 'marginTop': '30px'}}>
                     Submit Teams
