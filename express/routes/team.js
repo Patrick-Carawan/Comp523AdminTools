@@ -40,7 +40,7 @@ router.route('/:id').delete((req, res) => {
 });
 
 // Get all teams for a given semester
-router.route('/:semester').get((req, res) => {
+router.route('/semester/:semester').get((req, res) => {
     Team.find({ "semester": req.params.semester })
         .then(teams => res.json(teams))
         .catch(err => res.status(400).json('Error: ' + err));
