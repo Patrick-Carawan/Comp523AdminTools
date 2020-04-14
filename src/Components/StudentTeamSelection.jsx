@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
 
 
 function StudentTeamSelection(props) {
-    const [allStudents, setAllStudents] = useState([]);
+    const [students, setStudents] = useState([]);
     const [teams, setTeams] = useState([]);
     const [draggedOnyens, setDraggedOnyens] = useState([]);
     const [typedOnyens, setTypedOnyens] = useState([]);
@@ -52,35 +52,46 @@ function StudentTeamSelection(props) {
     useEffect(() => {
         axios.get(`http://localhost:5000/users/students/Spring2020`).then(res => {
             console.log('allStudents', res['data'].filter(student => student['admin'] === false));
-            setAllStudents(res['data'].filter(student => student['admin'] === false))
+            setStudents(res['data'].filter(student => student['admin'] === false))
         });
-        axios.get(`http://localhost:5000/teams/semester/Spring2020`).then(res => {
-            console.log('teams', res['data']);
-            setTeams(res['data'].sort((t1, t2) => t1['teamName'] < t2['teamName'] ? -1 : 1))
-            let tempStudents = []
-            res['data'].forEach(team => team['teamMembers'].forEach(student => tempStudents.push(student)));
-            setStudentsAlreadyInTeam(tempStudents);
-        })
+        // axios.get(`http://localhost:5000/teams/semester/Spring2020`).then(res => {
+        //     console.log('teams', res['data']);
+        //     setTeams(res['data'].sort((t1, t2) => t1['teamName'] < t2['teamName'] ? -1 : 1))
+        //     let tempStudents = []
+        //     res['data'].forEach(team => team['teamMembers'].forEach(student => tempStudents.push(student)));
+        //     setStudentsAlreadyInTeam(tempStudents);
+        // })
     }, []);
 
     // useEffect(() => console.log(draggedOnyens), [draggedOnyens]);
 
     const setTeam = function (oldBoxId, newBoxId, onyen, studentIndex, boxId) {
-        console.log('newBoxId', newBoxId)
-        if (newBoxId !== '0box') {
-            // console.log('set team index > 0');
-            let temp = [...draggedOnyens];
-            temp.push(onyen);
-            setDraggedOnyens(temp);
-        } else {
-            let tempDragged = [...draggedOnyens];
-            tempDragged.splice(draggedOnyens.indexOf(onyen), 1);
+        console.log('newBoxId', newBoxId);
+        let tempStudents = [...students];
+        tempStudents[studentIndex]['teamId'] = newBoxId;
+        setStudents(tempStudents);
+        let tempDragged = [...draggedOnyens];
+        if (newBoxId === "Assigned") {
+            tempDragged.push(onyen);
             setDraggedOnyens(tempDragged);
-            let tempTyped = [...typedOnyens];
-            tempTyped.splice(typedOnyens.indexOf(onyen), 1);
-            setTypedOnyens(tempTyped);
-            tempTyped.splice(typedOnyens.indexOf(onyen), 1);
+        } else {
+            tempDragged.splice(tempDragged.indexOf(onyen),1);
+            setDraggedOnyens(tempDragged);
         }
+        // if (newBoxId !== '0box') {
+        //     // console.log('set team index > 0');
+        //     let temp = [...draggedOnyens];
+        //     temp.push(onyen);
+        //     setDraggedOnyens(temp);
+        // } else {
+        //     let tempDragged = [...draggedOnyens];
+        //     tempDragged.splice(draggedOnyens.indexOf(onyen), 1);
+        //     setDraggedOnyens(tempDragged);
+        //     let tempTyped = [...typedOnyens];
+        //     tempTyped.splice(typedOnyens.indexOf(onyen), 1);
+        //     setTypedOnyens(tempTyped);
+        //     tempTyped.splice(typedOnyens.indexOf(onyen), 1);
+        // }
     };
 
     const submitTeams = function (e) {
@@ -88,9 +99,9 @@ function StudentTeamSelection(props) {
         console.log('draggedOnyens', draggedOnyens);
         console.log('typedOnyens', typedOnyens);
 
-
-        for (let i = 0; i < draggedOnyens.length; i++) {
-            if (studentsAlreadyInTeam.includes(draggedOnyens[i])) {
+        let assignedStudents = students.filter(student => student['teamId'] !== "Assigned").map(student => student['onyen']);
+        for (let i = 0; i < typedOnyens.length; i++) {
+            if (assignedStudents.includes(draggedOnyens[i])) {
                 alert(`${draggedOnyens[i]} is already in another team. Please have your teacher manually move you to the new team.`);
                 return;
             }
@@ -136,16 +147,26 @@ function StudentTeamSelection(props) {
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
 
-                <TeamBox id="0box" className={classes.nameBank} setTeam={setTeam}>
-                    {allStudents.map((student, index) =>
-                        <Name key={index} id={index} className="name" draggable="true" onyen={student['onyen']}
-                              teamId={student['teamId']}>
-                            <Card variant="outlined">
-                                <CardContent>
-                                    {`${student['firstName']} ${student['lastName']}`}
-                                </CardContent>
-                            </Card>
-                        </Name>
+                <TeamBox id="Pending" className={classes.nameBank} setTeam={setTeam}>
+                    {students.map((student, index) =>
+                            student['teamId'] === "Pending" ?
+                                <Name key={index} id={index} className="name" draggable="true"
+                                      onyen={student['onyen']} studentIndex={index}
+                                      teamId={student['teamId']}>
+                                    <Card variant="outlined">
+                                        <CardContent>
+                                            {`${student['firstName']} ${student['lastName']}`}
+                                        </CardContent>
+                                    </Card>
+                                </Name> : null
+                        // <Name key={index} id={index} className="name" draggable="true" onyen={student['onyen']}
+                        //       teamId={student['teamId']}>
+                        //     <Card variant="outlined">
+                        //         <CardContent>
+                        //             {`${student['firstName']} ${student['lastName']}`}
+                        //         </CardContent>
+                        //     </Card>
+                        // </Name>
                     )}
                 </TeamBox>
 
@@ -168,10 +189,23 @@ function StudentTeamSelection(props) {
                                         </Grid>
                                         <Grid item>
                                             <Card variant="outlined" className="teamTile">
-                                                <TeamBox id={`-1box`} setTeam={setTeam}>
+                                                <TeamBox id="Assigned" setTeam={setTeam}>
                                                     <Box textAlign="center">
                                                         <Typography>Drag Names Onto This Text</Typography>
                                                     </Box>
+                                                    {students.map((student, index) =>
+                                                        student['teamId'] === "Assigned" ?
+                                                            <Name key={index} id={index} className="name"
+                                                                  draggable="true"
+                                                                  onyen={student['onyen']} studentIndex={index}
+                                                                  teamId={student['teamId']}>
+                                                                <Card variant="outlined">
+                                                                    <CardContent>
+                                                                        {`${student['firstName']} ${student['lastName']}`}
+                                                                    </CardContent>
+                                                                </Card>
+                                                            </Name> : null
+                                                    )}
                                                 </TeamBox>
                                             </Card>
                                         </Grid>
