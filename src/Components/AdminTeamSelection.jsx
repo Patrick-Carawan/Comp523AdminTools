@@ -32,67 +32,69 @@ const useStyles = makeStyles(theme => ({
         justifyContent: 'space-around'
     }
 }));
-
+let modifiedTeams = new Set();
+let reassignedStudents = new Set();
 
 function AdminTeamSelection(props) {
     const [students, setStudents] = useState([]);
     const [teams, setTeams] = useState([]);
     const [newTeams, setNewTeams] = useState([]);
+    const [test, setTest] = useState([]);
+
     useEffect(() => {
         axios.get(`http://localhost:5000/users/students/Spring2020`).then(res => {
-            console.log('students', res['data'].filter(student=> student['admin'] === false));
+            console.log('students', res['data'].filter(student => student['admin'] === false));
             setStudents(res['data'].filter(student => student['admin'] === false))
         });
-        axios.get(`http://localhost:5000/teams/Spring2020`).then(res => {
+        axios.get(`http://localhost:5000/teams/semester/Spring2020`).then(res => {
             console.log(res['data']);
             setTeams(res['data'].sort((t1, t2) => t1['teamName'] < t2['teamName'] ? -1 : 1))
         })
     }, []);
 
-    // let nameTeamMap = new Map();
-    // students.forEach((student, index) => nameTeamMap.set(index, -1));
     let groupingArray = [];
     students.forEach(student => groupingArray.push({
         name: student['onyen'],
         team: 'NONE'
     }));
 
-    const letters = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'];
-    letters.unshift('NONE');
-
     const setTeam = function (oldTeamId, newTeamId, onyen, studentIndex) {
         let tempStudents = [...students];
-        console.log('students',students)
+        console.log('students', students);
         tempStudents[studentIndex]['teamId'] = newTeamId;
+        setStudents(tempStudents);
         console.log('tempStudents', tempStudents);
-        console.log('teams',teams)
-
-        // groupingArray[studentIndex]['team'] = teams[teamIndex]['teamName'];
+        console.log('teams', teams);
+        modifiedTeams.add(oldTeamId);
+        modifiedTeams.add(newTeamId);
+        reassignedStudents.add(students[studentIndex]);
+        console.log('reassignedStudents', reassignedStudents);
     };
 
     const submitTeams = function () {
-        console.log(students);
-        console.log(teams);
-        // console.log(groupingArray);
-        //
-        let payload = {};
-        groupingArray.forEach((name) => {
-            if (payload.hasOwnProperty(name['team'])) {
-                payload[name['team']].push(name['name'])
+        let teamMemberMap = new Map;
+        students.forEach(student => {
+            if (teamMemberMap.has(student['teamId'])) {
+                teamMemberMap.get(student['teamId']).push(student['onyen']);
             } else {
-                payload[name['team']] = [name['name']]
+                teamMemberMap.set(student['teamId'], [student['onyen']]);
             }
         });
-        console.log('payload', payload);
-
-        for (let [key, value] of Object.entries(payload)) {
-            console.log(key, value)
-            axios.post(`http://localhost:5000/teams/add`, {
-                teamName: key,
-                teamMembers: value,
-                semester: 'Spring2020'
-            })
-        }
+        console.log('teamMemberMap', teamMemberMap);
+        let axiosPromises = [];
+        modifiedTeams.forEach(team => {
+            if (team !== "Pending") {
+                axiosPromises.push(axios.post(`http://localhost:5000/teams/updateMembers/${team}`, {
+                    teamMembers: teamMemberMap.get(team)
+                }));
+            }
+        });
+        reassignedStudents.forEach(student => {
+            axiosPromises.push(axios.post(`http://localhost:5000/users/updateTeam/${student.onyen}`, {
+                teamId: student.teamId
+            }));
+        });
+        Promise.all(axiosPromises).then(()=> alert('teams updated')).catch(err => alert(err))
     };
 
 
@@ -104,7 +106,7 @@ function AdminTeamSelection(props) {
         setNewTeams(temp);
     }
 
-    function getBoxsStudents(teamId){
+    function getBoxsStudents(teamId) {
         return students.filter(student => student['teamId'] === teamId);
     }
 
@@ -116,13 +118,14 @@ function AdminTeamSelection(props) {
                 <TeamBox id="Pending" className={classes.nameBank} setTeam={setTeam}>
                     {students.map((student, index) =>
                         student.teamId === "Pending" ?
-                        <Name key={index} id={index} className="name" draggable="true" onyen={student['onyen']} studentIndex={index} teamId={student['teamId']}>
-                            <Card variant="outlined">
-                                <CardContent>
-                                    {`${student['firstName']} ${student['lastName']}`}
-                                </CardContent>
-                            </Card>
-                        </Name> : null
+                            <Name key={index} id={index} className="name" draggable="true" onyen={student['onyen']}
+                                  studentIndex={index} teamId={student['teamId']}>
+                                <Card variant="outlined">
+                                    <CardContent>
+                                        {`${student['firstName']} ${student['lastName']}`}
+                                    </CardContent>
+                                </Card>
+                            </Name> : null
                     )}
                 </TeamBox>
 
@@ -140,14 +143,15 @@ function AdminTeamSelection(props) {
                                         <Typography variant="h6">{team['teamName']}</Typography>
                                         {students.map((student, index) =>
                                             student['teamId'] === team['_id'] ?
-                                            <Name key={index} id={index} className="name" draggable="true"
-                                                  onyen={student['onyen']} studentIndex={index} teamId={student['teamId']} >
-                                                <Card variant="outlined">
-                                                    <CardContent>
-                                                        {`${student['firstName']} ${student['lastName']}`}
-                                                    </CardContent>
-                                                </Card>
-                                            </Name> : null
+                                                <Name key={index} id={index} className="name" draggable="true"
+                                                      onyen={student['onyen']} studentIndex={index}
+                                                      teamId={student['teamId']}>
+                                                    <Card variant="outlined">
+                                                        <CardContent>
+                                                            {`${student['firstName']} ${student['lastName']}`}
+                                                        </CardContent>
+                                                    </Card>
+                                                </Name> : null
                                         )}
                                     </TeamBox>
                                 </Card>

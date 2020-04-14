@@ -14,7 +14,11 @@ function TeamBox(props) {
 
         const name = document.getElementById(name_id);
         name.style.display = 'block';
-        e.target.appendChild(name);
+
+        //this line puts places the student in the new team's box
+        // e.target.appendChild(name);
+
+
         // const boxID = parseInt(props.id.match(/[0-9]+/)[0]);
         console.log('onyen', onyen);
         console.log('old teamId', oldBoxId);

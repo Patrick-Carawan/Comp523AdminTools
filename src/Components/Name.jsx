@@ -9,10 +9,8 @@ function Name(props) {
             teamId: props.teamId,
             studentIndex: props.studentIndex
         };
-        // console.log('in name dragStart, data',data)
         data = JSON.stringify(data);
         e.dataTransfer.setData('data', data);
-        // e.dataTransfer.setData('name_id', target.id);
     };
 
     const dragOver = e => {

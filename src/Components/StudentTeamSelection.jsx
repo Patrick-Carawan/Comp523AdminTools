@@ -54,7 +54,7 @@ function StudentTeamSelection(props) {
             console.log('allStudents', res['data'].filter(student => student['admin'] === false));
             setAllStudents(res['data'].filter(student => student['admin'] === false))
         });
-        axios.get(`http://localhost:5000/teams/Spring2020`).then(res => {
+        axios.get(`http://localhost:5000/teams/semester/Spring2020`).then(res => {
             console.log('teams', res['data']);
             setTeams(res['data'].sort((t1, t2) => t1['teamName'] < t2['teamName'] ? -1 : 1))
             let tempStudents = []
@@ -78,8 +78,8 @@ function StudentTeamSelection(props) {
             setDraggedOnyens(tempDragged);
             let tempTyped = [...typedOnyens];
             tempTyped.splice(typedOnyens.indexOf(onyen), 1);
-            setTypedOnyens(tempTyped)
-            ;tempTyped.splice(typedOnyens.indexOf(onyen), 1);
+            setTypedOnyens(tempTyped);
+            tempTyped.splice(typedOnyens.indexOf(onyen), 1);
         }
     };
 
