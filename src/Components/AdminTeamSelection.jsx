@@ -29,7 +29,8 @@ const useStyles = makeStyles(theme => ({
         flexDirection: 'row',
         flexWrap: 'wrap',
         padding: '15px',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        minHeight: '3em'
     }
 }));
 let modifiedTeams = new Set();
@@ -39,7 +40,6 @@ function AdminTeamSelection(props) {
     const [students, setStudents] = useState([]);
     const [teams, setTeams] = useState([]);
     const [newTeams, setNewTeams] = useState([]);
-    const [test, setTest] = useState([]);
 
     useEffect(() => {
         axios.get(`http://localhost:5000/users/students/Spring2020`).then(res => {
@@ -84,8 +84,9 @@ function AdminTeamSelection(props) {
         let axiosPromises = [];
         modifiedTeams.forEach(team => {
             if (team !== "Pending") {
+                console.log('teamMembers', teamMemberMap.get(team))
                 axiosPromises.push(axios.post(`http://localhost:5000/teams/updateMembers/${team}`, {
-                    teamMembers: teamMemberMap.get(team)
+                    teamMembers: teamMemberMap.get(team) ? teamMemberMap.get(team) : [""]
                 }));
             }
         });
@@ -94,7 +95,7 @@ function AdminTeamSelection(props) {
                 teamId: student.teamId
             }));
         });
-        Promise.all(axiosPromises).then(()=> alert('teams updated')).catch(err => alert(err))
+        Promise.all(axiosPromises).then(() => alert('teams updated')).catch(err => alert(err))
     };
 
 
@@ -104,10 +105,6 @@ function AdminTeamSelection(props) {
         let temp = [...newTeams];
         temp.push(0);
         setNewTeams(temp);
-    }
-
-    function getBoxsStudents(teamId) {
-        return students.filter(student => student['teamId'] === teamId);
     }
 
     return (
@@ -160,15 +157,6 @@ function AdminTeamSelection(props) {
                     </Grid>
                 </Container>
                 <Button variant="outlined" onClick={addNewTeam}>Add new Team</Button>
-                {/*{newTeams.length > 0 ?*/}
-                {/*    newTeams.map((team, index) =>*/}
-                {/*    <Card variant="outlined" className="teamTile">*/}
-                {/*        <TeamBox id={`${0-index}box`} setTeam={setTeam}>*/}
-                {/*            <Typography variant="h6">New Team</Typography>*/}
-                {/*        </TeamBox>*/}
-                {/*    </Card>*/}
-                {/*    )*/}
-                {/*    : null}*/}
                 <Button variant="contained" color="secondary" onClick={submitTeams}
                         style={{'marginLeft': '30px', 'marginTop': '30px'}}>
                     Submit Teams

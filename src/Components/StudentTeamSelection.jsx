@@ -44,28 +44,18 @@ const useStyles = makeStyles(theme => ({
 
 function StudentTeamSelection(props) {
     const [students, setStudents] = useState([]);
-    const [teams, setTeams] = useState([]);
     const [draggedOnyens, setDraggedOnyens] = useState([]);
     const [typedOnyens, setTypedOnyens] = useState([]);
-    const [studentsAlreadyInTeam, setStudentsAlreadyInTeam] = useState([]);
 
     useEffect(() => {
         axios.get(`http://localhost:5000/users/students/Spring2020`).then(res => {
             console.log('allStudents', res['data'].filter(student => student['admin'] === false));
             setStudents(res['data'].filter(student => student['admin'] === false))
         });
-        // axios.get(`http://localhost:5000/teams/semester/Spring2020`).then(res => {
-        //     console.log('teams', res['data']);
-        //     setTeams(res['data'].sort((t1, t2) => t1['teamName'] < t2['teamName'] ? -1 : 1))
-        //     let tempStudents = []
-        //     res['data'].forEach(team => team['teamMembers'].forEach(student => tempStudents.push(student)));
-        //     setStudentsAlreadyInTeam(tempStudents);
-        // })
     }, []);
 
-    // useEffect(() => console.log(draggedOnyens), [draggedOnyens]);
 
-    const setTeam = function (oldBoxId, newBoxId, onyen, studentIndex, boxId) {
+    const setTeam = function (oldBoxId, newBoxId, onyen, studentIndex) {
         console.log('newBoxId', newBoxId);
         let tempStudents = [...students];
         tempStudents[studentIndex]['teamId'] = newBoxId;
@@ -78,26 +68,12 @@ function StudentTeamSelection(props) {
             tempDragged.splice(tempDragged.indexOf(onyen),1);
             setDraggedOnyens(tempDragged);
         }
-        // if (newBoxId !== '0box') {
-        //     // console.log('set team index > 0');
-        //     let temp = [...draggedOnyens];
-        //     temp.push(onyen);
-        //     setDraggedOnyens(temp);
-        // } else {
-        //     let tempDragged = [...draggedOnyens];
-        //     tempDragged.splice(draggedOnyens.indexOf(onyen), 1);
-        //     setDraggedOnyens(tempDragged);
-        //     let tempTyped = [...typedOnyens];
-        //     tempTyped.splice(typedOnyens.indexOf(onyen), 1);
-        //     setTypedOnyens(tempTyped);
-        //     tempTyped.splice(typedOnyens.indexOf(onyen), 1);
-        // }
     };
 
     const submitTeams = function (e) {
         e.preventDefault();
-        console.log('draggedOnyens', draggedOnyens);
-        console.log('typedOnyens', typedOnyens);
+        // console.log('draggedOnyens', draggedOnyens);
+        // console.log('typedOnyens', typedOnyens);
 
         let assignedStudents = students.filter(student => student['teamId'] !== "Assigned").map(student => student['onyen']);
         for (let i = 0; i < typedOnyens.length; i++) {
@@ -127,13 +103,10 @@ function StudentTeamSelection(props) {
                     }).catch(err => alert(err))
                 })
             })
-            //need to redirect to another component here
-            // alert('good')
         }
     };
 
     const classes = useStyles();
-
 
     function updateTypedOnyens(e, index) {
         let copy = [...typedOnyens];
@@ -146,7 +119,6 @@ function StudentTeamSelection(props) {
             <DashBoard/>
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
-
                 <TeamBox id="Pending" className={classes.nameBank} setTeam={setTeam}>
                     {students.map((student, index) =>
                             student['teamId'] === "Pending" ?
@@ -159,14 +131,6 @@ function StudentTeamSelection(props) {
                                         </CardContent>
                                     </Card>
                                 </Name> : null
-                        // <Name key={index} id={index} className="name" draggable="true" onyen={student['onyen']}
-                        //       teamId={student['teamId']}>
-                        //     <Card variant="outlined">
-                        //         <CardContent>
-                        //             {`${student['firstName']} ${student['lastName']}`}
-                        //         </CardContent>
-                        //     </Card>
-                        // </Name>
                     )}
                 </TeamBox>
 
@@ -175,7 +139,6 @@ function StudentTeamSelection(props) {
                         <Grid container direction="row" justify="space-between">
                             <Grid item style={{'maxWidth': '45%', 'marginRight': '5%'}} className={classes.teamBox}>
                                 <Card className={classes.columnPad} variant="outlined">
-
                                     <Grid container
                                           direction="column"
                                           justify="center"
@@ -242,8 +205,6 @@ function StudentTeamSelection(props) {
                                 </Card>
                             </Grid>
                         </Grid>
-
-
                     </form>
                 </Container>
             </main>
