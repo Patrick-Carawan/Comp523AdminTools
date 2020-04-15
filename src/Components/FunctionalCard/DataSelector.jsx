@@ -5,6 +5,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import Grid from "@material-ui/core/Grid";
 import { useEffect } from "react";
 import Axios from "axios";
 
@@ -52,56 +53,69 @@ export default function DataSelector(props) {
 
   return (
     <div>
-      <FormControl className={classes.formControl}>
-        <InputLabel shrink id="">
-          Week
-        </InputLabel>
-        <Select
-          labelId=""
-          id=""
-          value={week}
-          onChange={handleWeekChange}
-          displayEmpty
-          className={classes.selectEmpty}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={12}>This Week</MenuItem>
-          <MenuItem value={1}>Week 1</MenuItem>
-          <MenuItem value={2}>Week 2</MenuItem>
-          <MenuItem value={3}>Week 3</MenuItem>
-          <MenuItem value={4}>Week 4</MenuItem>
-          <MenuItem value={5}>Week 5</MenuItem>
-          <MenuItem value={6}>Week 6</MenuItem>
-          <MenuItem value={7}>Week 7</MenuItem>
-          <MenuItem value={8}>Week 8</MenuItem>
-          <MenuItem value={9}>Week 9</MenuItem>
-          <MenuItem value={10}>Week 10</MenuItem>
-          <MenuItem value={11}>Week 11</MenuItem>
-          <MenuItem value={12}>Week 12</MenuItem>
-        </Select>
-        <FormHelperText>Choose the week</FormHelperText>
-      </FormControl>
+      {/* Week Selection */}
+      <Grid container>
+        <Grid item xs={4}>
+          <FormControl className={classes.formControl}>
+            <InputLabel shrink id="">
+              Week
+            </InputLabel>
+            <Select
+              labelId=""
+              id=""
+              value={week}
+              onChange={handleWeekChange}
+              displayEmpty
+              className={classes.selectEmpty}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={12}>This Week</MenuItem>
+              <MenuItem value={1}>Week 1</MenuItem>
+              <MenuItem value={2}>Week 2</MenuItem>
+              <MenuItem value={3}>Week 3</MenuItem>
+              <MenuItem value={4}>Week 4</MenuItem>
+              <MenuItem value={5}>Week 5</MenuItem>
+              <MenuItem value={6}>Week 6</MenuItem>
+              <MenuItem value={7}>Week 7</MenuItem>
+              <MenuItem value={8}>Week 8</MenuItem>
+              <MenuItem value={9}>Week 9</MenuItem>
+              <MenuItem value={10}>Week 10</MenuItem>
+              <MenuItem value={11}>Week 11</MenuItem>
+              <MenuItem value={12}>Week 12</MenuItem>
+              <MenuItem value={13}>Week 13</MenuItem>
+              <MenuItem value={14}>Week 14</MenuItem>
+              <MenuItem value={15}>Week 15</MenuItem>
+              <MenuItem value={16}>Week 16</MenuItem>
+            </Select>
+            <FormHelperText>Choose the week</FormHelperText>
+          </FormControl>
+        </Grid>
 
-      <FormControl className={classes.formControl}>
-        <InputLabel shrink id="">
-          Team
-        </InputLabel>
-        <Select
-          labelId=""
-          id=""
-          value={selectedTeam}
-          onChange={handleTeamChange}
-          displayEmpty
-          className={classes.selectEmpty}
-        >
-          {teams.map((team, index) => (
-            <MenuItem value={team}>{team["teamName"]}</MenuItem>
-          ))}
-        </Select>
-        <FormHelperText>Choose the team</FormHelperText>
-      </FormControl>
+        {/* Team Selection */}
+        <FormControl className={classes.formControl}>
+          <InputLabel shrink id="">
+            Team
+          </InputLabel>
+          <Select
+            labelId=""
+            id=""
+            value={selectedTeam}
+            onChange={handleTeamChange}
+            displayEmpty
+            className={classes.selectEmpty}
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            {teams.map((team, index) => (
+              <MenuItem value={team}>{team["teamName"]}</MenuItem>
+            ))}
+          </Select>
+          <FormHelperText>Choose the team</FormHelperText>
+        </FormControl>
+      </Grid>
     </div>
   );
 }

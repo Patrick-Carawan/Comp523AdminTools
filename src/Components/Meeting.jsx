@@ -141,10 +141,17 @@ export default function MeetingPage() {
           </Grid>
         </Container>
         <Container>
-          {" "}
-          <Button variant="contained" color="primary">
-            Submit
-          </Button>
+          <Grid container>
+            <Grid item xs={5}></Grid>
+            <Grid item xs={2}>
+              <div className={classes.root}>
+                <Button variant="contained" color="primary">
+                  Submit
+                </Button>
+              </div>
+            </Grid>
+            <Grid item xs={5}></Grid>
+          </Grid>
         </Container>
       </main>
     </div>

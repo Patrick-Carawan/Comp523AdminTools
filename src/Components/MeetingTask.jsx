@@ -40,38 +40,8 @@ export default function MeetingTask(props) {
   return (
     <div>
       <Container maxWidth="lg" className={classes.container}>
-        <Grid container spacing={3}>
-          <Grid className="commentSection" item xs={3}>
-            <TextField
-              id="standard-multiline-static"
-              label="Comment for the team"
-              multiline
-              rows="4"
-              defaultValue="Leave your comment"
-              onChange={(e) => {
-                setComment(e.target.value);
-              }}
-            />
-          </Grid>
-          <Grid className="commentSection" item xs={3}>
-            <TextField
-              id="standard-multiline-static"
-              label="To do for coming week"
-              multiline
-              rows="4"
-              defaultValue="Weekly notes"
-              onChange={(e) => {
-                setWeeklyNote(e.target.value);
-              }}
-            />
-            <div className={classes.root}>
-              {" "}
-              {/* <Button variant="contained" color="primary">
-                Submit
-              </Button> */}
-            </div>
-          </Grid>
-          <Grid item xs={6}>
+        <Grid container spacing={5}>
+          <Grid item xs={4}>
             <FormControl component="fieldset">
               <Title>Demo</Title>
               <RadioGroup
@@ -136,7 +106,35 @@ export default function MeetingTask(props) {
                 />
               </RadioGroup>
             </FormControl>
-          </Grid>{" "}
+          </Grid>
+          <Grid className="commentSection" item xs={4}>
+            <TextField
+              id="outlined-multiline-static"
+              label="Comment for the team"
+              multiline
+              rows="8"
+              fullWidth
+              defaultValue=""
+              variant="outlined"
+              onChange={(e) => {
+                setComment(e.target.value);
+              }}
+            />
+          </Grid>
+          <Grid className="commentSection" item xs={4}>
+            <TextField
+              id="outlined-multiline-static"
+              label="To do for coming week"
+              multiline
+              fullWidth
+              rows="8"
+              defaultValue=""
+              variant="outlined"
+              onChange={(e) => {
+                setWeeklyNote(e.target.value);
+              }}
+            />
+          </Grid>
         </Grid>
       </Container>
     </div>
