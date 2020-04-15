@@ -12,6 +12,7 @@ import MeetingSelector from "./MeetingSelector";
 import Calendar from "./FunctionalCard/Calendar";
 import { useEffect } from "react";
 import MeetingTask from "./MeetingTask";
+import Button from "@material-ui/core/Button";
 import Axios from "axios";
 import DataSelector from "./FunctionalCard/DataSelector";
 
@@ -76,12 +77,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function MeetingPage() {
-  useEffect(() => {
-    Axios.get(`http://localhost:5000/teams/Spring2020`).then((res) => {
-      console.log("teams", res);
-      setTeams(res["data"]);
-    });
-  }, []);
+  // useEffect(() => {
+  //   Axios.get(`http://localhost:5000/teams/Spring2020`).then((res) => {
+  //     console.log("teams", res);
+  //     setTeams(res["data"]);
+  //   });
+  // }, []);
 
   const [teams, setTeams] = React.useState([]);
 
@@ -114,6 +115,10 @@ export default function MeetingPage() {
               </Paper>
             </Grid>
           </Grid>
+        </Container>
+        <Container>
+          {" "}
+          <Button>Submit</Button>
         </Container>
       </main>
     </div>

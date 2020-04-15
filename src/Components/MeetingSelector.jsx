@@ -17,6 +17,8 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Snackbar from "@material-ui/core/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
+import { useEffect } from "react";
+import Axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -47,29 +49,36 @@ const GreenRadio = withStyles({
 
 export default function SimpleSelect(props) {
   const classes = useStyles();
-  // console.log("Property: " + props.teams["data"]);
-  // console.log(typeof props.teams);
-  const [week, setWeek] = React.useState("");
-  const [team, setTeam] = React.useState("");
+  const [team, setTeam] = React.useState({});
+  const [selectedValues, setSelectedValues] = React.useState([]);
+  const [attendanceMap, setAttendanceMap] = React.useState(new Map());
 
-  const handleWeekChange = (event) => {
-    setWeek(event.target.value);
-  };
-
-  const handleTeamChange = (event) => {
-    setTeam(event.target.value);
-  };
+  useEffect(() => {
+    Axios.get("http://localhost:5000/teams/5e961111a9e43336b45f4676").then(
+      (res) => {
+        console.log(res.data);
+        setSelectedValues(new Array(res.data.teamMembers.length));
+        setTeam(res.data);
+      }
+    );
+  }, []);
 
   //   Radio
-  const [selectedValue, setSelectedValue] = React.useState("a");
+  const changeAttendance = (event, index, member) => {
+    let tempSelectedValues = [...selectedValues];
+    tempSelectedValues[index] = event.target.value;
+    // console.log(tempSelectedValues);
+    setSelectedValues(tempSelectedValues);
 
-  const handleRadioChange = (event) => {
-    setSelectedValue(event.target.value);
+    let tempAttendanceMap = new Map(attendanceMap);
+    tempAttendanceMap.set(member, event.target.value);
+    setAttendanceMap(tempAttendanceMap);
+    console.log(tempAttendanceMap);
   };
 
   // Record all attended
   const handleAllAttended = (event) => {
-    setSelectedValue(event.target.value);
+    // setSelectedValue(event.target.value);
   };
   const [open, setOpen] = React.useState(false);
 
@@ -89,9 +98,6 @@ export default function SimpleSelect(props) {
     <div className={classes.root}>
       <Button variant="contained" color="primary">
         All attended
-      </Button>
-      <Button variant="contained" color="secondary" onClick={handleClick}>
-        Save
       </Button>
       <Snackbar
         anchorOrigin={{
@@ -118,126 +124,41 @@ export default function SimpleSelect(props) {
           </React.Fragment>
         }
       />
-      <div className="teamMember">
-        <Title>Daniel</Title>
-        <FormControl component="fieldset">
-          <RadioGroup
-            row
-            aria-label="position"
-            name="position"
-            defaultValue="top"
-          >
-            <FormControlLabel
-              value="attended"
-              control={<Radio color="primary" />}
-              label="attended"
-              labelPlacement="start"
-            />{" "}
-            <FormControlLabel
-              value="absent unexcused"
-              control={<Radio color="secondary" />}
-              label="absent unexcused"
-              labelPlacement="start"
-            />{" "}
-            <FormControlLabel
-              value="excused"
-              control={<Radio color="default" />}
-              label="excused"
-              labelPlacement="start"
-            />
-          </RadioGroup>
-        </FormControl>
-      </div>
-      <div>
-        <Title>Zion</Title>{" "}
-        <FormControl component="fieldset">
-          <RadioGroup
-            row
-            aria-label="position"
-            name="position"
-            defaultValue="top"
-          >
-            <FormControlLabel
-              value="attended"
-              control={<Radio color="primary" />}
-              label="attended"
-              labelPlacement="start"
-            />{" "}
-            <FormControlLabel
-              value="absent unexcused"
-              control={<Radio color="secondary" />}
-              label="absent unexcused"
-              labelPlacement="start"
-            />{" "}
-            <FormControlLabel
-              value="excused"
-              control={<Radio color="default" />}
-              label="excused"
-              labelPlacement="start"
-            />
-          </RadioGroup>
-        </FormControl>
-      </div>
-      <div>
-        <Title>Abraham</Title>
-        <FormControl component="fieldset">
-          <RadioGroup
-            row
-            aria-label="position"
-            name="position"
-            defaultValue="top"
-          >
-            <FormControlLabel
-              value="attended"
-              control={<Radio color="primary" />}
-              label="attended"
-              labelPlacement="start"
-            />{" "}
-            <FormControlLabel
-              value="absent unexcused"
-              control={<Radio color="secondary" />}
-              label="absent unexcused"
-              labelPlacement="start"
-            />{" "}
-            <FormControlLabel
-              value="excused"
-              control={<Radio color="default" />}
-              label="excused"
-              labelPlacement="start"
-            />
-          </RadioGroup>
-        </FormControl>
-      </div>
-      <div>
-        <Title>Patrick</Title>{" "}
-        <FormControl component="fieldset">
-          <RadioGroup
-            row
-            aria-label="position"
-            name="position"
-            defaultValue="top"
-          >
-            <FormControlLabel
-              value="attended"
-              control={<Radio color="primary" />}
-              label="attended"
-              labelPlacement="start"
-            />{" "}
-            <FormControlLabel
-              value="absent unexcused"
-              control={<Radio color="secondary" />}
-              label="absent unexcused"
-              labelPlacement="start"
-            />{" "}
-            <FormControlLabel
-              value="excused"
-              control={<Radio color="default" />}
-              label="excused"
-              labelPlacement="start"
-            />
-          </RadioGroup>
-        </FormControl>
-      </div>
+      {team.teamMembers
+        ? team.teamMembers.map((member, index) => (
+            <div className="teamMember">
+              <Title>{member}</Title>
+              <FormControl component="fieldset">
+                <RadioGroup
+                  row
+                  aria-label="position"
+                  name="position"
+                  defaultValue="top"
+                  onChange={(e) => changeAttendance(e, index, member)}
+                >
+                  <FormControlLabel
+                    value="attended"
+                    control={<Radio color="primary" />}
+                    label="attended"
+                    labelPlacement="start"
+                  />{" "}
+                  <FormControlLabel
+                    value="absent unexcused"
+                    control={<Radio color="secondary" />}
+                    label="absent unexcused"
+                    labelPlacement="start"
+                  />{" "}
+                  <FormControlLabel
+                    value="excused"
+                    control={<Radio color="default" />}
+                    label="excused"
+                    labelPlacement="start"
+                  />
+                </RadioGroup>
+              </FormControl>
+            </div>
+          ))
+        : null}
     </div>
   );
 }

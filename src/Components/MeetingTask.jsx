@@ -26,6 +26,10 @@ const useStyles = makeStyles((theme) => ({
 export default function MeetingTask(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState("Controlled");
+  const [comment, setComment] = React.useState("");
+  const [weeklyNote, setWeeklyNote] = React.useState("");
+  const [demoStatus, setDemoStatus] = React.useState("");
+  const [deliverableStatus, setDeliverableStatus] = React.useState("");
 
   const handleChange = (event) => {
     setValue(event.target.value);
@@ -35,18 +39,33 @@ export default function MeetingTask(props) {
     <div>
       <Container maxWidth="lg" className={classes.container}>
         <Grid container spacing={3}>
-          <Grid className="commentSection" item xs={6}>
+          <Grid className="commentSection" item xs={3}>
             <TextField
               id="standard-multiline-static"
               label="Comment for the team"
               multiline
               rows="4"
               defaultValue="Leave your comment"
+              onChange={(e) => {
+                setComment(e.target.value);
+              }}
+            />
+          </Grid>
+          <Grid className="commentSection" item xs={3}>
+            <TextField
+              id="standard-multiline-static"
+              label="To do for coming week"
+              multiline
+              rows="4"
+              defaultValue="Weekly notes"
+              onChange={(e) => {
+                setWeeklyNote(e.target.value);
+              }}
             />
             <div className={classes.root}>
               {" "}
               <Button variant="contained" color="primary">
-                Save comment
+                Submit
               </Button>
             </div>
           </Grid>
@@ -58,6 +77,9 @@ export default function MeetingTask(props) {
                 aria-label="position"
                 name="position"
                 defaultValue="top"
+                onChange={(e) => {
+                  setDemoStatus(e.target.value);
+                }}
               >
                 <FormControlLabel
                   value="demo fine"
@@ -67,14 +89,14 @@ export default function MeetingTask(props) {
                 />{" "}
                 <FormControlLabel
                   value="demo bad"
-                  control={<Radio color="secondary" />}
-                  label="absent unexcused"
+                  control={<Radio color="primary" />}
+                  label="demo bad"
                   labelPlacement="start"
                 />{" "}
                 <FormControlLabel
                   value="no demo"
                   control={<Radio color="default" />}
-                  label="excused"
+                  label="no demo"
                   labelPlacement="start"
                 />
               </RadioGroup>
@@ -87,21 +109,25 @@ export default function MeetingTask(props) {
                 aria-label="position"
                 name="position"
                 defaultValue="top"
+                onChange={(e) => {
+                  setDeliverableStatus(e.target.value);
+                  console.log(e.target.value);
+                }}
               >
                 <FormControlLabel
-                  value="demo fine"
+                  value="finished"
                   control={<Radio color="primary" />}
                   label="finished"
                   labelPlacement="start"
                 />{" "}
                 <FormControlLabel
-                  value="demo bad"
+                  value="unfinished"
                   control={<Radio color="secondary" />}
                   label="unfinished"
                   labelPlacement="start"
                 />{" "}
                 <FormControlLabel
-                  value="no demo"
+                  value="excused"
                   control={<Radio color="default" />}
                   label="excused"
                   labelPlacement="start"
