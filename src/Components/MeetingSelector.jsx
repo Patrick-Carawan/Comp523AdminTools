@@ -47,21 +47,11 @@ const GreenRadio = withStyles({
   checked: {},
 })((props) => <Radio color="default" {...props} />);
 
-export default function SimpleSelect(props) {
+export default function CheckAttendance(props) {
   const classes = useStyles();
   const [team, setTeam] = React.useState({});
   const [selectedValues, setSelectedValues] = React.useState([]);
   const [attendanceMap, setAttendanceMap] = React.useState(new Map());
-
-  useEffect(() => {
-    Axios.get("http://localhost:5000/teams/5e961111a9e43336b45f4676").then(
-      (res) => {
-        console.log(res.data);
-        setSelectedValues(new Array(res.data.teamMembers.length));
-        setTeam(res.data);
-      }
-    );
-  }, []);
 
   //   Radio
   const changeAttendance = (event, index, member) => {
@@ -73,7 +63,7 @@ export default function SimpleSelect(props) {
     let tempAttendanceMap = new Map(attendanceMap);
     tempAttendanceMap.set(member, event.target.value);
     setAttendanceMap(tempAttendanceMap);
-    console.log(tempAttendanceMap);
+    props.changeAttendance(member, event.target.value);
   };
 
   // Record all attended
@@ -96,9 +86,9 @@ export default function SimpleSelect(props) {
 
   return (
     <div className={classes.root}>
-      <Button variant="contained" color="primary">
+      {/* <Button variant="contained" color="primary">
         All attended
-      </Button>
+      </Button> */}
       <Snackbar
         anchorOrigin={{
           vertical: "bottom",
@@ -124,8 +114,9 @@ export default function SimpleSelect(props) {
           </React.Fragment>
         }
       />
-      {team.teamMembers
-        ? team.teamMembers.map((member, index) => (
+      {props.team.teamMembers
+        ? props.team.teamMembers.map((member, index) =>
+          props.team.teamMembers.length > 0 ? 
             <div className="teamMember">
               <Title>{member}</Title>
               <FormControl component="fieldset">
@@ -157,7 +148,9 @@ export default function SimpleSelect(props) {
                 </RadioGroup>
               </FormControl>
             </div>
-          ))
+            :
+            <Typography>No members in this team</Typography>
+        )
         : null}
     </div>
   );

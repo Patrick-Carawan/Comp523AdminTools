@@ -5,6 +5,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import { useEffect } from "react";
+import Axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -22,14 +24,23 @@ export default function DataSelector(props) {
   //   console.log("Property: " + props.teams["data"]);
   //   console.log(typeof props.teams);
   const [week, setWeek] = React.useState("");
-  const [team, setTeam] = React.useState("");
+  const [teams, setTeams] = React.useState([]);
+  const [selectedTeam, setSelectedTeam] = React.useState([]);
+
+  useEffect(() => {
+    Axios.get("http://localhost:5000/teams/semester/Spring2020").then((res) => {
+      console.log(res.data);
+      setTeams(res.data);
+    });
+  }, []);
 
   const handleWeekChange = (event) => {
     setWeek(event.target.value);
   };
 
   const handleTeamChange = (event) => {
-    setTeam(event.target.value);
+    setSelectedTeam(event.target.value);
+    props.changeSelectedTeam(event.target.value);
   };
 
   //   Radio
@@ -80,18 +91,14 @@ export default function DataSelector(props) {
         <Select
           labelId=""
           id=""
-          value={team}
+          value={selectedTeam}
           onChange={handleTeamChange}
           displayEmpty
           className={classes.selectEmpty}
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          {/* <MenuItem value={100}>Current Team</MenuItem> */}
-          {/* {props.teams.map((team, index) => (
-            <MenuItem value={team["teamName"]}>{team["teamName"]}</MenuItem>
-          ))} */}
+          {teams.map((team, index) => (
+            <MenuItem value={team}>{team["teamName"]}</MenuItem>
+          ))}
         </Select>
         <FormHelperText>Choose the team</FormHelperText>
       </FormControl>

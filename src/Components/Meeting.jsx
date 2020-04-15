@@ -77,14 +77,28 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function MeetingPage() {
-  // useEffect(() => {
-  //   Axios.get(`http://localhost:5000/teams/Spring2020`).then((res) => {
-  //     console.log("teams", res);
-  //     setTeams(res["data"]);
-  //   });
-  // }, []);
+  useEffect(() => {
+    Axios.get(`http://localhost:5000/teams/Spring2020`).then((res) => {
+      console.log("teams", res);
+      setTeams(res["data"]);
+    });
+  }, []);
 
   const [teams, setTeams] = React.useState([]);
+  const [attendanceMap, setAttendanceMap] = React.useState(new Map());
+  const [selectedTeam, setSelectedTeam] = React.useState({});
+
+  const changeAttendance = (member, attendanceValue) => {
+    let tempAttendanceMap = new Map(attendanceMap);
+    tempAttendanceMap.set(member, attendanceValue);
+    console.log(tempAttendanceMap);
+    setAttendanceMap(tempAttendanceMap);
+  };
+
+  const changeSelectedTeam = (team) => {
+    setSelectedTeam(team);
+    console.log(team);
+  };
 
   const classes = useStyles();
 
@@ -101,12 +115,22 @@ export default function MeetingPage() {
             <Grid item xs={6}>
               <Paper className={fixedHeightPaper}>
                 <Calendar />
-                <DataSelector teams={teams} />
+                <DataSelector
+                  teams={teams}
+                  changeSelectedTeam={(team) => {
+                    changeSelectedTeam(team);
+                  }}
+                />
               </Paper>
             </Grid>
             <Grid item xs={6}>
               <Paper className={fixedHeightPaper}>
-                <MeetingSelector teams={teams} />
+                <MeetingSelector
+                  team={selectedTeam}
+                  changeAttendance={(e, index, member) =>
+                    changeAttendance(e, index, member)
+                  }
+                />
               </Paper>
             </Grid>
             <Grid item xs={12}>
@@ -118,7 +142,9 @@ export default function MeetingPage() {
         </Container>
         <Container>
           {" "}
-          <Button>Submit</Button>
+          <Button variant="contained" color="primary">
+            Submit
+          </Button>
         </Container>
       </main>
     </div>
