@@ -103,7 +103,7 @@ export default function Login(props) {
                         className={classes.submit}
                         onClick={() => {
                             window.localStorage.setItem("studentUser", "true");
-                            history.push("/teams");
+                            history.push("/studentDash");
                         }}
                     >
                         Grant student access

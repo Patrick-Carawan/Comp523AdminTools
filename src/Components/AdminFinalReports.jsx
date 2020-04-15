@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import DashBoard from "./DashBoard";
+import DashBoard from "./AdminDashboard";
 import Container from "@material-ui/core/Container";
 import {makeStyles} from "@material-ui/core/styles";
 import axios from 'axios';
@@ -61,7 +61,7 @@ const MenuProps = {
     },
 };
 
-function FinalReports() {
+function AdminFinalReports() {
     const classes = useStyles();
     const [teamReports, setTeamReports] = useState([]);
     const [studentReports, setStudentReports] = useState([]);
@@ -165,4 +165,4 @@ function FinalReports() {
     );
 }
 
-export default FinalReports;
+export default AdminFinalReports;

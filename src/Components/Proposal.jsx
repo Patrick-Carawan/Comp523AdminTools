@@ -19,11 +19,11 @@ function Proposal(props) {
                         <a href={props.url}>{props.url}
                         </a>
                     </Typography>
-                    <Typography>{props.description}</Typography>
+                    <Typography>Description: {props.description}</Typography>
                     <br/>
-                    <Typography>{props.softwareReq}</Typography>
+                    <Typography>Software requirements: {props.softwareReq}</Typography>
                     <br/>
-                    <Typography>{props.hardwareReq}</Typography>
+                    <Typography>Hardware requirements: {props.hardwareReq}</Typography>
                 </> : null
             }
         </>

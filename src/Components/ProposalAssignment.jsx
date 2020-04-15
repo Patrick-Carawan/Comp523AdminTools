@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
-import DashBoard from "./DashBoard";
+import DashBoard from "./AdminDashboard";
 import Container from "@material-ui/core/Container";
 import axios from "axios";
 import {Card, CardContent} from "@material-ui/core";

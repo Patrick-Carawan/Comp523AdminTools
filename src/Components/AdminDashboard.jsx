@@ -32,6 +32,7 @@ import AssignmentIcon from "@material-ui/icons/ExitToApp";
 
 import NavPanel from "./NavPanel";
 import { Link } from "react-router-dom";
+import Button from "@material-ui/core/Button";
 
 const drawerWidth = 260;
 
@@ -72,6 +73,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    textColor: 'white !important'
   },
   drawerPaper: {
     height: `calc(100vh)`,
@@ -125,7 +127,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Dashboard() {
+export default function AdminDashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -135,6 +137,10 @@ export default function Dashboard() {
     setOpen(false);
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+
+  function logout() {
+
+  }
 
   return (
     <div className={classes.root}>
@@ -159,12 +165,13 @@ export default function Dashboard() {
           <Typography
             component="h1"
             variant="h6"
-            color="inherit"
+            // color="secondary"
             noWrap
             className={classes.title}
           >
             COMP 523 Admin Tool
           </Typography>
+          <Button style={{'color':'white'}} onClick={logout}>Logout</Button>
         </Toolbar>
       </AppBar>
 
@@ -188,7 +195,7 @@ export default function Dashboard() {
               <ListItemIcon>
                 <DashboardIcon />
               </ListItemIcon>
-              <ListItemText primary="Dashboard" />
+              <ListItemText primary="AdminDashboard" />
             </Link>
           </ListItem>
           <ListItem button key={1} className={classes.listItem}>

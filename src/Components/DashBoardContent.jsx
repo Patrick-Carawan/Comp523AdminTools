@@ -7,7 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Card from "./FunctionalCard/Card";
 import { Link } from "react-router-dom";
-import DashBoard from "./DashBoard";
+import DashBoard from "./AdminDashboard";
 import WelcomeCard from "./FunctionalCard/WelcomeCard";
 import FutureEventCard from "./FunctionalCard/FutureEventCard";
 

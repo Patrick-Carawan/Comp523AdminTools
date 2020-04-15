@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import '../App.css'
 import CSVReader from "react-csv-reader";
 import {makeStyles} from "@material-ui/core/styles";
-import DashBoard from "./DashBoard";
+import DashBoard from "./AdminDashboard";
 import Container from "@material-ui/core/Container";
 import Card from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";

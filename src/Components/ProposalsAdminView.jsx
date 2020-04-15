@@ -5,7 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import Proposal from "./Proposal";
 import {makeStyles} from "@material-ui/core/styles";
-import DashBoard from "./DashBoard";
+import DashBoard from "./AdminDashboard";
 import Box from "@material-ui/core/Box";
 import axios from 'axios';
 import {ExpansionPanel, ExpansionPanelDetails} from "@material-ui/core";

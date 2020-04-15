@@ -3,9 +3,14 @@ import React from 'react';
 function Name(props) {
     const dragStart = e => {
         const target = e.target;
-        e.dataTransfer.setData('name_id', target.id);
-        // setTimeout(() => { target.style.display = "none";
-        // }, 0);
+        let data = {
+            id: target.id,
+            onyen: props.onyen,
+            teamId: props.teamId,
+            studentIndex: props.studentIndex
+        };
+        data = JSON.stringify(data);
+        e.dataTransfer.setData('data', data);
     };
 
     const dragOver = e => {
