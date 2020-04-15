@@ -7,7 +7,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { InputLabel } from "@material-ui/core";
 import FormControl from "@material-ui/core/FormControl";
 import { makeStyles } from "@material-ui/core/styles";
-import DashBoard from "./DashBoard";
+import DashBoard from "./AdminDashboard";
 import axios from "axios";
 
 const clientGroups = {

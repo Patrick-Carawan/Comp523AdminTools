@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import DashBoard from "./DashBoard";
+import DashBoard from "./AdminDashboard";
 import Container from "@material-ui/core/Container";
 import {makeStyles} from "@material-ui/core/styles";
 import axios from 'axios';

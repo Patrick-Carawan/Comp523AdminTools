@@ -115,7 +115,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Dashboard() {
+export default function AdminDashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {
@@ -149,7 +149,7 @@ export default function Dashboard() {
               <ListItemIcon>
                 <DashboardIcon />
               </ListItemIcon>
-              <ListItemText primary="Dashboard" />
+              <ListItemText primary="AdminDashboard" />
             </Link>
           </ListItem>
           <ListItem button>

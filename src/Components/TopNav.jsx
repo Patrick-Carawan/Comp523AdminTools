@@ -17,9 +17,9 @@ const useStyles = makeStyles(theme => ({
     width: drawerWidth,
     flexShrink: 0
   },
-  drawerPaper: {
-    width: drawerWidth
-  },
+  // drawerPaper: {
+  //   width: drawerWidth
+  // },
   toolbar: theme.mixins.toolbar,
   listItem: {
     padding: "0px"
@@ -38,9 +38,9 @@ const useStyles = makeStyles(theme => ({
   root: {
     display: "flex"
   },
-  toolbar: {
-    paddingRight: 24 // keep right padding when drawer closed
-  },
+  // toolbar: {
+  //   paddingRight: 24 // keep right padding when drawer closed
+  // },
   toolbarIcon: {
     display: "flex",
     alignItems: "center",
