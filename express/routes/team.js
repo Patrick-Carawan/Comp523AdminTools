@@ -105,6 +105,19 @@ router.route('/updateMembers/:id').post((req, res) => {
                 .catch(err => res.status(400).json('Error: ' + err));
         })
         .catch(err => res.status(400).json('Error: ' + err));
-})
+});
+
+
+// Update a team's rankings
+router.route('/updateRankings/:id').post((req, res) => {
+    Team.findById(req.params.id)
+        .then(team => {
+            team.proposalRanks = req.body.proposalRanks;
+            team.save()
+                .then(() => res.json("Team's proposal rankings updated"))
+                .catch(err => res.status(400).json('Error: ' + err));
+        })
+        .catch(err => res.status(400).json('Error: ' + err));
+});
 
 module.exports = router;
