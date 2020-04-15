@@ -11,6 +11,7 @@ import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 
 import ReportIcon from '@material-ui/icons/PostAdd';
+import TeamReportIcon from '@material-ui/icons/Assignment';
 import RankIcon from '@material-ui/icons/FormatListNumbered';
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
@@ -19,6 +20,7 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import { Link } from "react-router-dom";
+import Button from "@material-ui/core/Button";
 
 const drawerWidth = 260;
 
@@ -123,6 +125,10 @@ export default function AdminDashboard() {
     };
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
+    function logout() {
+
+    }
+
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -150,8 +156,9 @@ export default function AdminDashboard() {
                         noWrap
                         className={classes.title}
                     >
-                        COMP 523 Admin Tool
+                        COMP 523
                     </Typography>
+                    <Button style={{'color':'white'}} onClick={logout}>Logout</Button>
                 </Toolbar>
             </AppBar>
 
@@ -186,12 +193,20 @@ export default function AdminDashboard() {
                             <ListItemText primary="Rank Proposals" />
                         </Link>
                     </ListItem>
-                    <ListItem button key={2} className={classes.listItem}>
-                        <Link to="/nowhere" className={classes.link}>
+                    <ListItem button key={2} className={classes.listItem} title="Submit your individual final report">
+                        <Link to="/individualReport" className={classes.link}>
                             <ListItemIcon>
                                 <ReportIcon />
                             </ListItemIcon>
-                            <ListItemText primary="Submit Final Report" />
+                            <ListItemText primary="Individual Final Report" />
+                        </Link>
+                    </ListItem>
+                    <ListItem button key={3} className={classes.listItem} title="Submit your team's final report">
+                        <Link to="/teamReport" className={classes.link}>
+                            <ListItemIcon>
+                                <TeamReportIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Team Final Report" />
                         </Link>
                     </ListItem>
                 </List>

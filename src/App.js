@@ -5,7 +5,6 @@ import ClientForm from "./Components/ClientForm";
 import Home from "./Components/Home";
 import Login from "./Components/Login";
 import ProposalsAdminView from "./Components/ProposalsAdminView";
-import ProposalsStudentView from "./Components/ProposalsStudentView";
 import DashBoard from "./Components/AdminDashboard";
 import StudentSetupPage from "./Components/StudentSetupPage";
 import TeammateSelectionRules from "./Components/TeammateSelectionRules";
@@ -20,17 +19,19 @@ import ComposeEmail from "./Components/ComposeEmail";
 import CreateAccount from "./Components/CreateAccount";
 import DashBoardContent from "./Components/DashBoardContent";
 import Meeting from "./Components/Meeting";
-import FinalReports from "./Components/FinalReports";
+import AdminFinalReports from "./Components/AdminFinalReports";
 import {AdminProtectedRoute, StudentProtectedRoute} from "./protected.route";
 import ProposalAssignment from "./Components/ProposalAssignment";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Roster from "./Components/Roster";
 import StudentDashboard from "./Components/StudentDashboard";
+import StudentFinalReport from "./Components/StudentFinalReport";
+import TeamFinalReport from "./Components/TeamFinalReport";
 
 const theme = createMuiTheme({
     palette: {
-        primary: {main: "#78b5e8"},
-        secondary: {main: "#0a0960"},
+        primary: {main: "#78b5e8", contrastText: "#ffffff"},
+        secondary: {main: "#0a0960", contrastText: "#ffffff"},
         danger: {main: "rgba(255,24,34,0.96)"},
     },
 });
@@ -66,18 +67,22 @@ function App() {
                             component={StudentDashboard}
                             exact={true}/>
                         <StudentProtectedRoute
-                            path="/studentProps"
-                            component={ProposalsStudentView}
-                            exact={true}
-                        />
-                        // TODO: Deal with student team selection page
-                        <StudentProtectedRoute
                             path="/formTeams"
                             component={StudentTeamSelection}
                             exact={true}/>
                         <StudentProtectedRoute
                             path="/rank"
                             component={RankContainer}
+                            exact={true}
+                        />
+                        <StudentProtectedRoute
+                            path="/individualReport"
+                            component={StudentFinalReport}
+                            exact={true}
+                        />
+                        <StudentProtectedRoute
+                            path="/teamReport"
+                            component={TeamFinalReport}
                             exact={true}
                         />
                         <AdminProtectedRoute
@@ -92,7 +97,7 @@ function App() {
                         />
                         <AdminProtectedRoute
                             path="/viewFinalReports"
-                            component={FinalReports}
+                            component={AdminFinalReports}
                             exact={true}
                         />
                         <Route

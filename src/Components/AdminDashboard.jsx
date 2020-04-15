@@ -32,6 +32,7 @@ import AssignmentIcon from "@material-ui/icons/ExitToApp";
 
 import NavPanel from "./NavPanel";
 import { Link } from "react-router-dom";
+import Button from "@material-ui/core/Button";
 
 const drawerWidth = 260;
 
@@ -72,6 +73,7 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+    textColor: 'white !important'
   },
   drawerPaper: {
     height: `calc(100vh)`,
@@ -136,6 +138,10 @@ export default function AdminDashboard() {
   };
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
+  function logout() {
+
+  }
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -159,12 +165,13 @@ export default function AdminDashboard() {
           <Typography
             component="h1"
             variant="h6"
-            color="inherit"
+            // color="secondary"
             noWrap
             className={classes.title}
           >
             COMP 523 Admin Tool
           </Typography>
+          <Button style={{'color':'white'}} onClick={logout}>Logout</Button>
         </Toolbar>
       </AppBar>
 

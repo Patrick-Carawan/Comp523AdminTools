@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react'
 import DraggableProposal from './DraggableProposal'
 import update from 'immutability-helper'
 import Grid from "@material-ui/core/Grid";
-import lorem from "../lorem";
 import DashBoard from "./StudentDashboard";
 import Container from "@material-ui/core/Container";
 import {makeStyles} from "@material-ui/core/styles";
@@ -22,31 +21,6 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const staticProposals = [{
-    title: 'iPhone App',
-    firstName: 'Jane',
-    lastName: 'Doe',
-    description: `This is the description of the first project. Hopefully some students would like to work on this project because it is really cool ${lorem}`,
-    url: 'www.project1url.com',
-    hardwareReq: 'These are the hardware restrictions for the first project. You have to use Apple, sheeple.',
-    softwareReq: 'You can only code in fortran because I am a progressive professor.'
-}, {
-    title: 'Website',
-    firstName: 'John',
-    lastName: 'Smith',
-    description: `This is the description of the second project. Hopefully some students would like to work on this project because it is really cool. ${lorem}`,
-    url: 'www.project2url.com',
-    hardwareReq: 'These are the hardware restrictions for the second project. You have to use Windows, #PCMasterRace.',
-    softwareReq: 'You can use whatever language you want.'
-}, {
-    title: 'Android App',
-    firstName: 'Sam',
-    lastName: 'Sung',
-    description: `This is the description of the third project. Hopefully some students would like to work on this project because it is really cool. ${lorem}`,
-    url: 'www.project3url.com',
-    hardwareReq: 'These are the hardware restrictions for the third project. Android dev, Oreo or newer.',
-    softwareReq: 'Let\'s use Kotlin.'
-}];
 const ProjectRanking = () => {
     const classes = useStyles();
     const [proposals, setProposals] = useState([]);

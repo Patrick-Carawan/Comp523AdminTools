@@ -61,7 +61,7 @@ const MenuProps = {
     },
 };
 
-function FinalReports() {
+function AdminFinalReports() {
     const classes = useStyles();
     const [teamReports, setTeamReports] = useState([]);
     const [studentReports, setStudentReports] = useState([]);
@@ -165,4 +165,4 @@ function FinalReports() {
     );
 }
 
-export default FinalReports;
+export default AdminFinalReports;
