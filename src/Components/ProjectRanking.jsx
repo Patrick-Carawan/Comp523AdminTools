@@ -51,15 +51,22 @@ const ProjectRanking = () => {
     const classes = useStyles();
     const [proposals, setProposals] = useState([]);
 
-    useEffect(()=>{
-        axios.get(`http://localhost:5000/proposals/`).then((res)=>{
+    useEffect(() => {
+        axios.get(`http://localhost:5000/proposals/`).then((res) => {
             console.log(res['data']);
             setProposals(res['data'].filter(proposal => proposal['status'].toLowerCase() === "accepted"))
         })
-    },[]);
+    }, []);
 
-    useEffect(()=> console.log(proposals),[proposals]);
+    useEffect(() => console.log(proposals), [proposals]);
 
+    const submitRanking = function () {
+        // let teamId = window.localStorage.getItem('teamId');
+        let rankings = proposals.map(proposal => proposal['_id'])
+        axios.post(`http://localhost:5000/teams/updateRankings/######put id here`,{
+            proposalRanks: rankings
+        })
+    };
 
     const moveCard = (dragIndex, hoverIndex) => {
         const dragCard = proposals[dragIndex];
