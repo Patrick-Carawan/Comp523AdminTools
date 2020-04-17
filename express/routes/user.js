@@ -5,26 +5,33 @@ const auth = require('./auth');
 var User = require('../models/user.model');
 
 // Get all users
-router.route('/').get((req, res) => {
+router.get('/', auth.required, (req, res, next) => {
     User.find()
         .then(users => res.json(users))
         .catch(err => res.status(400).json('Error: ' + err));
-})
+});
+
+// Get a user by their onyen
+router.get('/:onyen', auth.required, (req, res, next) => {
+    User.find({ onyen: req.params.onyen })
+        .then(user => res.json(user))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
 
 // Get all students for a given semester
-router.route('/students/:semester').get((req, res) => {
+router.get('/students/:semester', auth.required, (req, res, next) => {
     User.find({ "semester": req.params.semester })
         .then(users => res.json(users))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
 //Update team for a given student
-router.route('/updateTeam/:onyen').post((req,res)=> {
-    User.findOne({onyen: req.params.onyen})
+router.post('/updateTeam/:onyen', auth.required, (req, res, next) => {
+  User.findOne({onyen: req.params.onyen})
         .then(student => {
             student.teamId = req.body.teamId;
             student.save()
-                .then(() => res.json("Student's teamId updated"))
+                .then(() => res.json("Student's teamId updated. ")) // Do we want to change the Team here too?
                 .catch(err => res.status(400).json('Error in saving student: ' + err));
         })
         .catch(err => res.status(400).json('Error in finding student: ' + err));
@@ -51,11 +58,17 @@ router.post('/', auth.optional, (req, res, next) => {
     }
   
     const finalUser = new User(user);
+
+    console.log(user);
   
     finalUser.setPassword(user.password);
   
     return finalUser.save()
-      .then(() => res.json({ user: finalUser.toAuthJSON() }));
+      .then(() => res.json({ 
+        user: finalUser.toAuthJSON(),
+        onyen: finalUser.onyen,
+        name: `${finalUser.firstName} ${finalUser.lastName}`
+      }));
 });
   
 
@@ -109,33 +122,4 @@ router.get('/current', auth.required, (req, res, next) => {
       });
 });
   
-// Add students
-// router.route('/students/add').post((req, res) => {
-    
-//     const _onyen = req.body.onyen;
-//     const _firstName = req.body.firstName;
-//     const _lastName = req.body.lastName;
-//     const _phone = req.body.phone;
-//     const _email = req.body.email;
-//     const _semester = req.body.semester;
-//     const _teamId = req.body.teamId;
-//     const _admin = req.body.admin;
-
-    
-//     const newStudent = new User({
-//         onyen: _onyen,
-//         firstName: _firstName,
-//         lastName: _lastName,
-//         phone: _phone,
-//         email: _email,
-//         semester: _semester,
-//         teamId: _teamId,
-//         admin: _admin
-//     });
-
-//     newStudent.save()
-//         .then(() => res.json("Student added."))
-//         .catch(err => res.status(400).json('Error: ' + err));
-// });
-
 module.exports = router;
