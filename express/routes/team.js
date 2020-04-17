@@ -3,12 +3,6 @@ const auth = require('./auth');
 var Team = require("../models/team.model");
 
 // Get all teams
-// router.route('/').get((req, res) => {
-//     Team.find()
-//         .then(teams => res.json(teams))
-//         .catch(err => res.status(400).json('Error: ' + err));
-// });
-
 router.get('/', auth.required, (req, res, next) => {
     Team.find()
         .then(teams => res.json(teams))
@@ -16,12 +10,6 @@ router.get('/', auth.required, (req, res, next) => {
 });
 
 // Get all teams proposal ranks
-// router.route('/rankings').get((req, res) => {
-//     Team.find({}, "teamName proposalRanks")
-//         .then(teams => res.json(teams))
-//         .catch(err => res.status(400).json('Error: ' + err));
-// });
-
 router.get('/rankings', auth.required, (req, res, next) => {
     Team.find({}, "teamName proposalRanks")
         .then(teams => res.json(teams))
@@ -30,22 +18,6 @@ router.get('/rankings', auth.required, (req, res, next) => {
 
 
 // Add a new team to the database
-// router.route('/add').post((req, res) => {
-//     const _teamName = req.body.teamName;
-//     const _teamMembers = req.body.teamMembers;
-//     const _semester = req.body.semester;
-
-//     const newTeam = new Team({
-//         teamName:  _teamName,
-//         teamMembers: _teamMembers,
-//         semester: _semester
-//     });
-
-//     newTeam.save()
-//         .then((team) => res.json({id: team._id}))
-//         .catch(err => res.status(400).json('Error: ' + err));
-// });
-
 router.post('/add', auth.required, (req, res, next) => {
     const _teamName = req.body.teamName;
     const _teamMembers = req.body.teamMembers;
@@ -63,12 +35,6 @@ router.post('/add', auth.required, (req, res, next) => {
 });
 
 // Delete a team
-// router.route('/:id').delete((req, res) => {
-//     Team.findByIdAndDelete(req.params.id)
-//         .then(() => res.json("Team deleted."))
-//         .catch(err => res.status(400).json('Error: ' + err));
-// });
-
 router.delete('/:id', auth.required, (req, res, next) => {
     Team.findByIdAndDelete(req.params.id)
         .then(() => res.json("Team deleted."))
@@ -76,12 +42,6 @@ router.delete('/:id', auth.required, (req, res, next) => {
 });
 
 // Get all teams for a given semester
-// router.route('/:semester').get((req, res) => {
-//     Team.find({ "semester": req.params.semester })
-//         .then(teams => res.json(teams))
-//         .catch(err => res.status(400).json('Error: ' + err));
-// });
-
 router.get('/semester/:semester', auth.required, (req, res, next) => {
     Team.find({ "semester": req.params.semester })
         .then(teams => res.json(teams))
@@ -89,12 +49,6 @@ router.get('/semester/:semester', auth.required, (req, res, next) => {
 });
 
 // Get a team by its ID
-// router.route('/:id').get((req, res) => {
-//     Team.findById(req.params.id)
-//         .then(team => res.json(team))
-//         .catch(err => res.status(400).json('Error: ' + err));
-// });
-
 router.get('/:id', auth.required, (req, res, next) => {
     Team.findById(req.params.id)
         .then(team => res.json(team))
@@ -110,23 +64,6 @@ Assign projects to teams, request should look like
         ]
     }    
 */
-// router.route('/assignments').post( (req, res) => {
-//     var assignments = req.body.assignments;
-//     for (let i = 0; i < assignments.length; i++) {
-        
-//         Team.findById(assignments[i].teamId)
-//             .then( (team) => {
-//                 team.projectId = assignments[i].projectId;
-//                 team.projectTitle = assignments[i].projectTitle;
-//                 team.save()
-//                     .then(() => res.json(`Team ${i} assignment updated`))
-//                     .catch(err => res.status(400).json('Error: ' + err));
-//             })
-//             .catch(err => res.status(400).json('Error: ' + err));
-        
-//     }
-// });
-
 router.post('/assignments', auth.required, (req, res, next) => {
     var assignments = req.body.assignments;
     for (let i = 0; i < assignments.length; i++) {
@@ -145,21 +82,6 @@ router.post('/assignments', auth.required, (req, res, next) => {
 });
 
 // Update a team entry, to add or remove a student from a team, change proposal ranking, etc.
-// router.route('/update/:id').post((req, res) => {
-//     Team.findById(req.params.id)
-//         .then(team => {
-//             team.teamName = req.body.teamName;
-//             team.projectId = req.body.projectId;
-//             team.projectTitle = req.body.projectTitle;
-//             team.teamMembers = req.body.teamMembers;
-//             team.proposalRanks = req.body.proposalRanks;
-//             team.save()
-//                 .then(() => res.json("Team updated with new info."))
-//                 .catch(err => res.status(400).json('Error: ' + err));
-//          })
-//          .catch(err => res.status(400).json('Error: ' + err));
-// });
-
 // router.post('/update/:id', auth.required, (req, res, next) => {
 //     Team.findById(req.params.id)
 //         .then(team => {
@@ -176,17 +98,6 @@ router.post('/assignments', auth.required, (req, res, next) => {
 // });
 
 // Update a team's members
-// router.route('/updateMembers/:id').post((req, res) => {
-//     Team.findById(req.params.id)
-//         .then(team => {
-//             team.teamMembers = req.body.teamMembers;
-//             team.save()
-//                 .then(() => res.json("Team updated with new members"))
-//                 .catch(err => res.status(400).json('Error: ' + err));
-//         })
-//         .catch(err => res.status(400).json('Error: ' + err));
-// });
-
 router.post('/updateMembers/:id', auth.required, (req, res, next) => {
     Team.findById(req.params.id)
         .then(team => {
