@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import clsx from "clsx";
 import {makeStyles} from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -29,6 +29,7 @@ import Calendar from "@material-ui/icons/DateRange";
 import Deliverable from "@material-ui/icons/ListAlt";
 import DashboardContent from "./DashBoardContent";
 import AssignmentIcon from "@material-ui/icons/ExitToApp";
+import axios from 'axios';
 
 import NavPanel from "./NavPanel";
 import {Link} from "react-router-dom";
@@ -135,6 +136,7 @@ export default function AdminDashboard() {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     const [semester, setSemester] = useState('');
+    const [allSemesters, setAllSemesters] = useState(['test']);
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -152,6 +154,13 @@ export default function AdminDashboard() {
         window.localStorage.setItem('semester', e.target.value);
         console.log(window.localStorage.getItem('semester'))
     }
+
+    useEffect(() => {
+        axios.get(`http://localhost:5000/semesters`).then(res => {
+            console.log(res['data'][0]);
+            setAllSemesters(res['data'][0]['semesters']);
+        })
+    }, []);
 
     return (
         <div className={classes.root}>
@@ -187,12 +196,11 @@ export default function AdminDashboard() {
                         <Select onChange={handleSemesterChange}
                                 value={semester}
                                 style={{'minWidth':'7em', 'marginBottom':'1em'}}>
-                            <MenuItem value='Spring 2020'>
-                                Spring 2020
-                            </MenuItem>
-                            <MenuItem value='Fall 2021'>
-                                Fall 2021
-                            </MenuItem>
+                            {allSemesters ? allSemesters.map((semester,index) =>
+                                <MenuItem key={index} value={allSemesters[index]}>
+                                    {semester}
+                                </MenuItem>
+                            ):null}
                         </Select>
                     </FormControl>
                     <Button style={{'color': 'white'}} onClick={logout}>Logout</Button>
