@@ -1,23 +1,24 @@
 const router = require('express').Router();
+const auth = require('./auth');
 var StudentReport = require("../models/studentReport.model");
 var TeamReport = require("../models/teamReport.model");
 
 // Get all student reports
-router.route('/students').get((req, res) => {
+router.get('/students', auth.required, (req, res, next) => {
     StudentReport.find()
         .then(reports => res.json(reports))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
 // Get all team reports
-router.route('/teams').get((req, res) => {
+router.get('/teams', auth.required, (req, res, next) => {
     TeamReport.find()
         .then(reports => res.json(reports))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
 // Add a student report
-router.route('/students').post((req, res) => {
+router.post('/students', auth.required, (req, res, next) => {
     const _onyen = req.body.onyen;
     const _text = req.body.text;
 
@@ -32,7 +33,7 @@ router.route('/students').post((req, res) => {
 });
 
 // Add a team report
-router.route('/teams').post((req, res) => {
+router.post('/teams', auth.required, (req, res, next) => {
     const _team = req.body.team;
     const _text = req.body.text;
 

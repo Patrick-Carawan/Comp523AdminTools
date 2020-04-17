@@ -1,24 +1,24 @@
 const router = require('express').Router();
+const auth = require('./auth');
 var Proposal = require('../models/proposal.model');
 var Letter = require('../models/letter.model');
 
 // Get all proposals
-router.route('/').get((req, res) => {
+router.get('/', auth.required, (req, res, next) => {
     Proposal.find()
         .then(proposals => res.json(proposals))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
 // Delete a proposal
-router.route('/:id').delete((req, res) => {
+router.delete('/:id', auth.required, (req, res, next) => {
     Proposal.findByIdAndDelete(req.params.id)
         .then(() => res.json("Proposal deleted."))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
 // Add a proposal
-router.route('/').post((req, res) => {
-    
+router.post('/', auth.required, (req, res, next) => {
     const _title = req.body.title;
     const _email = req.body.email;
     const _prop_name = req.body.prop_name;
@@ -45,14 +45,14 @@ router.route('/').post((req, res) => {
 });
 
 // Get all proposal emails and their status
-router.route('/emails').get((req, res) => {
+router.get('/emails', auth.required, (req, res, next) => {
     Proposal.find({}, "email status")
         .then(emails => res.json(emails))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
-// add a letter
-router.route("/addLetter").post((req, res) => {
+// Add a letter
+router.post('/addLetter', auth.required, (req, res, next) => {
     const text = req.body.text;
     const status = req.body.status;
 
@@ -67,15 +67,15 @@ router.route("/addLetter").post((req, res) => {
 });
 
 // Get pending letter
-router.route('/pendingLetter').get((req, res) => {
-    Letter.find({status: 'pending'})
+router.get('/pendingLetter', auth.required, (req, res, next) => {
+    Letter.find({status: 'Pending'})
         .then(pending => res.json(pending))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
 // Update pending letter
-router.route('/pendingLetter').post((req, res) => {
-    Letter.findOne({status: 'pending'})
+router.post('/pendingLetter', auth.required, (req, res, next) => {
+    Letter.findOne({status: 'Pending'})
         .then(letter => {
             letter.text = req.body.text;
             letter.save()
@@ -83,24 +83,48 @@ router.route('/pendingLetter').post((req, res) => {
                 .catch(err => res.status(400).json('Error: ' + err));
         })
         .catch(err => res.status(400).json('Error: ' + err));
-})
+});
 
 // Get rejection letter
-router.route('/rejectionLetter').get((req, res) => {
-    Letter.find({status: 'rejected'})
+router.get('/rejectionLetter', auth.required, (req, res, next) => {
+    Letter.find({status: 'Rejected'})
         .then(rejection => res.json(rejection))
-        .catch(err => res.status(400).json('Error: ' + err))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+
+// Update rejection letter
+router.post('/rejectionLetter', auth.required, (req, res, next) => {
+    Letter.findOne({status: 'Rejected'})
+        .then(letter => {
+            letter.text = req.body.text;
+            letter.save()
+                .then(() => res.json("Rejection letter updated"))
+                .catch(err => res.status(400).json('Error: ' + err));
+        })
+        .catch(err => res.status(400).json('Error: ' + err));
 });
 
 // Get acceptance letter
-router.route('/acceptanceLetter').get((req, res) => {
-    Letter.find({status: 'accepted'})
+router.get('/acceptanceLetter', auth.required, (req, res, next) => {
+    Letter.find({status: 'Accepted'})
         .then(acceptance => res.json(acceptance))
-        .catch(err => res.status(400).json('Error: ' + err))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+
+// Update acceptance letter
+router.post('/acceptanceLetter', auth.required, (req, res, next) => {
+    Letter.findOne({status: 'Accepted'})
+        .then(letter => {
+            letter.text = req.body.text;
+            letter.save()
+                .then(() => res.json("Accepted letter updated"))
+                .catch(err => res.status(400).json('Error: ' + err));
+        })
+        .catch(err => res.status(400).json('Error: ' + err));
 });
 
 // Only updates status of proposal, can be changed to update other elements
-router.route('/update/:id').post((req, res) => {
+router.post('/update/:id', auth.required, (req, res, next) => {
     Proposal.findById(req.params.id)
         .then(proposal => {
             proposal.status = req.body.status;
