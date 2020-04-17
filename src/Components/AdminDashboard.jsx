@@ -1,6 +1,6 @@
-import React from "react";
+import React, {useState} from "react";
 import clsx from "clsx";
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Drawer from "@material-ui/core/Drawer";
 import Box from "@material-ui/core/Box";
@@ -31,257 +31,281 @@ import DashboardContent from "./DashBoardContent";
 import AssignmentIcon from "@material-ui/icons/ExitToApp";
 
 import NavPanel from "./NavPanel";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import Button from "@material-ui/core/Button";
+import FormControl from "@material-ui/core/FormControl";
+import {InputLabel} from "@material-ui/core";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
 
 const drawerWidth = 260;
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-  },
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
-  },
-  toolbarIcon: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    padding: "0 8px",
-    ...theme.mixins.toolbar,
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  menuButtonHidden: {
-    display: "none",
-  },
-  title: {
-    flexGrow: 1,
-    textColor: 'white !important'
-  },
-  drawerPaper: {
-    height: `calc(100vh)`,
-    position: "relative",
-    whiteSpace: "nowrap",
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerPaperClose: {
-    overflowX: "hidden",
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9),
+    root: {
+        display: "flex",
     },
-  },
-  appBarSpacer: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-    height: "100vh",
-    overflow: "auto",
-  },
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: "flex",
-    overflow: "auto",
-    flexDirection: "column",
-  },
-  fixedHeight: {
-    height: 240,
-  },
-  link: {
-    display: "flex",
-    flexDirection: "row",
-    width: "100%",
-    margin: 0,
-    padding: "10px",
-    textDecoration: "none",
-    color: "black",
-    decoration: "none",
-  },
+    toolbar: {
+        paddingRight: 24, // keep right padding when drawer closed
+    },
+    toolbarIcon: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "flex-end",
+        padding: "0 8px",
+        ...theme.mixins.toolbar,
+    },
+    appBar: {
+        zIndex: theme.zIndex.drawer + 1,
+        transition: theme.transitions.create(["width", "margin"], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+    },
+    appBarShift: {
+        marginLeft: drawerWidth,
+        width: `calc(100% - ${drawerWidth}px)`,
+        transition: theme.transitions.create(["width", "margin"], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+    },
+    menuButton: {
+        marginRight: 36,
+    },
+    menuButtonHidden: {
+        display: "none",
+    },
+    title: {
+        flexGrow: 1,
+        textColor: 'white !important'
+    },
+    drawerPaper: {
+        height: `calc(100vh)`,
+        position: "relative",
+        whiteSpace: "nowrap",
+        width: drawerWidth,
+        transition: theme.transitions.create("width", {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+    },
+    drawerPaperClose: {
+        overflowX: "hidden",
+        transition: theme.transitions.create("width", {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+        width: theme.spacing(7),
+        [theme.breakpoints.up("sm")]: {
+            width: theme.spacing(9),
+        },
+    },
+    appBarSpacer: theme.mixins.toolbar,
+    content: {
+        flexGrow: 1,
+        height: "100vh",
+        overflow: "auto",
+    },
+    container: {
+        paddingTop: theme.spacing(4),
+        paddingBottom: theme.spacing(4),
+    },
+    paper: {
+        padding: theme.spacing(2),
+        display: "flex",
+        overflow: "auto",
+        flexDirection: "column",
+    },
+    fixedHeight: {
+        height: 240,
+    },
+    link: {
+        display: "flex",
+        flexDirection: "row",
+        width: "100%",
+        margin: 0,
+        padding: "10px",
+        textDecoration: "none",
+        color: "black",
+        decoration: "none",
+    },
 }));
 
 export default function AdminDashboard() {
-  const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+    const classes = useStyles();
+    const [open, setOpen] = React.useState(true);
+    const [semester, setSemester] = useState('');
+    const handleDrawerOpen = () => {
+        setOpen(true);
+    };
+    const handleDrawerClose = () => {
+        setOpen(false);
+    };
+    const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
-  function logout() {
+    function logout() {
 
-  }
+    }
 
-  return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar
-        position="absolute"
-        className={clsx(classes.appBar, open && classes.appBarShift)}
-      >
-        <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            className={clsx(
-              classes.menuButton,
-              open && classes.menuButtonHidden
-            )}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            component="h1"
-            variant="h6"
-            // color="secondary"
-            noWrap
-            className={classes.title}
-          >
-            COMP 523 Admin Tool
-          </Typography>
-          <Button style={{'color':'white'}} onClick={logout}>Logout</Button>
-        </Toolbar>
-      </AppBar>
+    function handleSemesterChange(e){
+        setSemester(e.target.value);
+        window.localStorage.setItem('semester', e.target.value);
+        console.log(window.localStorage.getItem('semester'))
+    }
 
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-        }}
-        open={open}
-      >
-        <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
+    return (
+        <div className={classes.root}>
+            <CssBaseline/>
+            <AppBar
+                position="absolute"
+                className={clsx(classes.appBar, open && classes.appBarShift)}
+            >
+                <Toolbar className={classes.toolbar}>
+                    <IconButton
+                        edge="start"
+                        color="inherit"
+                        aria-label="open drawer"
+                        onClick={handleDrawerOpen}
+                        className={clsx(
+                            classes.menuButton,
+                            open && classes.menuButtonHidden
+                        )}
+                    >
+                        <MenuIcon/>
+                    </IconButton>
+                    <Typography
+                        component="h1"
+                        variant="h6"
+                        // color="secondary"
+                        noWrap
+                        className={classes.title}
+                    >
+                        COMP 523 Admin Tool
+                    </Typography>
+                    <FormControl>
+                        <InputLabel>Semester</InputLabel>
+                        <Select onChange={handleSemesterChange}
+                                value={semester}
+                                style={{'minWidth':'7em', 'marginBottom':'1em'}}>
+                            <MenuItem value='Spring 2020'>
+                                Spring 2020
+                            </MenuItem>
+                            <MenuItem value='Fall 2021'>
+                                Fall 2021
+                            </MenuItem>
+                        </Select>
+                    </FormControl>
+                    <Button style={{'color': 'white'}} onClick={logout}>Logout</Button>
+                </Toolbar>
+            </AppBar>
+
+            <Drawer
+                variant="permanent"
+                classes={{
+                    paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
+                }}
+                open={open}
+            >
+                <div className={classes.toolbarIcon}>
+                    <IconButton onClick={handleDrawerClose}>
+                        <ChevronLeftIcon/>
+                    </IconButton>
+                </div>
+                <Divider/>
+                <List>
+                    {" "}
+                    <ListItem button key={0} className={classes.listItem}>
+                        <Link to="/dashboard" className={classes.link}>
+                            <ListItemIcon>
+                                <DashboardIcon/>
+                            </ListItemIcon>
+                            <ListItemText primary="AdminDashboard"/>
+                        </Link>
+                    </ListItem>
+                    <ListItem button key={1} className={classes.listItem}>
+                        <Link to="/composeEmail" className={classes.link}>
+                            <ListItemIcon>
+                                <MailIcon/>
+                            </ListItemIcon>
+                            <ListItemText primary="Email Clients"/>
+                        </Link>
+                    </ListItem>
+                    <ListItem button key={2} className={classes.listItem}>
+                        <Link to="/proposalsAdmin" className={classes.link}>
+                            <ListItemIcon>
+                                <Proposals/>
+                            </ListItemIcon>
+                            <ListItemText primary="View Proposals"/>
+                        </Link>
+                    </ListItem>
+                    <ListItem
+                        button
+                        key={3}
+                        title="Change which students are in which teams"
+                        className={classes.listItem}
+                    >
+                        <Link to="/teamSelection" className={classes.link}>
+                            <ListItemIcon>
+                                <Team/>
+                            </ListItemIcon>
+                            <ListItemText primary="Regroup Teams"/>
+                        </Link>
+                    </ListItem>
+                    <ListItem
+                        button
+                        key={4}
+                        className={classes.listItem}
+                        title="Keep track of teams' progress in coach meetings"
+                    >
+                        <Link to="/meeting" className={classes.link}>
+                            <ListItemIcon>
+                                <Calendar/>
+                            </ListItemIcon>
+                            <ListItemText primary="Track Meetings"/>
+                        </Link>
+                    </ListItem>
+                    <Divider/>
+                    <ListItem
+                        button
+                        key={5}
+                        className={classes.listItem}
+                        title="View Team and Individual Final Reports"
+                    >
+                        <Link to="/viewFinalReports" className={classes.link}>
+                            <ListItemIcon>
+                                <AssignmentIcon/>
+                            </ListItemIcon>
+                            <ListItemText primary="Final Reports"/>
+                        </Link>
+                    </ListItem>
+                    <ListItem
+                        button
+                        key={6}
+                        className={classes.listItem}
+                        title="Give feedback on team deliverables"
+                    >
+                        <Link to="/proposalAssignment" className={classes.link}>
+                            <ListItemIcon>
+                                <Deliverable/>
+                            </ListItemIcon>
+                            <ListItemText primary="Project Assignment"/>
+                        </Link>
+                    </ListItem>
+                    <ListItem
+                        button
+                        key={7}
+                        className={classes.listItem}
+                        title="View or upload current roster"
+                    >
+                        <Link to="/roster" className={classes.link}>
+                            <ListItemIcon>
+                                <Roster/>
+                            </ListItemIcon>
+                            <ListItemText primary="Roster"/>
+                        </Link>
+                    </ListItem>
+                </List>
+            </Drawer>
         </div>
-        <Divider />
-        <List>
-          {" "}
-          <ListItem button key={0} className={classes.listItem}>
-            <Link to="/dashboard" className={classes.link}>
-              <ListItemIcon>
-                <DashboardIcon />
-              </ListItemIcon>
-              <ListItemText primary="AdminDashboard" />
-            </Link>
-          </ListItem>
-          <ListItem button key={1} className={classes.listItem}>
-            <Link to="/composeEmail" className={classes.link}>
-              <ListItemIcon>
-                <MailIcon />
-              </ListItemIcon>
-              <ListItemText primary="Email Clients" />
-            </Link>
-          </ListItem>
-          <ListItem button key={2} className={classes.listItem}>
-            <Link to="/proposalsAdmin" className={classes.link}>
-              <ListItemIcon>
-                <Proposals />
-              </ListItemIcon>
-              <ListItemText primary="View Proposals" />
-            </Link>
-          </ListItem>
-          <ListItem
-            button
-            key={3}
-            title="Change which students are in which teams"
-            className={classes.listItem}
-          >
-            <Link to="/teamSelection" className={classes.link}>
-              <ListItemIcon>
-                <Team />
-              </ListItemIcon>
-              <ListItemText primary="Regroup Teams" />
-            </Link>
-          </ListItem>
-          <ListItem
-            button
-            key={4}
-            className={classes.listItem}
-            title="Keep track of teams' progress in coach meetings"
-          >
-            <Link to="/meeting" className={classes.link}>
-              <ListItemIcon>
-                <Calendar />
-              </ListItemIcon>
-              <ListItemText primary="Track Meetings" />
-            </Link>
-          </ListItem>
-          <Divider />
-          <ListItem
-            button
-            key={5}
-            className={classes.listItem}
-            title="View Team and Individual Final Reports"
-          >
-            <Link to="/viewFinalReports" className={classes.link}>
-              <ListItemIcon>
-                <AssignmentIcon />
-              </ListItemIcon>
-              <ListItemText primary="Final Reports" />
-            </Link>
-          </ListItem>
-          <ListItem
-            button
-            key={6}
-            className={classes.listItem}
-            title="Give feedback on team deliverables"
-          >
-            <Link to="/proposalAssignment" className={classes.link}>
-              <ListItemIcon>
-                <Deliverable />
-              </ListItemIcon>
-              <ListItemText primary="Project Assignment" />
-            </Link>
-          </ListItem>
-          <ListItem
-              button
-              key={7}
-              className={classes.listItem}
-              title="View or upload current roster"
-          >
-            <Link to="/roster" className={classes.link}>
-              <ListItemIcon>
-                <Roster />
-              </ListItemIcon>
-              <ListItemText primary="Roster" />
-            </Link>
-          </ListItem>
-        </List>
-      </Drawer>
-    </div>
-  );
+    );
 }
