@@ -117,7 +117,7 @@ export default function CheckAttendance(props) {
       {props.team.teamMembers
         ? props.team.teamMembers.map((member, index) =>
           props.team.teamMembers.length > 0 ? 
-            <div className="teamMember">
+            <div className="teamMember" key={index}>
               <Title>{member}</Title>
               <FormControl component="fieldset">
                 <RadioGroup

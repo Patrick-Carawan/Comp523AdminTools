@@ -36,6 +36,7 @@ export default function DataSelector(props) {
   }, []);
 
   const handleWeekChange = (event) => {
+    props.changeWeek(event.target.value);
     setWeek(event.target.value);
   };
 
@@ -71,7 +72,6 @@ export default function DataSelector(props) {
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={12}>This Week</MenuItem>
               <MenuItem value={1}>Week 1</MenuItem>
               <MenuItem value={2}>Week 2</MenuItem>
               <MenuItem value={3}>Week 3</MenuItem>
@@ -110,7 +110,7 @@ export default function DataSelector(props) {
               <em>None</em>
             </MenuItem>
             {teams.map((team, index) => (
-              <MenuItem value={team}>{team["teamName"]}</MenuItem>
+              <MenuItem value={team} key={index}>{team["teamName"]}</MenuItem>
             ))}
           </Select>
           <FormHelperText>Choose the team</FormHelperText>

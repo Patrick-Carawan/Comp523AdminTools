@@ -78,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MeetingPage() {
   useEffect(() => {
-    Axios.get(`http://localhost:5000/teams/Spring2020`).then((res) => {
+    Axios.get(`http://localhost:5000/teams/semester/Spring2020`).then((res) => {
       console.log("teams", res);
       setTeams(res["data"]);
     });
@@ -87,6 +87,11 @@ export default function MeetingPage() {
   const [teams, setTeams] = React.useState([]);
   const [attendanceMap, setAttendanceMap] = React.useState(new Map());
   const [selectedTeam, setSelectedTeam] = React.useState({});
+  const [demoStatus, setDemoStatus] = React.useState('');
+  const [week, setWeek] = React.useState(-1);
+  const [deliverableStatus, setDeliverableStatus] = React.useState('');
+  const [comment, setComment] = React.useState('');
+  const [weekTodo, setWeekTodo] = React.useState('');
 
   const changeAttendance = (member, attendanceValue) => {
     let tempAttendanceMap = new Map(attendanceMap);
@@ -100,10 +105,39 @@ export default function MeetingPage() {
     console.log(team);
   };
 
+  const changeDemoStatus = (status) =>{
+    setDemoStatus(status);
+  };
+  const changeDeliverableStatus = (status) =>{
+    setDeliverableStatus(status);
+  };
+  const changeWeek = (week) =>{
+    setWeek(week);
+  };
+
+  const changeComment = (comment) => {
+    setComment(comment);
+  };
+
+  const changeWeekTodo = (weekTodo) => {
+    setWeekTodo(weekTodo);
+  };
+
+
   const classes = useStyles();
 
   const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
   const MeetingTaskPaper = clsx(classes.paper, classes.meetingTaskHeight);
+
+  function submitCoachMeeting() {
+    console.log('week', week);
+    console.log('team', selectedTeam);
+    console.log('demo', demoStatus);
+    console.log('deliverable', deliverableStatus);
+    console.log('attendance', attendanceMap);
+    console.log('comment', comment);
+    console.log('weekly todo', weekTodo);
+  }
 
   return (
     <div className={classes.root}>
@@ -120,6 +154,7 @@ export default function MeetingPage() {
                   changeSelectedTeam={(team) => {
                     changeSelectedTeam(team);
                   }}
+                  changeWeek={(week)=> changeWeek(week)}
                 />
               </Paper>
             </Grid>
@@ -135,22 +170,27 @@ export default function MeetingPage() {
             </Grid>
             <Grid item xs={12}>
               <Paper className={MeetingTaskPaper}>
-                <MeetingTask teams={teams} />
+                <MeetingTask
+                    changeComment={(comment) =>changeComment(comment)}
+                    changeWeeklyTodo={(todo) => changeWeekTodo(todo)}
+                    changeDeliverableStatus={(status) => changeDeliverableStatus(status)}
+                    changeDemoStatus={(status) => changeDemoStatus(status)}
+                    teams={teams} />
               </Paper>
             </Grid>
           </Grid>
         </Container>
         <Container>
           <Grid container>
-            <Grid item xs={5}></Grid>
+            <Grid item xs={5}>
             <Grid item xs={2}>
               <div className={classes.root}>
-                <Button variant="contained" color="primary">
+                <Button onClick={submitCoachMeeting} variant="contained" color="primary">
                   Submit
                 </Button>
               </div>
             </Grid>
-            <Grid item xs={5}></Grid>
+            </Grid>
           </Grid>
         </Container>
       </main>
