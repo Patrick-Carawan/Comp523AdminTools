@@ -109,4 +109,17 @@ router.post('/updateMembers/:id', auth.required, (req, res, next) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
+
+// Update a team's rankings
+router.post('/updateRankings/:id', auth.required, (req, res, next) => {
+    Team.findById(req.params.id)
+        .then(team => {
+            team.proposalRanks = req.body.proposalRanks;
+            team.save()
+                .then(() => res.json("Team's proposal rankings updated"))
+                .catch(err => res.status(400).json('Error: ' + err));
+        })
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+
 module.exports = router;

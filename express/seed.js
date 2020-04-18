@@ -4,6 +4,9 @@ var Letter = require("./models/letter.model");
 var Proposal = require("./models/proposal.model");
 var StudentReport = require("./models/studentReport.model");
 var TeamReport = require("./models/teamReport.model");
+var Roster = require("./models/roster.model");
+var Semester = require("./models/semesters.model");
+var CoachMeeting = require("./models/coachMeeting.model");
 
 const express = require('express');
 const cors = require('cors');
@@ -194,8 +197,33 @@ connection.once('open', () => {
             console.log(result);
         }
     });
-    
-    User.collection.deleteMany({}, function(err, result) {
+
+    CoachMeeting.collection.deleteMany({}, function(err, result) {
+        if (err) {
+            return console.error(err);
+        } else {
+            console.log(result);
+        }
+    });
+
+    CoachMeeting.collection.deleteMany({}, function(err, result) {
+        if (err) {
+            return console.error(err);
+        } else {
+            console.log(result);
+        }
+    });
+
+
+    Semester.collection.deleteMany({}, function(err, result) {
+        if (err) {
+            return console.error(err);
+        } else {
+            console.log(result);
+        }
+    });
+
+    Roster.collection.deleteMany({}, function(err, result) {
         if (err) {
             return console.error(err);
         } else {
