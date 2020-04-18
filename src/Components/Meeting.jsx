@@ -131,12 +131,25 @@ export default function MeetingPage() {
 
   function submitCoachMeeting() {
     console.log('week', week);
-    console.log('team', selectedTeam);
     console.log('demo', demoStatus);
     console.log('deliverable', deliverableStatus);
     console.log('attendance', attendanceMap);
     console.log('comment', comment);
     console.log('weekly todo', weekTodo);
+    let semester = window.localStorage.getItem('semester');
+    let teamId = selectedTeam['_id'];
+    console.log('team', teamId);
+    const attendanceObj = {};
+    attendanceMap.forEach((value, key) => (attendanceObj[key] = value));
+    console.log('assignObj', attendanceObj);
+
+    Axios.post(`http://localhost:5000/coachMeetings/add/${semester}/${week}/${teamId}`,{
+      demoStatus: demoStatus,
+      deliverableStatus: deliverableStatus,
+      comment: comment,
+      weekTodo: weekTodo,
+      attendance: attendanceMap
+    }).then(()=>alert('meeting submitted'));
   }
 
   return (

@@ -28,20 +28,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MeetingTask(props) {
     const classes = useStyles();
-    const [value, setValue] = React.useState("Controlled");
     const [comment, setComment] = React.useState("");
     const [weeklyTodo, setWeeklyTodo] = React.useState("");
     const [demoStatus, setDemoStatus] = React.useState("");
     const [deliverableStatus, setDeliverableStatus] = React.useState("");
 
-    // const debounce = (callback, delay ) => {
-    //     let timeout;
-    //     return function(){
-    //         const functionCall = () => callback.apply(this, arguments);
-    //         clearTimeout(timeout);
-    //         timeout = setTimeout(functionCall, delay);
-    //     }
-    // };
 
     function debounced(delay, fn) {
         let timerId;
@@ -78,11 +69,6 @@ export default function MeetingTask(props) {
         setDemoStatus(event.target.value);
         props.changeDemoStatus(event.target.value);
     };
-
-    const handleChange = (event) => {
-        setValue(event.target.value);
-    };
-
 
     return (
         <div>
