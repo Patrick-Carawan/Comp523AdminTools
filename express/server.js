@@ -7,9 +7,6 @@ const mongoose = require('mongoose');
 
 require('dotenv').config();
 
-// Production variable
-// const isProduction = process.env.NODE_ENV === 'production';
-
 // Setting up app
 const app = express();
 const port = process.env.PORT || 5000;

@@ -4,6 +4,8 @@ const router = require('express').Router();
 const auth = require('./auth');
 var User = require('../models/user.model');
 
+require('dotenv').config();
+
 // Get all users
 router.get('/', auth.required, (req, res, next) => {
     User.find()
@@ -57,12 +59,12 @@ router.post('/', auth.optional, (req, res, next) => {
       });
     }
 
-
-    
     const finalUser = new User(user);
 
-    if (user.adminToken && user.adminToken === "PapaStotts") {
+    if (user.adminToken && user.adminToken === process.env.ADMIN_TOKEN) {
         finalUser.admin = true;
+    } else {
+        finalUser.admin = false;
     }
 
     console.log(user);
