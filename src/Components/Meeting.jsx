@@ -133,12 +133,12 @@ export default function MeetingPage() {
   const MeetingTaskPaper = clsx(classes.paper, classes.meetingTaskHeight);
 
   function submitCoachMeeting() {
-    console.log('week', week);
-    console.log('demo', demoStatus);
-    console.log('deliverable', deliverableStatus);
-    console.log('attendance', attendanceMap);
-    console.log('comment', comment);
-    console.log('weekly todo', weekTodo);
+    // console.log('week', week);
+    // console.log('demo', demoStatus);
+    // console.log('deliverable', deliverableStatus);
+    // console.log('attendance', attendanceMap);
+    // console.log('comment', comment);
+    // console.log('weekly todo', weekTodo);
     let semester = window.localStorage.getItem('semester');
     let teamId = selectedTeam['_id'];
     console.log('team', teamId);
