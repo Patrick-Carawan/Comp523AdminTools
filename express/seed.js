@@ -211,14 +211,6 @@ connection.once('open', () => {
         }
     });
 
-    CoachMeeting.collection.deleteMany({}, function(err, result) {
-        if (err) {
-            return console.error(err);
-        } else {
-            console.log(result);
-        }
-    });
-
 
     Semesters.collection.deleteMany({}, function(err, result) {
         if (err) {
