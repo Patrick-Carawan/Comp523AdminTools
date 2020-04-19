@@ -5,7 +5,7 @@ var Proposal = require("./models/proposal.model");
 var StudentReport = require("./models/studentReport.model");
 var TeamReport = require("./models/teamReport.model");
 var Roster = require("./models/roster.model");
-var Semester = require("./models/semesters.model");
+var Semesters = require("./models/semesters.model");
 var CoachMeeting = require("./models/coachMeeting.model");
 
 const express = require('express');
@@ -183,13 +183,18 @@ connection.once('open', () => {
         text: "Best experience of our young lives"
     });
 
+    const semester = new Semesters({
+        semesters: ["Spring2020", "Fall2021", "Spring2021"]
+    });
+
     const users = [adminUser, user1, user2, user3, user4, user5, user6];
     const proposals = [prop1, prop2, prop3, prop4];
     const teams = [team1, team2];
     const letters = [pendingLetter, acceptedLetter, rejectedLetter];
     const studentReports = [studentReport1, studentReport2];
     const teamReports = [teamReport1, teamReport2];
-    
+    const semesters=[semester];
+
     Team.collection.deleteMany({}, function(err, result) {
         if (err) {
             return console.error(err);
@@ -215,7 +220,7 @@ connection.once('open', () => {
     });
 
 
-    Semester.collection.deleteMany({}, function(err, result) {
+    Semesters.collection.deleteMany({}, function(err, result) {
         if (err) {
             return console.error(err);
         } else {
@@ -274,6 +279,10 @@ connection.once('open', () => {
     }
 
     User.collection.insertMany(users, function(err) {
+        console.error(err);
+    });
+
+    Semesters.collection.insertMany(semesters, function(err){
         console.error(err);
     });
 

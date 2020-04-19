@@ -37,4 +37,13 @@ router.route('/:semester/:week/:teamId').get((req, res) => {
 });
 
 
+
+// Get all coach meetings for a semester
+router.route('/:semester').get((req, res) => {
+    CoachMeeting.find({"semester": req.params.semester})
+        .then(meeting => res.json(meeting))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+
+
 module.exports = router;
