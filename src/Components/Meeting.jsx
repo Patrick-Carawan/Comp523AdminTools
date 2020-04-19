@@ -82,6 +82,9 @@ export default function MeetingPage() {
       console.log("teams", res);
       setTeams(res["data"]);
     });
+    Axios.get(`http://localhost:5000/coachMeetings/Spring2020`).then(res =>{
+      console.log('allCoachMeetings',res['data']);
+    })
   }, []);
 
   const [teams, setTeams] = React.useState([]);
