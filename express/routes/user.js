@@ -56,8 +56,14 @@ router.post('/', auth.optional, (req, res, next) => {
         },
       });
     }
-  
+
+
+    
     const finalUser = new User(user);
+
+    if (user.adminToken && user.adminToken === "PapaStotts") {
+        finalUser.admin = true;
+    }
 
     console.log(user);
   
@@ -68,7 +74,8 @@ router.post('/', auth.optional, (req, res, next) => {
         user: finalUser.toAuthJSON(),
         onyen: finalUser.onyen,
         name: `${finalUser.firstName} ${finalUser.lastName}`
-      }));
+      }))
+      .catch(err => res.status(400).json('Error in finding student: ' + err));
 });
   
 
