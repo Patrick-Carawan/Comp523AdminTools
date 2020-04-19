@@ -70,10 +70,12 @@ router.post('/', auth.optional, (req, res, next) => {
     console.log(user);
   
     finalUser.setPassword(user.password);
-  
+    finalUser.verified = false;
+
+    finalUser.generateVerificationEmail();
+
     return finalUser.save()
       .then(() => res.json({ 
-        user: finalUser.toAuthJSON(),
         onyen: finalUser.onyen,
         name: `${finalUser.firstName} ${finalUser.lastName}`
       }))
@@ -104,6 +106,10 @@ router.post('/login', auth.optional, (req, res, next) => {
     return passport.authenticate('local', { session: false }, (err, passportUser, info) => {
       if(err) {
         return next(err);
+      }
+
+      if(!passportUser.verified) {
+        return res.status(403).json("Please verify your email before logging in.");
       }
   
       if(passportUser) {

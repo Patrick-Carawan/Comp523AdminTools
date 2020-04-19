@@ -1,6 +1,19 @@
 const mongoose = require('mongoose');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
+
+require('dotenv').config();
+
+var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.NOREPLY_EMAIL,
+      pass: process.env.NOREPLY_PASSWORD
+    }
+  });
+
+
 
 const Schema = mongoose.Schema;
 
@@ -11,6 +24,7 @@ const userSchema = new Schema({
     phone: { type: String, required: true },
     semester: { type: String, required: true },   
     admin: { type: Boolean, required: true, default: false },
+    verified: { type: Boolean, required: true, default: false},
     teamId: String,
     hash: String,
     salt: String 
@@ -34,16 +48,47 @@ userSchema.methods.generateJWT = function() {
     expirationDate.setDate(today.getDate() + 60);
 
     return jwt.sign({
-        email: this.email,
+        onyen: this.onyen,
         id: this._id,
         exp: parseInt(expirationDate.getTime() / 1000, 10),
-    }, 'secret');
+    }, 'secret', {
+        expiresIn: "1d"
+    });
+};
+
+// This function asynchronously sends verification emails 
+userSchema.methods.generateVerificationEmail = function() {
+
+    return jwt.sign({
+        onyen: this.onyen,
+        id: this._id
+    }, 'secret', {
+        expiresIn: "1 hour"
+    }, (err, emailToken) => {
+        if (err) {
+            console.log(err);
+        }
+        let verificationEmail = {
+            from: process.env.NOREPLY_EMAIL,
+            to: `${onyen}@live.unc.edu`,
+            subject: 'Verification for COMP 523',
+            html: `Please click the following link to verify your account for COMP 523: <a href="">gettheurlfromdaniel.com/${emailToken}</a>`
+            };
+        transporter.sendMail(verificationEmail, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log("Email sent.")
+            }
+        });
+
+    });
 };
 
 userSchema.methods.toAuthJSON = function() {
     return {
         _id: this._id,
-        email: this.email, 
+        onyen: this.onyen, 
         token: this.generateJWT()
     }
 };
