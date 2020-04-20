@@ -66,8 +66,6 @@ router.post('/', auth.optional, (req, res, next) => {
     } else {
         finalUser.admin = false;
     }
-
-    console.log(user);
   
     finalUser.setPassword(user.password);
     finalUser.verified = false;

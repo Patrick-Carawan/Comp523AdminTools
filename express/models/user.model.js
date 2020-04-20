@@ -5,16 +5,6 @@ const nodemailer = require('nodemailer');
 
 require('dotenv').config();
 
-var transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.NOREPLY_EMAIL,
-      pass: process.env.NOREPLY_PASSWORD
-    }
-  });
-
-
-
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -49,8 +39,7 @@ userSchema.methods.generateJWT = function() {
 
     return jwt.sign({
         onyen: this.onyen,
-        id: this._id,
-        exp: parseInt(expirationDate.getTime() / 1000, 10),
+        id: this._id
     }, 'secret', {
         expiresIn: "1d"
     });
@@ -58,32 +47,56 @@ userSchema.methods.generateJWT = function() {
 
 // This function asynchronously sends verification emails 
 userSchema.methods.generateVerificationEmail = function() {
+    console.log("Sending email");
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.NOREPLY_EMAIL,
+          pass: process.env.NOREPLY_PASSWORD
+        }
+    });
 
-    return jwt.sign({
+    let verificationToken = jwt.sign({
         onyen: this.onyen,
         id: this._id
     }, 'secret', {
         expiresIn: "1 hour"
-    }, (err, emailToken) => {
-        if (err) {
-            console.log(err);
-        }
-        let verificationEmail = {
-            from: process.env.NOREPLY_EMAIL,
-            to: `${onyen}@live.unc.edu`,
-            subject: 'Verification for COMP 523',
-            html: `Please click the following link to verify your account for COMP 523: <a href="">gettheurlfromdaniel.com/${emailToken}</a>`
-            };
-        transporter.sendMail(verificationEmail, function (error, info) {
-            if (error) {
-                console.log(error);
-            } else {
-                console.log("Email sent.")
-            }
-        });
-
     });
+
+    let verificationEmail = {
+        from: process.env.NOREPLY_EMAIL,
+        to: `${this.onyen}@ttirv.com`,
+        subject: 'Verification for COMP 523',
+        html: `Please click the following link to verify your account for COMP 523: <a href="">gettheurlfromdaniel.com/${verificationToken}</a>`
+    };
+    transporter.sendMail(verificationEmail, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log(`Email sent to ${verificationEmail.to}`);
+        }
+    })
 };
+    // }, (err, emailToken) => {
+    //     if (err) {
+    //         console.log(err);
+    //     }
+    //     let verificationEmail = {
+    //         from: process.env.NOREPLY_EMAIL,
+    //         to: `${onyen}@awdrt.org`,
+    //         subject: 'Verification for COMP 523',
+    //         html: `Please click the following link to verify your account for COMP 523: <a href="">gettheurlfromdaniel.com/${emailToken}</a>`
+    //         };
+    //     transporter.sendMail(verificationEmail, function (error, info) {
+    //         if (error) {
+    //             console.log(error);
+    //         } else {
+    //             console.log("Email sent.")
+    //         }
+    //     });
+
+    // });
+
 
 userSchema.methods.toAuthJSON = function() {
     return {
