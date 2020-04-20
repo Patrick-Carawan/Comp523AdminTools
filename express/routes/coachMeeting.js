@@ -1,7 +1,7 @@
 const router = require('express').Router();
 var CoachMeeting = require('../models/coachMeeting.model');
 
-// Add a roster
+// Add a coachMeeting
 router.route('/add/:semester/:week/:teamId').post((req, res) => {
 
     const _demoStatus = req.body.demoStatus;
