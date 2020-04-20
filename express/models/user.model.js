@@ -8,7 +8,7 @@ const userSchema = new Schema({
     onyen: { type: String, required: true, unique: true },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    phone: { type: String, required: true },
+    phone: { type: String, required: false },
     semester: { type: String, required: true },   
     admin: { type: Boolean, required: true, default: false },
     teamId: String,
