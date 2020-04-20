@@ -64,7 +64,11 @@ function ProposalAssignment(props) {
     const [disableButton, setDisableButton] = useState(true);
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/proposals`).then((res) => {
+        axios.get(`http://localhost:5000/proposals`,{
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+        }).then((res) => {
             let acceptedProps = res["data"].filter(
                 (proposal) => proposal["status"] === "Accepted"
             );
@@ -78,7 +82,11 @@ function ProposalAssignment(props) {
             );
             setTitleMap(tempMap);
         });
-        axios.get(`http://localhost:5000/teams`).then((res) => {
+        axios.get(`http://localhost:5000/teams`,{
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+        }).then((res) => {
             // console.log('teams', res);
             setTeams(res.data);
             const fillArray = new Array(res.data.length);

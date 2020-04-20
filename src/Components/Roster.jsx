@@ -48,7 +48,11 @@ function Roster() {
     const classes = useStyles();
     const [roster, setRoster] = useState([]);
     useEffect(() => {
-        axios.get(`http://localhost:5000/roster/Spring2020`).then((res) => {
+        axios.get(`http://localhost:5000/roster/Spring2020`,{
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+        }).then((res) => {
             if (res.data[0]) {
                 setRoster(res.data[0].studentList);
             }

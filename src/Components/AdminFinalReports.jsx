@@ -70,7 +70,11 @@ function AdminFinalReports() {
     const [tabIndex, setTabIndex] = useState(0);
     const [teamMap, setTeamMap] = useState(new Map());
     useEffect(() => {
-        axios.get(`http://localhost:5000/teams`).then((res) => {
+        axios.get(`http://localhost:5000/teams`, {
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+        }).then((res) => {
             console.log('teams', res['data']);
             const myTeams = res['data'].sort((team1, team2) => team1['teamName'] < team2['teamName'] ? -1 : 1);
             setTeams(myTeams);
@@ -79,11 +83,19 @@ function AdminFinalReports() {
             console.log(tempMap);
             setTeamMap(tempMap);
         });
-        axios.get(`http://localhost:5000/finalReports/students`).then((res) => {
+        axios.get(`http://localhost:5000/finalReports/students`, {
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+        }).then((res) => {
             console.log('student reports', res['data']);
             setStudentReports(res['data'].sort((team1, team2) => team1['team'] < team2['team'] ? -1 : 1));
         });
-        axios.get(`http://localhost:5000/finalReports/teams`).then((res) => {
+        axios.get(`http://localhost:5000/finalReports/teams`, {
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+        }).then((res) => {
             console.log('team reports', res['data']);
             setTeamReports(res['data'].sort((team1, team2) => team1['team'] < team2['team'] ? -1 : 1));
         })
@@ -150,7 +162,7 @@ function AdminFinalReports() {
                     {
                         teamMap.get(currentTeam['team']) ?
                             studentReports.filter(report => teamMap.get(currentTeam['team']).includes(report['onyen'])).map((rep, i) =>
-                                <TabPanel value={tabIndex} index={i + 1}>
+                                <TabPanel key={i} value={tabIndex} index={i + 1}>
                                     <Typography>
                                         {rep['text']}
                                     </Typography>
@@ -158,7 +170,6 @@ function AdminFinalReports() {
                             )
                             : null
                     }
-
                 </Container>
             </main>
         </div>

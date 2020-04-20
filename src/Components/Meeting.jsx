@@ -95,7 +95,11 @@ export default function MeetingPage() {
       console.log("teams", res);
       setTeams(res["data"]);
     });
-    Axios.get(`http://localhost:5000/coachMeetings/Spring2020`).then((res) => {
+    Axios.get(`http://localhost:5000/coachMeetings/Spring2020`,{
+      headers: {
+        Authorization: `Token ${window.localStorage.getItem('token')}`
+      }
+    }).then((res) => {
       console.log("allCoachMeetings", res["data"]);
     });
   }, []);
@@ -112,7 +116,11 @@ export default function MeetingPage() {
     // console.log(team);
     if (week !== -1 && team.hasOwnProperty('_id')) {
       Axios.get(
-          `http://localhost:5000/coachMeetings/Spring2020/${week}/${team._id}`
+          `http://localhost:5000/coachMeetings/Spring2020/${week}/${team._id}`,{
+            headers: {
+              Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+          }
       ).then((res) => {
         console.log("SpecificCoachMeetings", res["data"]);
       });
@@ -125,7 +133,11 @@ export default function MeetingPage() {
   const changeWeek = (week) => {
     if (week !== -1 && selectedTeam.hasOwnProperty('_id')) {
       Axios.get(
-        `http://localhost:5000/coachMeetings/Spring2020/${week}/${selectedTeam._id}`
+        `http://localhost:5000/coachMeetings/Spring2020/${week}/${selectedTeam._id}`,{
+            headers: {
+              Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+          }
       ).then((res) => {
         console.log("SpecificCoachMeetings", res["data"]);
       });

@@ -156,7 +156,11 @@ export default function AdminDashboard() {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/semesters`).then(res => {
+        axios.get(`http://localhost:5000/semesters`,{
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+        }).then(res => {
             console.log(res['data'][0]);
             setAllSemesters(res['data'][0]['semesters']);
         })

@@ -26,7 +26,11 @@ const ProjectRanking = () => {
     const [proposals, setProposals] = useState([]);
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/proposals/`).then((res) => {
+        axios.get(`http://localhost:5000/proposals/`,{
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+        }).then((res) => {
             console.log(res['data']);
             setProposals(res['data'].filter(proposal => proposal['status'].toLowerCase() === "accepted"))
         })

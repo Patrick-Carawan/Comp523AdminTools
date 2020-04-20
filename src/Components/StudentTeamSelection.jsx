@@ -48,7 +48,11 @@ function StudentTeamSelection(props) {
     const [typedOnyens, setTypedOnyens] = useState([]);
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/users/students/Spring2020`).then(res => {
+        axios.get(`http://localhost:5000/users/students/Spring2020`,{
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+        }).then(res => {
             console.log('allStudents', res['data'].filter(student => student['admin'] === false));
             setStudents(res['data'].filter(student => student['admin'] === false))
         });

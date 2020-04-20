@@ -42,11 +42,19 @@ function AdminTeamSelection(props) {
     const [newTeams, setNewTeams] = useState([]);
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/users/students/Spring2020`).then(res => {
+        axios.get(`http://localhost:5000/users/students/Spring2020`,{
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+        }).then(res => {
             // console.log('students', res['data'].filter(student => student['admin'] === false));
             setStudents(res['data'].filter(student => student['admin'] === false))
         });
-        axios.get(`http://localhost:5000/teams/semester/Spring2020`).then(res => {
+        axios.get(`http://localhost:5000/teams/semester/Spring2020`,{
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+        }).then(res => {
             console.log(res['data']);
             setTeams(res['data'].sort((t1, t2) => t1['teamName'] < t2['teamName'] ? -1 : 1))
         })

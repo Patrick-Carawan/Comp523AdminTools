@@ -83,11 +83,13 @@ function ProposalsAdminView(props) {
     const [newProposals, setNewProposals] = useState([]);
     const [pendingProposals, setPendingProposals] = useState([]);
     const [rejectedProposals, setRejectedProposals] = useState([]);
-    useEffect(()=>{
-        console.log(acceptedProposals)
-    },[acceptedProposals])
+
     useEffect(() => {
-        axios.get("http://localhost:5000/proposals/")
+        axios.get("http://localhost:5000/proposals/",{
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+        })
             .then(response => {
                 console.log(response);
                 const proposals = response['data'];
