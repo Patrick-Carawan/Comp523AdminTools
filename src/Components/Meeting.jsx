@@ -77,24 +77,28 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function MeetingPage() {
-  useEffect(() => {
-    Axios.get(`http://localhost:5000/teams/semester/Spring2020`).then((res) => {
-      console.log("teams", res);
-      setTeams(res["data"]);
-    });
-    Axios.get(`http://localhost:5000/coachMeetings/Spring2020`).then(res =>{
-      console.log('allCoachMeetings',res['data']);
-    })
-  }, []);
-
   const [teams, setTeams] = React.useState([]);
   const [attendanceMap, setAttendanceMap] = React.useState(new Map());
   const [selectedTeam, setSelectedTeam] = React.useState({});
-  const [demoStatus, setDemoStatus] = React.useState('');
+  const [demoStatus, setDemoStatus] = React.useState("");
   const [week, setWeek] = React.useState(-1);
-  const [deliverableStatus, setDeliverableStatus] = React.useState('');
-  const [comment, setComment] = React.useState('');
-  const [weekTodo, setWeekTodo] = React.useState('');
+  const [deliverableStatus, setDeliverableStatus] = React.useState("");
+  const [comment, setComment] = React.useState("");
+  const [weekTodo, setWeekTodo] = React.useState("");
+
+  useEffect(() => {
+    Axios.get(`http://localhost:5000/teams/semester/Spring2020`, {
+      headers: {
+        Authorization: `Token ${window.localStorage.getItem("token")}`,
+      },
+    }).then((res) => {
+      console.log("teams", res);
+      setTeams(res["data"]);
+    });
+    Axios.get(`http://localhost:5000/coachMeetings/Spring2020`).then((res) => {
+      console.log("allCoachMeetings", res["data"]);
+    });
+  }, []);
 
   const changeAttendance = (member, attendanceValue) => {
     let tempAttendanceMap = new Map(attendanceMap);
@@ -108,14 +112,22 @@ export default function MeetingPage() {
     console.log(team);
   };
 
-  const changeDemoStatus = (status) =>{
+  const changeWeek = (week) => {
+    if (week != -1 && selectedTeam != "") {
+      Axios.get(
+        `http://localhost:5000/coachMeetings/Spring2020/${week}/${selectedTeam._id}`
+      ).then((res) => {
+        console.log("SpecificCoachMeetings", res["data"]);
+      });
+    }
+    setWeek(week);
+  };
+
+  const changeDemoStatus = (status) => {
     setDemoStatus(status);
   };
-  const changeDeliverableStatus = (status) =>{
+  const changeDeliverableStatus = (status) => {
     setDeliverableStatus(status);
-  };
-  const changeWeek = (week) =>{
-    setWeek(week);
   };
 
   const changeComment = (comment) => {
@@ -125,7 +137,6 @@ export default function MeetingPage() {
   const changeWeekTodo = (weekTodo) => {
     setWeekTodo(weekTodo);
   };
-
 
   const classes = useStyles();
 
@@ -139,20 +150,23 @@ export default function MeetingPage() {
     // console.log('attendance', attendanceMap);
     // console.log('comment', comment);
     // console.log('weekly todo', weekTodo);
-    let semester = window.localStorage.getItem('semester');
-    let teamId = selectedTeam['_id'];
-    console.log('team', teamId);
+    let semester = window.localStorage.getItem("semester");
+    let teamId = selectedTeam["_id"];
+    console.log("team", teamId);
     const attendanceObj = {};
     attendanceMap.forEach((value, key) => (attendanceObj[key] = value));
-    console.log('assignObj', attendanceObj);
+    console.log("assignObj", attendanceObj);
 
-    Axios.post(`http://localhost:5000/coachMeetings/add/${semester}/${week}/${teamId}`,{
-      demoStatus: demoStatus,
-      deliverableStatus: deliverableStatus,
-      comment: comment,
-      weekTodo: weekTodo,
-      attendance: attendanceMap
-    }).then(()=>alert('meeting submitted'));
+    Axios.post(
+      `http://localhost:5000/coachMeetings/add/${semester}/${week}/${teamId}`,
+      {
+        demoStatus: demoStatus,
+        deliverableStatus: deliverableStatus,
+        comment: comment,
+        weekTodo: weekTodo,
+        attendance: attendanceMap,
+      }
+    ).then(() => alert("meeting submitted"));
   }
 
   return (
@@ -170,7 +184,7 @@ export default function MeetingPage() {
                   changeSelectedTeam={(team) => {
                     changeSelectedTeam(team);
                   }}
-                  changeWeek={(week)=> changeWeek(week)}
+                  changeWeek={(week) => changeWeek(week)}
                 />
               </Paper>
             </Grid>
@@ -187,11 +201,14 @@ export default function MeetingPage() {
             <Grid item xs={12}>
               <Paper className={MeetingTaskPaper}>
                 <MeetingTask
-                    changeComment={(comment) =>changeComment(comment)}
-                    changeWeeklyTodo={(todo) => changeWeekTodo(todo)}
-                    changeDeliverableStatus={(status) => changeDeliverableStatus(status)}
-                    changeDemoStatus={(status) => changeDemoStatus(status)}
-                    teams={teams} />
+                  changeComment={(comment) => changeComment(comment)}
+                  changeWeeklyTodo={(todo) => changeWeekTodo(todo)}
+                  changeDeliverableStatus={(status) =>
+                    changeDeliverableStatus(status)
+                  }
+                  changeDemoStatus={(status) => changeDemoStatus(status)}
+                  teams={teams}
+                />
               </Paper>
             </Grid>
           </Grid>
@@ -199,13 +216,17 @@ export default function MeetingPage() {
         <Container>
           <Grid container>
             <Grid item xs={5}>
-            <Grid item xs={2}>
-              <div className={classes.root}>
-                <Button onClick={submitCoachMeeting} variant="contained" color="primary">
-                  Submit
-                </Button>
-              </div>
-            </Grid>
+              <Grid item xs={2}>
+                <div className={classes.root}>
+                  <Button
+                    onClick={submitCoachMeeting}
+                    variant="contained"
+                    color="primary"
+                  >
+                    Submit
+                  </Button>
+                </div>
+              </Grid>
             </Grid>
           </Grid>
         </Container>

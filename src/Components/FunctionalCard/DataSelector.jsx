@@ -28,13 +28,6 @@ export default function DataSelector(props) {
   const [teams, setTeams] = React.useState([]);
   const [selectedTeam, setSelectedTeam] = React.useState([]);
 
-  useEffect(() => {
-    Axios.get("http://localhost:5000/teams/semester/Spring2020").then((res) => {
-      console.log(res.data);
-      setTeams(res.data);
-    });
-  }, []);
-
   const handleWeekChange = (event) => {
     props.changeWeek(event.target.value);
     setWeek(event.target.value);
@@ -109,8 +102,10 @@ export default function DataSelector(props) {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            {teams.map((team, index) => (
-              <MenuItem value={team} key={index}>{team["teamName"]}</MenuItem>
+            {props.teams.map((team, index) => (
+              <MenuItem value={team} key={index}>
+                {team["teamName"]}
+              </MenuItem>
             ))}
           </Select>
           <FormHelperText>Choose the team</FormHelperText>
