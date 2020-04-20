@@ -109,17 +109,26 @@ export default function MeetingPage() {
 
   const changeSelectedTeam = (team) => {
     setSelectedTeam(team);
-    console.log(team);
+    // console.log(team);
+    if (week !== -1 && team.hasOwnProperty('_id')) {
+      Axios.get(
+          `http://localhost:5000/coachMeetings/Spring2020/${week}/${team._id}`
+      ).then((res) => {
+        console.log("SpecificCoachMeetings", res["data"]);
+      });
+    }
+    console.log('selectedTeam', selectedTeam)
   };
 
   const changeWeek = (week) => {
-    if (week != -1 && selectedTeam != "") {
+    if (week !== -1 && selectedTeam.hasOwnProperty('_id')) {
       Axios.get(
         `http://localhost:5000/coachMeetings/Spring2020/${week}/${selectedTeam._id}`
       ).then((res) => {
         console.log("SpecificCoachMeetings", res["data"]);
       });
     }
+    console.log(week)
     setWeek(week);
   };
 

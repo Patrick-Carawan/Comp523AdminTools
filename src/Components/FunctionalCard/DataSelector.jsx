@@ -35,6 +35,7 @@ export default function DataSelector(props) {
 
   const handleTeamChange = (event) => {
     setSelectedTeam(event.target.value);
+    // console.log('team in dataSelector', event.target.value)
     props.changeSelectedTeam(event.target.value);
   };
 
