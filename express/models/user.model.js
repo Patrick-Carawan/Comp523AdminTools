@@ -11,7 +11,7 @@ const userSchema = new Schema({
     phone: { type: String, required: false },
     semester: { type: String, required: true },   
     admin: { type: Boolean, required: true, default: false },
-    teamId: String,
+    teamId: {type: String, default: "Pending"},
     hash: String,
     salt: String 
 }, {
