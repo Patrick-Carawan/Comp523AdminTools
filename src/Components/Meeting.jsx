@@ -113,7 +113,9 @@ export default function MeetingPage() {
   };
 
   const changeWeek = (week) => {
-    if (week != -1 && selectedTeam != "") {
+    console.log(typeof week);
+    console.log(typeof selectedTeam);
+    if (week != -1 && selectedTeam != {}) {
       Axios.get(
         `http://localhost:5000/coachMeetings/Spring2020/${week}/${selectedTeam._id}`
       ).then((res) => {
