@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -8,6 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Grid from "@material-ui/core/Grid";
+import axios from 'axios';
+import {Redirect, useHistory} from "react-router-dom";
 
 
 const useStyles = makeStyles(theme => ({
@@ -36,10 +38,46 @@ const useStyles = makeStyles(theme => ({
 
 export default function CreateAccount() {
     const classes = useStyles();
+    const [onyen, setOnyen] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [adminToken, setAdminToken] = useState('');
+    let history = useHistory();
+
+    function toLogin() {
+        console.log('toLogin called')
+        return (<Redirect to="/login"/>);
+    }
 
     function submit(e) {
         e.preventDefault();
+        console.log('onyen', onyen);
+        console.log('password', password);
+        console.log('firstname', firstName);
+        console.log('lastname ', lastName);
 
+        if (password !== confirmPassword) {
+            alert('Passwords must match')
+        } else {
+            axios.post(`http://localhost:5000/users`, {
+                "user": {
+                    onyen: onyen,
+                    password: password,
+                    firstName: firstName,
+                    lastName: lastName,
+                    semester: "Spring2020",
+                    adminToken: adminToken
+                }
+            }).then(res => {
+                console.log(res);
+                history.push("/login");
+            }).catch(err => {
+                alert('Could not create user. Make sure this is the correct onyen. See your teacher for help if needed.')
+                console.log(err)
+            })
+        }
     }
 
     return (
@@ -61,6 +99,7 @@ export default function CreateAccount() {
                                 required
                                 fullWidth
                                 label="First Name"
+                                onChange={(e) => setFirstName(e.target.value)}
                             />
                         </Grid>
                         <Grid item
@@ -72,6 +111,7 @@ export default function CreateAccount() {
                                 required
                                 fullWidth
                                 label="Last Name"
+                                onChange={(e) => setLastName(e.target.value)}
                             />
                         </Grid>
 
@@ -82,6 +122,7 @@ export default function CreateAccount() {
                         required
                         fullWidth
                         label="Onyen"
+                        onChange={(e) => setOnyen(e.target.value)}
                     />
                     <TextField
                         variant="outlined"
@@ -92,6 +133,7 @@ export default function CreateAccount() {
                         label="Password"
                         type="password"
                         id="password"
+                        onChange={(e) => setPassword(e.target.value)}
                     />
                     <TextField
                         variant="outlined"
@@ -101,6 +143,7 @@ export default function CreateAccount() {
                         name="password"
                         label="Confirm Password"
                         type="password"
+                        onChange={(e) => setConfirmPassword(e.target.value)}
                     />
                     <Typography>If you are an administrator, enter the admin key below.</Typography>
                     <TextField
@@ -110,6 +153,7 @@ export default function CreateAccount() {
                         name="password"
                         label="Admin Key"
                         type="password"
+                        onChange={(e) => setAdminToken(e.target.value)}
                     />
                     <Button
                         type="submit"
