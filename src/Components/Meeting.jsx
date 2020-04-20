@@ -117,7 +117,9 @@ export default function MeetingPage() {
         console.log("SpecificCoachMeetings", res["data"]);
       });
     }
-    console.log('selectedTeam', selectedTeam)
+
+    console.log('selectedTeam', team._id);
+    console.log('week', team._id);
   };
 
   const changeWeek = (week) => {
