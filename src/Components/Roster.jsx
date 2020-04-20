@@ -66,6 +66,10 @@ function Roster() {
     function submitRoster() {
         axios.post(`http://localhost:5000/roster/add/Spring2020`, {
             studentList: roster
+        },{
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
         }).then(() => alert('Roster submitted')).catch(e => alert(e))
     }
 

@@ -31,8 +31,12 @@ const StudentFinalReport = () => {
 
     const submitReport = function () {
         axios.post(`http://localhost:5000/finalReports/students`, {
-            // onyen: window.location.get('onyen');
+            onyen: window.localStorage.getItem('onyen'),
             text: report
+        },{
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
         }).then((res) => {
             alert('Final Report Submitted')
         })

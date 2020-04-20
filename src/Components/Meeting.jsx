@@ -188,7 +188,11 @@ export default function MeetingPage() {
         comment: comment,
         weekTodo: weekTodo,
         attendance: attendanceMap,
-      }
+      },{
+          headers: {
+            Authorization: `Token ${window.localStorage.getItem('token')}`
+          }
+        }
     ).then(() => alert("meeting submitted"));
   }
 

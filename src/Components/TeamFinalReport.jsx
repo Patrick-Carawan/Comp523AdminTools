@@ -31,8 +31,12 @@ const TeamFinalReport = () => {
 
     const submitReport = function () {
         axios.post(`http://localhost:5000/finalReports/teams`, {
-            // team: window.location.get('teamId');
+            team: window.localStorage.getItem('teamId'),
             text: report
+        },{
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
         }).then((res) => {
             alert('Final Report Submitted')
         })
