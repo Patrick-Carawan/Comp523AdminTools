@@ -78,10 +78,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MeetingPage() {
   const [teams, setTeams] = React.useState([]);
-  const [attendanceMap, setAttendanceMap] = React.useState(new Map());
+  const [attendanceObj, setAttendanceMap] = React.useState(new Map());
   const [selectedTeam, setSelectedTeam] = React.useState({});
-  const [demoStatus, setDemoStatus] = React.useState("");
   const [week, setWeek] = React.useState(-1);
+
+  const [demoStatus, setDemoStatus] = React.useState("");
   const [deliverableStatus, setDeliverableStatus] = React.useState("");
   const [comment, setComment] = React.useState("");
   const [weekTodo, setWeekTodo] = React.useState("");
@@ -101,28 +102,39 @@ export default function MeetingPage() {
   }, []);
 
   const changeAttendance = (member, attendanceValue) => {
-    let tempAttendanceMap = new Map(attendanceMap);
-    tempAttendanceMap.set(member, attendanceValue);
-    console.log(tempAttendanceMap);
-    setAttendanceMap(tempAttendanceMap);
+    const tempAttendanceObj = Object.assign({}, attendanceObj);
+    tempAttendanceObj[`${member}`] = attendanceValue;
+    // console.log(tempAttendanceObj);
+    setAttendanceMap(tempAttendanceObj);
   };
 
   const changeSelectedTeam = (team) => {
     setSelectedTeam(team);
-    console.log(team);
+    // console.log(team);
+    if (week !== -1 && team.hasOwnProperty("_id")) {
+      Axios.get(
+        `http://localhost:5000/coachMeetings/Spring2020/${week}/${team._id}`
+      ).then((res) => {
+        console.log("SpecificCoachMeetings", res["data"]);
+      });
+    }
+
+    // console.log("selectedTeam", team._id);
+    // console.log("week", team._id);
   };
 
   const changeWeek = (week) => {
-    console.log(typeof week);
-    console.log(typeof selectedTeam);
-    if (week != -1 && selectedTeam != {}) {
+    if (week !== -1 && selectedTeam.hasOwnProperty("_id")) {
       Axios.get(
         `http://localhost:5000/coachMeetings/Spring2020/${week}/${selectedTeam._id}`
       ).then((res) => {
         console.log("SpecificCoachMeetings", res["data"]);
       });
     }
+    console.log(week);
     setWeek(week);
+
+    changeDemoStatus();
   };
 
   const changeDemoStatus = (status) => {
@@ -147,17 +159,14 @@ export default function MeetingPage() {
 
   function submitCoachMeeting() {
     // console.log('week', week);
-    // console.log('demo', demoStatus);
+    console.log("demo", demoStatus);
     // console.log('deliverable', deliverableStatus);
-    // console.log('attendance', attendanceMap);
+    // console.log('attendance', attendanceObj);
     // console.log('comment', comment);
     // console.log('weekly todo', weekTodo);
     let semester = window.localStorage.getItem("semester");
     let teamId = selectedTeam["_id"];
     console.log("team", teamId);
-    const attendanceObj = {};
-    attendanceMap.forEach((value, key) => (attendanceObj[key] = value));
-    console.log("assignObj", attendanceObj);
 
     Axios.post(
       `http://localhost:5000/coachMeetings/add/${semester}/${week}/${teamId}`,
@@ -166,7 +175,7 @@ export default function MeetingPage() {
         deliverableStatus: deliverableStatus,
         comment: comment,
         weekTodo: weekTodo,
-        attendance: attendanceMap,
+        attendance: attendanceObj,
       }
     ).then(() => alert("meeting submitted"));
   }
@@ -194,6 +203,7 @@ export default function MeetingPage() {
               <Paper className={fixedHeightPaper}>
                 <MeetingSelector
                   team={selectedTeam}
+                  attendance={attendanceObj}
                   changeAttendance={(e, index, member) =>
                     changeAttendance(e, index, member)
                   }
@@ -203,6 +213,11 @@ export default function MeetingPage() {
             <Grid item xs={12}>
               <Paper className={MeetingTaskPaper}>
                 <MeetingTask
+                  demoStatus={demoStatus}
+                  deliverableStatus={deliverableStatus}
+                  comment={comment}
+                  weekTodo={weekTodo}
+
                   changeComment={(comment) => changeComment(comment)}
                   changeWeeklyTodo={(todo) => changeWeekTodo(todo)}
                   changeDeliverableStatus={(status) =>

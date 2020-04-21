@@ -51,7 +51,7 @@ export default function CheckAttendance(props) {
   const classes = useStyles();
   const [team, setTeam] = React.useState({});
   const [selectedValues, setSelectedValues] = React.useState([]);
-  const [attendanceMap, setAttendanceMap] = React.useState(new Map());
+  const [attendanceObj, setAttendanceObj] = React.useState({});
 
   //   Radio
   const changeAttendance = (event, index, member) => {
@@ -60,9 +60,10 @@ export default function CheckAttendance(props) {
     // console.log(tempSelectedValues);
     setSelectedValues(tempSelectedValues);
 
-    let tempAttendanceMap = new Map(attendanceMap);
-    tempAttendanceMap.set(member, event.target.value);
-    setAttendanceMap(tempAttendanceMap);
+    const tempAttendanceObj = Object.assign({}, attendanceObj);
+    tempAttendanceObj[`${member}`] = event.target.value;
+    console.log(tempAttendanceObj);
+    setAttendanceObj(tempAttendanceObj);
     props.changeAttendance(member, event.target.value);
   };
 
@@ -116,41 +117,42 @@ export default function CheckAttendance(props) {
       />
       {props.team.teamMembers
         ? props.team.teamMembers.map((member, index) =>
-          props.team.teamMembers.length > 0 ? 
-            <div className="teamMember" key={index}>
-              <Title>{member}</Title>
-              <FormControl component="fieldset">
-                <RadioGroup
-                  row
-                  aria-label="position"
-                  name="position"
-                  defaultValue="top"
-                  onChange={(e) => changeAttendance(e, index, member)}
-                >
-                  <FormControlLabel
-                    value="attended"
-                    control={<Radio color="primary" />}
-                    label="attended"
-                    labelPlacement="start"
-                  />{" "}
-                  <FormControlLabel
-                    value="absent unexcused"
-                    control={<Radio color="secondary" />}
-                    label="absent unexcused"
-                    labelPlacement="start"
-                  />{" "}
-                  <FormControlLabel
-                    value="excused"
-                    control={<Radio color="default" />}
-                    label="excused"
-                    labelPlacement="start"
-                  />
-                </RadioGroup>
-              </FormControl>
-            </div>
-            :
-            <Typography>No members in this team</Typography>
-        )
+            props.team.teamMembers.length > 0 ? (
+              <div className="teamMember" key={index}>
+                <Title>{member}</Title>
+                <FormControl component="fieldset">
+                  <RadioGroup
+                    row
+                    aria-label="position"
+                    name="position"
+                    defaultValue="top"
+                    onChange={(e) => changeAttendance(e, index, member)}
+                  >
+                    <FormControlLabel
+                      value="attended"
+                      control={<Radio color="primary" />}
+                      label="attended"
+                      labelPlacement="start"
+                    />{" "}
+                    <FormControlLabel
+                      value="absent unexcused"
+                      control={<Radio color="secondary" />}
+                      label="absent unexcused"
+                      labelPlacement="start"
+                    />{" "}
+                    <FormControlLabel
+                      value="excused"
+                      control={<Radio color="default" />}
+                      label="excused"
+                      labelPlacement="start"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </div>
+            ) : (
+              <Typography>No members in this team</Typography>
+            )
+          )
         : null}
     </div>
   );
