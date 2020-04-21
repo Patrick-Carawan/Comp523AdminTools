@@ -83,7 +83,7 @@ function ProposalsAdminView(props) {
     const [newProposals, setNewProposals] = useState([]);
     const [pendingProposals, setPendingProposals] = useState([]);
     const [rejectedProposals, setRejectedProposals] = useState([]);
-
+    const [semester, setSemester] = useState('');
     useEffect(() => {
         axios.get("http://localhost:5000/proposals/", {
             headers: {
@@ -214,7 +214,7 @@ function ProposalsAdminView(props) {
 
     return (
         <div className={classes.root}>
-            <DashBoard/>
+            <DashBoard updateSemester={(sem) => setSemester(sem)}/>
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
                 <Grid container direction="column">

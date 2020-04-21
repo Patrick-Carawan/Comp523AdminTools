@@ -40,6 +40,7 @@ function AdminTeamSelection(props) {
     const [students, setStudents] = useState([]);
     const [teams, setTeams] = useState([]);
     const [newTeams, setNewTeams] = useState([]);
+    const [semester, setSemester] = useState('');
 
     useEffect(() => {
         axios.get(`http://localhost:5000/users/students/Spring2020`, {
@@ -168,7 +169,7 @@ function AdminTeamSelection(props) {
 
     return (
         <div className={classes.root}>
-            <DashBoard/>
+            <DashBoard updateSemester={(sem) => setSemester(sem)}/>
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
                 <TeamBox id="Pending" className={classes.nameBank} setTeam={setTeam}>

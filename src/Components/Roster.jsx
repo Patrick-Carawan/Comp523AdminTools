@@ -47,6 +47,7 @@ const parseOptions = {
 function Roster() {
     const classes = useStyles();
     const [roster, setRoster] = useState([]);
+    const [semester, setSemester] = useState('');
     useEffect(() => {
         axios.get(`http://localhost:5000/roster/Spring2020`,{
             headers: {
@@ -75,7 +76,7 @@ function Roster() {
 
     return (
         <div className={classes.root}>
-            <DashBoard/>
+            <DashBoard updateSemester={(sem) => setSemester(sem)}/>
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
                 {/*<Container maxWidth="md">*/}

@@ -36,6 +36,7 @@ function ComposeEmail(props) {
     const [acceptedEmails, setAcceptedEmails] = useState([]);
     const [pendingEmails, setPendingEmails] = useState([]);
     const [rejectedEmails, setRejectedEmails] = useState([]);
+    const [semester, setSemester] = useState('');
     useEffect(() => {
         axios
             .get("http://localhost:5000/proposals/emails", {
@@ -175,7 +176,7 @@ function ComposeEmail(props) {
 
     return (
         <div className={classes.root}>
-            <DashBoard/>
+            <DashBoard updateSemester={(sem) => setSemester(sem)}/>
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
                 <Container maxWidth="sm">

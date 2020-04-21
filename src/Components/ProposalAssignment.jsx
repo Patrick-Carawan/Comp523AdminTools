@@ -59,7 +59,7 @@ function ProposalAssignment(props) {
     const [idMap, setIdMap] = useState(new Map());
     const [pairings, setPairings] = useState([]);
     const [showPairings, setShowPairings] = useState(false);
-
+    const [semester, setSemester] = useState('');
     const [selectedProjects, setSelectedProjects] = useState([]);
     const [remainingProjects, setRemainingProjects] = useState([]);
     const [disableButton, setDisableButton] = useState(true);
@@ -140,7 +140,7 @@ function ProposalAssignment(props) {
 
     return (
         <div className={classes.root}>
-            <DashBoard/>
+            <DashBoard updateSemester={(sem) => setSemester(sem)}/>
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
                 <Container maxWidth="md">
@@ -176,7 +176,7 @@ function ProposalAssignment(props) {
                                         {team.proposalRanks.map((t, i) => (
                                             <Grid item key={i}>
                                                 {idMap.get(t) ?
-                                                    <Typography>{i+1}. {idMap.get(t).title}</Typography>
+                                                    <Typography>{i + 1}. {idMap.get(t).title}</Typography>
                                                     : null}
                                             </Grid>
                                         ))}
