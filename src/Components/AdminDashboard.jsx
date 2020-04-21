@@ -132,7 +132,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function AdminDashboard() {
+export default function AdminDashboard(props) {
     let history = useHistory();
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
@@ -159,7 +159,8 @@ export default function AdminDashboard() {
     function handleSemesterChange(e){
         setSemester(e.target.value);
         window.localStorage.setItem('semester', e.target.value);
-        console.log(window.localStorage.getItem('semester'))
+        // console.log(window.localStorage.getItem('semester'));
+        props.updateSemester(e.target.value);
     }
 
     useEffect(() => {

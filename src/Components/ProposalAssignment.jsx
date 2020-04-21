@@ -56,6 +56,7 @@ function ProposalAssignment(props) {
     const classes = useStyles();
     const [teams, setTeams] = useState([]);
     const [titleMap, setTitleMap] = useState(new Map());
+    const [idMap, setIdMap] = useState(new Map());
     const [pairings, setPairings] = useState([]);
     const [showPairings, setShowPairings] = useState(false);
 
@@ -64,7 +65,7 @@ function ProposalAssignment(props) {
     const [disableButton, setDisableButton] = useState(true);
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/proposals`,{
+        axios.get(`http://localhost:5000/proposals`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
@@ -80,9 +81,11 @@ function ProposalAssignment(props) {
                     tempIdMap.set(project["_id"], project);
                 }
             );
+            console.log('tempIdMap', tempIdMap)
             setTitleMap(tempMap);
+            setIdMap(tempIdMap);
         });
-        axios.get(`http://localhost:5000/teams`,{
+        axios.get(`http://localhost:5000/teams`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
@@ -172,7 +175,9 @@ function ProposalAssignment(props) {
                                         </Grid>
                                         {team.proposalRanks.map((t, i) => (
                                             <Grid item key={i}>
-                                                <Typography>{t}</Typography>
+                                                {idMap.get(t) ?
+                                                    <Typography>{i+1}. {idMap.get(t).title}</Typography>
+                                                    : null}
                                             </Grid>
                                         ))}
                                     </Grid>
