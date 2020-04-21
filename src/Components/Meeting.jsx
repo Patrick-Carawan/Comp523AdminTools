@@ -119,8 +119,8 @@ export default function MeetingPage() {
       });
     }
 
-    // console.log("selectedTeam", team._id);
-    // console.log("week", team._id);
+    console.log("selectedTeam", team._id);
+    console.log("week", team._id);
   };
 
   const changeWeek = (week) => {
@@ -217,7 +217,6 @@ export default function MeetingPage() {
                   deliverableStatus={deliverableStatus}
                   comment={comment}
                   weekTodo={weekTodo}
-
                   changeComment={(comment) => changeComment(comment)}
                   changeWeeklyTodo={(todo) => changeWeekTodo(todo)}
                   changeDeliverableStatus={(status) =>
