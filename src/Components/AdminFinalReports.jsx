@@ -178,7 +178,8 @@ function AdminFinalReports() {
                                 <Tab label="Team">Team</Tab>
                                 {
                                     studentReports.filter(rep => teamMap.get(currentTeam['team']).includes(rep['onyen'])).map((report, index) =>
-                                        <Tab label={report['onyen']} key={index}>{onyenMap.get(report['onyen'])}</Tab>)
+                                        <Tab label={onyenMap.get(report['onyen'])} key={index}>{report['onyen']}</Tab>
+                                    )
                                 }
                             </Tabs>
                             : null
