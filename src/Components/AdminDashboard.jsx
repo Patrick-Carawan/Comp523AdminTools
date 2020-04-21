@@ -138,6 +138,18 @@ export default function AdminDashboard(props) {
     const [open, setOpen] = React.useState(true);
     const [semester, setSemester] = useState('');
     const [allSemesters, setAllSemesters] = useState(['test']);
+
+    useEffect(() => {
+        axios.get(`http://localhost:5000/semesters/current`,{
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+        }).then(res =>{
+            console.log('current semester',res['data']);
+            setSemester(res['data']);
+        })
+    }, []);
+
     const handleDrawerOpen = () => {
         setOpen(true);
     };

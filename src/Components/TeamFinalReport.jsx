@@ -52,7 +52,7 @@ const TeamFinalReport = () => {
                     <Grid container direction="column" alignItems="center">
                         <Grid item>
                             <Typography variant="h3">
-                                Individual Final Report
+                                Team Final Report
                             </Typography>
                         </Grid>
                         <Grid item>
