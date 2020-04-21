@@ -118,32 +118,6 @@ export default function Login(props) {
                     >
                         Sign In
                     </Button>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="secondary"
-                        className={classes.submit}
-                        onClick={() => {
-                            window.localStorage.setItem("studentUser", "true");
-                            history.push("/studentDash");
-                        }}
-                    >
-                        Grant student access
-                    </Button>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="secondary"
-                        className={classes.submit}
-                        onClick={() => {
-                            window.localStorage.setItem("adminUser", "true");
-                            history.push("/dashboard")
-                        }}
-                    >
-                        Grant admin access
-                    </Button>
                 </form>
                 <Link to="/createAccount" className={classes.link}>Create Account</Link>
             </div>
