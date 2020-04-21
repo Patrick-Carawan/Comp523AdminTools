@@ -37,6 +37,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Login(props) {
+    let history = useHistory();
     window.localStorage.setItem("adminUser", "false");
     window.localStorage.setItem("studentUser", "false");
 
@@ -73,7 +74,6 @@ export default function Login(props) {
         });
     }
 
-    let history = useHistory();
 
     return (
         <Container component="main" maxWidth="xs">

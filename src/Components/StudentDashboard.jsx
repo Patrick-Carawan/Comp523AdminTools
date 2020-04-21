@@ -19,7 +19,7 @@ import GroupIcon from '@material-ui/icons/GroupAdd';
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import { Link } from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import Button from "@material-ui/core/Button";
 
 const drawerWidth = 260;
@@ -115,6 +115,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function AdminDashboard() {
+    let history = useHistory();
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     const handleDrawerOpen = () => {
@@ -126,7 +127,13 @@ export default function AdminDashboard() {
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
     function logout() {
-
+        window.localStorage.setItem('teamId','');
+        window.localStorage.setItem('onyen','');
+        window.localStorage.setItem('token','');
+        window.localStorage.setItem('name','');
+        window.localStorage.setItem('studentUser','false');
+        window.localStorage.setItem('adminUser','false');
+        history.push("/login");
     }
 
     return (
