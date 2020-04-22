@@ -40,8 +40,8 @@ userSchema.methods.generateJWT = function() {
     return jwt.sign({
         onyen: this.onyen,
         id: this._id
-    }, 'secret', {
-        expiresIn: "1d"
+    }, process.env.LOGIN_SECRET, {
+        expiresIn: "7d"
     });
 };
 
@@ -56,46 +56,32 @@ userSchema.methods.generateVerificationEmail = function() {
         }
     });
 
-    let verificationToken = jwt.sign({
+    jwt.sign({
         onyen: this.onyen,
         id: this._id
-    }, 'secret', {
-        expiresIn: "1 hour"
+    }, process.env.EMAIL_SECRET, {
+        expiresIn: "3d"
+    }, (err, emailToken) => {
+        if (err) {
+            console.log(err);
+        }
+        let verificationEmail = {
+        from: process.env.NOREPLY_EMAIL,
+        to: `${this.onyen}${process.env.NOREPLY_RECIPIENT_DOMAIN}`,
+        subject: 'Verification for COMP 523',
+        html: `Please click the following link to verify your account for COMP 523: <a href='www.google.com'>gettheurlfromdaniel.com/${emailToken}</a>`
+        };
+        transporter.sendMail(verificationEmail, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log(`Email sent to ${verificationEmail.to}`);
+            }
+        });
     });
 
-    let verificationEmail = {
-        from: process.env.NOREPLY_EMAIL,
-        to: `${this.onyen}@ttirv.com`,
-        subject: 'Verification for COMP 523',
-        html: `Please click the following link to verify your account for COMP 523: <a href="">gettheurlfromdaniel.com/${verificationToken}</a>`
-    };
-    transporter.sendMail(verificationEmail, function (error, info) {
-        if (error) {
-            console.log(error);
-        } else {
-            console.log(`Email sent to ${verificationEmail.to}`);
-        }
-    })
+    
 };
-    // }, (err, emailToken) => {
-    //     if (err) {
-    //         console.log(err);
-    //     }
-    //     let verificationEmail = {
-    //         from: process.env.NOREPLY_EMAIL,
-    //         to: `${onyen}@awdrt.org`,
-    //         subject: 'Verification for COMP 523',
-    //         html: `Please click the following link to verify your account for COMP 523: <a href="">gettheurlfromdaniel.com/${emailToken}</a>`
-    //         };
-    //     transporter.sendMail(verificationEmail, function (error, info) {
-    //         if (error) {
-    //             console.log(error);
-    //         } else {
-    //             console.log("Email sent.")
-    //         }
-    //     });
-
-    // });
 
 
 userSchema.methods.toAuthJSON = function() {
