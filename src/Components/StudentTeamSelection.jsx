@@ -46,17 +46,25 @@ function StudentTeamSelection(props) {
     const [students, setStudents] = useState([]);
     const [draggedOnyens, setDraggedOnyens] = useState([]);
     const [typedOnyens, setTypedOnyens] = useState([]);
-    const [semester, setSemester] = useState(window.localStorage.getItem('semester'));
+    const [semester, setSemester] = useState('');
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/users/students/${semester}`, {
+        axios.get(`http://localhost:5000/semesters/current`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
         }).then(res => {
-            console.log('allStudents', res['data'].filter(student => student['admin'] === false));
-            setStudents(res['data'].filter(student => student['admin'] === false))
-        });
+            setSemester(res['data']);
+            let currentSemester = res['data'];
+            axios.get(`http://localhost:5000/users/students/${currentSemester}`, {
+                headers: {
+                    Authorization: `Token ${window.localStorage.getItem('token')}`
+                }
+            }).then(res => {
+                console.log('allStudents', res['data'].filter(student => student['admin'] === false));
+                setStudents(res['data'].filter(student => student['admin'] === false))
+            }).catch(err => alert(err));
+        }).catch(err => alert(err))
     }, []);
 
 
