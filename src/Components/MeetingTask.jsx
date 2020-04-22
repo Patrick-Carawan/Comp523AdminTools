@@ -30,7 +30,7 @@ export default function MeetingTask(props) {
   const classes = useStyles();
   const [comment, setComment] = React.useState("");
   const [weeklyTodo, setWeeklyTodo] = React.useState("");
-  const [demoStatus, setDemoStatus] = React.useState("");
+  const [demoStatus, setDemoStatus] = React.useState(props.demoStatus);
   const [deliverableStatus, setDeliverableStatus] = React.useState("");
 
   function debounced(delay, fn) {
@@ -84,9 +84,7 @@ export default function MeetingTask(props) {
                 aria-label="position"
                 name="position"
                 defaultValue="top"
-
-                value={demoStatus}
-
+                value={props.demoStatus}
                 onChange={(e) => {
                   changeDemoStatus(e);
                 }}
@@ -124,7 +122,8 @@ export default function MeetingTask(props) {
                 row
                 aria-label="position"
                 name="position"
-                defaultValue="top"
+                defaultValue=""
+                value={props.deliverableStatus}
                 onChange={(e) => {
                   changeDeliverableStatus(e);
                 }}
@@ -163,7 +162,7 @@ export default function MeetingTask(props) {
               multiline
               rows="8"
               fullWidth
-              defaultValue=""
+              value={props.comment}
               variant="outlined"
               onChange={(e) => {
                 changeComment(e);
@@ -177,7 +176,7 @@ export default function MeetingTask(props) {
               multiline
               fullWidth
               rows="8"
-              defaultValue=""
+              value={props.weekTodo}
               variant="outlined"
               onChange={(e) => {
                 changeWeeklyTodo(e);

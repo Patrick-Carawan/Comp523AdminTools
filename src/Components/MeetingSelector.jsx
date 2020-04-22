@@ -67,6 +67,10 @@ export default function CheckAttendance(props) {
     props.changeAttendance(member, event.target.value);
   };
 
+  useEffect(() => {
+    console.log("Team members: ", props.attendance["pat1"]);
+  }, [props.attendance["pat1"]]);
+
   // Record all attended
   const handleAllAttended = (event) => {
     // setSelectedValue(event.target.value);
@@ -125,7 +129,12 @@ export default function CheckAttendance(props) {
                     row
                     aria-label="position"
                     name="position"
-                    defaultValue="top"
+                    defaultValue=""
+                    value={
+                      props.attendance && props.attendance[`${member}`]
+                        ? props.attendance[`${member}`]
+                        : ""
+                    }
                     onChange={(e) => changeAttendance(e, index, member)}
                   >
                     <FormControlLabel

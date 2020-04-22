@@ -101,6 +101,10 @@ export default function MeetingPage() {
     });
   }, []);
 
+  useEffect(() => {
+    console.log("Attendance Status: ", attendanceObj);
+  }, [attendanceObj]);
+
   const changeAttendance = (member, attendanceValue) => {
     const tempAttendanceObj = Object.assign({}, attendanceObj);
     tempAttendanceObj[`${member}`] = attendanceValue;
@@ -116,11 +120,30 @@ export default function MeetingPage() {
         `http://localhost:5000/coachMeetings/Spring2020/${week}/${team._id}`
       ).then((res) => {
         console.log("SpecificCoachMeetings", res["data"]);
+        if (res["data"].length != 0) {
+          setAttendanceMap(res["data"][0]["attendance"]);
+          setDemoStatus(res["data"][0]["demoStatus"]);
+          setDeliverableStatus(res["data"][0]["deliverableStatus"]);
+          setComment(res["data"][0]["comment"]);
+          setWeekTodo(res["data"][0]["weekTodo"]);
+        } else {
+          setAttendanceMap({});
+          setDemoStatus("");
+          setDeliverableStatus("");
+          setComment("");
+          setWeekTodo("");
+        }
       });
     }
 
-    console.log("selectedTeam", team._id);
-    console.log("week", team._id);
+    // console.log("selectedTeam", team._id);
+    // console.log("week", team._id);
+  };
+
+  // Use to update the info in demo&comment section
+  const updateInfo = (info) => {
+    // changeDemoStatus(info.demoStatus);
+    console.log("demo status: " + info.demoStatus);
   };
 
   const changeWeek = (week) => {
@@ -129,12 +152,24 @@ export default function MeetingPage() {
         `http://localhost:5000/coachMeetings/Spring2020/${week}/${selectedTeam._id}`
       ).then((res) => {
         console.log("SpecificCoachMeetings", res["data"]);
+        // changeDemoStatus(res["data"]["demoStatus"]);
+        if (res["data"].length != 0) {
+          setAttendanceMap(res["data"][0]["attendance"]);
+          setDemoStatus(res["data"][0]["demoStatus"]);
+          setDeliverableStatus(res["data"][0]["deliverableStatus"]);
+          setComment(res["data"][0]["comment"]);
+          setWeekTodo(res["data"][0]["weekTodo"]);
+        } else {
+          setAttendanceMap({});
+          setDemoStatus("");
+          setDeliverableStatus("");
+          setComment("");
+          setWeekTodo("");
+        }
       });
     }
-    console.log(week);
+    // console.log(week);
     setWeek(week);
-
-    changeDemoStatus();
   };
 
   const changeDemoStatus = (status) => {
