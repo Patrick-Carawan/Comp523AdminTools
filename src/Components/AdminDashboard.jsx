@@ -137,7 +137,7 @@ export default function AdminDashboard(props) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     const [semester, setSemester] = useState('');
-    const [allSemesters, setAllSemesters] = useState(['test']);
+    const [allSemesters, setAllSemesters] = useState([]);
 
     useEffect(() => {
         axios.get(`http://localhost:5000/semesters/current`,{
@@ -147,6 +147,7 @@ export default function AdminDashboard(props) {
         }).then(res =>{
             console.log('current semester',res['data']);
             setSemester(res['data']);
+            window.localStorage.setItem('semester', res['data']);
         })
     }, []);
 
@@ -170,9 +171,8 @@ export default function AdminDashboard(props) {
 
     function handleSemesterChange(e){
         setSemester(e.target.value);
-        window.localStorage.setItem('semester', e.target.value);
-        // console.log(window.localStorage.getItem('semester'));
         props.updateSemester(e.target.value);
+        window.localStorage.setItem('semester', e.target.value);
     }
 
     useEffect(() => {

@@ -68,40 +68,51 @@ function AdminFinalReports() {
     const [teams, setTeams] = useState([])
     const [currentTeam, setCurrentTeam] = useState({});
     const [tabIndex, setTabIndex] = useState(0);
-    const [teamMap, setTeamMap] = useState(new Map());
+    const [teamToMembersMap, setTeamToMembersMap] = useState(new Map());
+    const [teamIdsToNames, setTeamIdsToNames] = useState(new Map());
     const [roster, setRoster] = useState([]);
     const [onyenMap, setOnyenMap] = useState(new Map());
-    const [semester, setSemester] = useState('');
-
+    const [semester, setSemester] = useState(window.localStorage.getItem('semester'));
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/teams`, {
+        console.log('currentTeam', currentTeam);
+        console.log('teamIdsToNames', teamIdsToNames);
+        console.log('teamToMemebers', teamToMembersMap);
+    }, [currentTeam]);
+
+    useEffect(() => {
+        axios.get(`http://localhost:5000/teams/semester/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
         }).then((res) => {
-            // console.log('teams', res['data']);
+            console.log('teams', res['data']);
             const myTeams = res['data'].sort((team1, team2) => team1['teamName'] < team2['teamName'] ? -1 : 1);
             setTeams(myTeams);
             let tempMap = new Map();
-            myTeams.forEach(team => tempMap.set(team['teamName'], team['teamMembers']));
+            let tempIdToName = new Map();
+            myTeams.forEach(team => {
+                tempMap.set(team['teamName'], team['teamMembers']);
+                tempIdToName.set(team['_id'], team['teamName']);
+            });
             // console.log(tempMap);
-            setTeamMap(tempMap);
+            setTeamToMembersMap(tempMap);
+            setTeamIdsToNames(tempIdToName);
         });
-        axios.get(`http://localhost:5000/finalReports/students`, {
+        axios.get(`http://localhost:5000/finalReports/students/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
         }).then((res) => {
-            // console.log('student reports', res['data']);
+            console.log('student reports', res['data']);
             setStudentReports(res['data'].sort((team1, team2) => team1['team'] < team2['team'] ? -1 : 1));
         });
-        axios.get(`http://localhost:5000/finalReports/teams`, {
+        axios.get(`http://localhost:5000/finalReports/teams/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
         }).then((res) => {
-            // console.log('team reports', res['data']);
+            console.log('team reports', res['data']);
             setTeamReports(res['data'].sort((team1, team2) => team1['team'] < team2['team'] ? -1 : 1));
         });
         if (semester !== '') {
@@ -125,7 +136,7 @@ function AdminFinalReports() {
             let tempOnyenMap = new Map();
             if (res.data[0]) {
                 res.data[0].studentList.forEach(obj => tempOnyenMap.set(obj.onyen, obj.name));
-                console.log(tempOnyenMap)
+                console.log(tempOnyenMap);
                 setOnyenMap(tempOnyenMap);
             }
         })
@@ -160,7 +171,7 @@ function AdminFinalReports() {
                                 >
                                     {teamReports.map((teamItem, i) => (
                                         <MenuItem key={i} value={teamItem}>
-                                            {teamItem['team']}
+                                            {teamIdsToNames.get(teamItem['team'])}
                                         </MenuItem>
                                     ))}
                                 </Select>
@@ -168,7 +179,7 @@ function AdminFinalReports() {
                         </Grid>
                     </Grid>
                     {
-                        teamMap.get(currentTeam['team']) ?
+                        teamToMembersMap.get(teamIdsToNames.get(currentTeam['team'])) ?
                             <Tabs
                                 value={tabIndex}
                                 onChange={handleTabClick}
@@ -177,7 +188,7 @@ function AdminFinalReports() {
                             >
                                 <Tab label="Team">Team</Tab>
                                 {
-                                    studentReports.filter(rep => teamMap.get(currentTeam['team']).includes(rep['onyen'])).map((report, index) =>
+                                    studentReports.filter(rep => teamToMembersMap.get(teamIdsToNames.get(currentTeam['team'])).includes(rep['onyen'])).map((report, index) =>
                                         <Tab label={onyenMap.get(report['onyen'])} key={index}>{report['onyen']}</Tab>
                                     )
                                 }
@@ -190,8 +201,8 @@ function AdminFinalReports() {
                         </Typography>
                     </TabPanel>
                     {
-                        teamMap.get(currentTeam['team']) ?
-                            studentReports.filter(report => teamMap.get(currentTeam['team']).includes(report['onyen'])).map((rep, i) =>
+                        teamToMembersMap.get(currentTeam['team']) ?
+                            studentReports.filter(report => teamToMembersMap.get(teamIdsToNames.get(currentTeam['team'])).includes(report['onyen'])).map((rep, i) =>
                                 <TabPanel key={i} value={tabIndex} index={i + 1}>
                                     <Typography>
                                         {rep['text']}
