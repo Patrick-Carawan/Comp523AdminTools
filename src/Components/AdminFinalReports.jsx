@@ -79,6 +79,8 @@ function AdminFinalReports() {
     // }, [currentTeam]);
 
     const setAllSemesterInfo = () => {
+        console.log(onyenMap)
+        setCurrentTeam({});
         axios.get(`http://localhost:5000/teams/semester/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
@@ -127,7 +129,7 @@ function AdminFinalReports() {
                 setOnyenMap(tempOnyenMap);
             }
         })
-    }
+    };
 
     useEffect(() => {
         setAllSemesterInfo()
@@ -193,10 +195,11 @@ function AdminFinalReports() {
                                 aria-label="simple tabs example"
                                 centered
                             >
-                                <Tab label="Team">Team</Tab>
+                                <Tab label="Team"></Tab>
                                 {
                                     studentReports.filter(rep => teamToMembersMap.get(teamIdsToNames.get(currentTeam['team'])).includes(rep['onyen'])).map((report, index) =>
-                                        <Tab label={onyenMap.get(report['onyen'])} key={index}>{report['onyen']}</Tab>
+                                        // <Tab label={onyenMap.get(report['onyen'])} key={index}>{onyenMap.get(report['onyen'])}</Tab>
+                                        <Tab label={onyenMap.get(report['onyen'])} key={index}></Tab>
                                     )
                                 }
                             </Tabs>
@@ -208,9 +211,10 @@ function AdminFinalReports() {
                         </Typography>
                     </TabPanel>
                     {
-                        teamToMembersMap.get(currentTeam['team']) ?
+                        teamToMembersMap.get(teamIdsToNames.get(currentTeam['team'])) ?
                             studentReports.filter(report => teamToMembersMap.get(teamIdsToNames.get(currentTeam['team'])).includes(report['onyen'])).map((rep, i) =>
-                                <TabPanel key={i} value={tabIndex} index={i + 1}>
+                            // studentReports.map((rep, i) =>
+                                <TabPanel key={i} value={tabIndex} index={i+1}>
                                     <Typography>
                                         {rep['text']}
                                     </Typography>

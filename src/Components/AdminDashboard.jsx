@@ -139,6 +139,8 @@ export default function AdminDashboard(props) {
     const [semester, setSemester] = useState('');
     const [allSemesters, setAllSemesters] = useState([]);
 
+    useEffect(()=>{console.log('semester',semester)},[semester])
+
     useEffect(() => {
         axios.get(`http://localhost:5000/semesters/current`,{
             headers: {
@@ -182,7 +184,11 @@ export default function AdminDashboard(props) {
             }
         }).then(res => {
             console.log(res['data'][0]);
+            if(res['data'].length === 0){
+                alert('Please upload a list of semesters in Mongo. \n Ex. \'Spring2020\',\'Fall2021\'')
+            } else {
             setAllSemesters(res['data'][0]['semesters']);
+            }
         })
     }, []);
 
@@ -218,8 +224,10 @@ export default function AdminDashboard(props) {
                     <FormControl>
                         <InputLabel>Semester</InputLabel>
                         <Select onChange={handleSemesterChange}
+                                displayEmpty={true}
                                 value={semester}
-                                style={{'minWidth':'7em', 'marginBottom':'1em'}}>
+                                label="Current Semester"
+                                style={{'minWidth':'7em', 'marginBottom':'1em', 'color':'white'}}>
                             {allSemesters ? allSemesters.map((semester,index) =>
                                 <MenuItem key={index} value={allSemesters[index]}>
                                     {semester}
