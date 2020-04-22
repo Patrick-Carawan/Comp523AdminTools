@@ -9,7 +9,7 @@ const userSchema = new Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     phone: { type: String, required: false },
-    semester: { type: String, required: true },   
+    semester: { type: String, required: true, default: process.env.CURRENT_SEMESTER },
     admin: { type: Boolean, required: true, default: false },
     teamId: {type: String, default: "Pending"},
     hash: String,

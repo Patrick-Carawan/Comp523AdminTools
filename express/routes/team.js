@@ -9,9 +9,9 @@ router.get('/', auth.required, (req, res, next) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
-// Get all teams proposal ranks
-router.get('/rankings', auth.required, (req, res, next) => {
-    Team.find({}, "teamName proposalRanks")
+// Get all teams proposal ranks for a semester
+router.get('/rankings/:semester', auth.required, (req, res, next) => {
+    Team.find({"semester": req.params.semester}, "teamName proposalRanks")
         .then(teams => res.json(teams))
         .catch(err => res.status(400).json('Error: ' + err));
 });
@@ -21,12 +21,10 @@ router.get('/rankings', auth.required, (req, res, next) => {
 router.post('/add', auth.required, (req, res, next) => {
     const _teamName = req.body.teamName;
     const _teamMembers = req.body.teamMembers;
-    const _semester = req.body.semester;
 
     const newTeam = new Team({
         teamName:  _teamName,
         teamMembers: _teamMembers,
-        semester: _semester
     });
 
     newTeam.save()
@@ -64,7 +62,7 @@ Assign projects to teams, request should look like
         ]
     }    
 */
-router.post('/assignments', auth.required, (req, res, next) => {
+router.post('/assignments/', auth.required, (req, res, next) => {
     var assignments = req.body.assignments;
     for (let i = 0; i < assignments.length; i++) {
         

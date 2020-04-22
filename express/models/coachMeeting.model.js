@@ -6,7 +6,7 @@ const meetingSchema = new Schema({
     demoStatus: { type: String, required: true },
     deliverableStatus: { type: String, required: true },
     week: { type: String, required: true },
-    semester: { type: String, required: true },
+    semester: { type: String, required: true, default: process.env.CURRENT_SEMESTER },
     teamId: { type: String, required: true },
     comment: { type: String, required: true },
     weekTodo: { type: String, required: true },
