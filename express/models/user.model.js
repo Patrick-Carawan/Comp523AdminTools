@@ -11,11 +11,10 @@ const userSchema = new Schema({
     onyen: { type: String, required: true, unique: true },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    phone: String,
+    phone: { type: String, required: false },
     semester: { type: String, required: true },   
     admin: { type: Boolean, required: true, default: false },
-    verified: { type: Boolean, required: true, default: false},
-    teamId: String,
+    teamId: {type: String, default: "Pending"},
     hash: String,
     salt: String 
 }, {

@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const meetingSchema = new Schema({
     demoStatus: { type: String, required: true },
     deliverableStatus: { type: String, required: true },
-    week: { type: Number, required: true },
+    week: { type: String, required: true },
     semester: { type: String, required: true },
     teamId: { type: String, required: true },
     comment: { type: String, required: true },
