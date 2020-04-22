@@ -77,7 +77,7 @@ router.post('/', auth.optional, (req, res, next) => {
         onyen: finalUser.onyen,
         name: `${finalUser.firstName} ${finalUser.lastName}`
       }))
-      .catch(err => res.status(400).json('Error in finding student: ' + err));
+      .catch(err => res.status(400).json('Error saving student: ' + err));
 });
   
 
@@ -105,6 +105,10 @@ router.post('/login', auth.optional, (req, res, next) => {
       if(err) {
         return next(err);
       }
+      
+      if(!passportUser) {
+        return res.status(401).json("A user with that onyen and password combination does not exist.")
+      }
 
       if(!passportUser.verified) {
         return res.status(403).json("Please verify your email before logging in.");
@@ -119,6 +123,33 @@ router.post('/login', auth.optional, (req, res, next) => {
   
       return status(400).info;
     })(req, res, next);
+});
+
+// Send reset password email route
+router.post('/emailPasswordReset', auth.optional, (req, res, next) => {
+    const { body: { onyen } } = req;
+    User.findOne({ onyen: onyen })
+        .then(user => {
+          user.sendPasswordResetEmail();
+          res.status(200).json("Reset email sent");
+        })
+        .catch(err => res.status(400).json('Error sending reset password email: ' + err));
+});
+
+// Reset password route
+router.post('/reset', auth.required, (req, res, next) => {
+    User.findOne({ onyen: req.body.user.onyen })
+        .then(user => {
+            console.log(req.body.user.password);
+            user.setPassword(req.body.user.password);
+            user.save()
+                .then(() => res.json({ 
+                  onyen: user.onyen,
+                  name: `${user.firstName} ${user.lastName}`
+                }))
+                .catch(err => res.status(400).json('Error saving student: ' + err));
+        })
+        .catch(err => res.status(400).json('Error resetting password: ' + err));
 });
   
 // GET current route (required, only authenticated users have access)

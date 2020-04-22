@@ -11,7 +11,7 @@ const userSchema = new Schema({
     onyen: { type: String, required: true, unique: true },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    phone: { type: String, required: true },
+    phone: String,
     semester: { type: String, required: true },   
     admin: { type: Boolean, required: true, default: false },
     verified: { type: Boolean, required: true, default: false},
@@ -40,14 +40,14 @@ userSchema.methods.generateJWT = function() {
     return jwt.sign({
         onyen: this.onyen,
         id: this._id
-    }, process.env.LOGIN_SECRET, {
+    }, process.env.SECRET, {
         expiresIn: "7d"
     });
 };
 
-// This function asynchronously sends verification emails 
-userSchema.methods.generateVerificationEmail = function() {
-    console.log("Sending email");
+userSchema.methods.sendPasswordResetEmail = function() {
+    console.log(`Sending password reset email for ${this.onyen}`);
+
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -59,7 +59,44 @@ userSchema.methods.generateVerificationEmail = function() {
     jwt.sign({
         onyen: this.onyen,
         id: this._id
-    }, process.env.EMAIL_SECRET, {
+    }, process.env.SECRET, {
+        expiresIn: "1d"
+    }, (err, emailToken) => {
+        if (err) {
+            console.log(err);
+        }
+        let resetEmail = {
+        from: process.env.NOREPLY_EMAIL,
+        to: `${this.onyen}${process.env.NOREPLY_RECIPIENT_DOMAIN}`,
+        subject: 'Password Reset for COMP 523',
+        html: `Please click the following link to reset your password for COMP 523:\n <a href='www.google.com'>gettheurlfromdaniel.com/${emailToken}</a>`
+        };
+        transporter.sendMail(resetEmail, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log(`Email sent to ${resetEmail.to}`);
+            }
+        });
+    });
+};
+
+// This function asynchronously sends verification emails 
+userSchema.methods.generateVerificationEmail = function() {
+    console.log(`Sending verification email for ${this.onyen}`);
+
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.NOREPLY_EMAIL,
+          pass: process.env.NOREPLY_PASSWORD
+        }
+    });
+
+    jwt.sign({
+        onyen: this.onyen,
+        id: this._id
+    }, process.env.SECRET, {
         expiresIn: "3d"
     }, (err, emailToken) => {
         if (err) {
