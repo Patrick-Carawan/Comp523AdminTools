@@ -45,6 +45,7 @@ userSchema.methods.generateJWT = function() {
     });
 };
 
+// Asynchronously sends a reset password email to a user
 userSchema.methods.sendPasswordResetEmail = function() {
     console.log(`Sending password reset email for ${this.onyen}`);
 
@@ -58,7 +59,7 @@ userSchema.methods.sendPasswordResetEmail = function() {
 
     jwt.sign({
         onyen: this.onyen,
-        id: this._id
+        id: this._id, 
     }, process.env.SECRET, {
         expiresIn: "1d"
     }, (err, emailToken) => {
@@ -95,7 +96,7 @@ userSchema.methods.generateVerificationEmail = function() {
 
     jwt.sign({
         onyen: this.onyen,
-        id: this._id
+        id: this._id,
     }, process.env.SECRET, {
         expiresIn: "3d"
     }, (err, emailToken) => {
@@ -106,7 +107,7 @@ userSchema.methods.generateVerificationEmail = function() {
         from: process.env.NOREPLY_EMAIL,
         to: `${this.onyen}${process.env.NOREPLY_RECIPIENT_DOMAIN}`,
         subject: 'Verification for COMP 523',
-        html: `Please click the following link to verify your account for COMP 523: <a href='www.google.com'>gettheurlfromdaniel.com/${emailToken}</a>`
+        html: `Please click the following link to verify your account for COMP 523:\n <a href='www.google.com'>gettheurlfromdaniel.com/${emailToken}</a>`
         };
         transporter.sendMail(verificationEmail, function (error, info) {
             if (error) {
