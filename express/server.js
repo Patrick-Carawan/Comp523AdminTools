@@ -74,6 +74,10 @@ app.use((err, req, res, next) => {
   });
 });
 
+if(process.env.NODE_ENV === 'production'){
+    app.use(express.static('523-admin-tools-frontend/build'))
+}
+
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
 });

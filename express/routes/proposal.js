@@ -18,7 +18,7 @@ router.delete('/:id', auth.required, (req, res, next) => {
 });
 
 // Add a proposal
-router.post('/', auth.required, (req, res, next) => {
+router.route('/').post( (req, res, next) => {
     const _title = req.body.title;
     const _email = req.body.email;
     const _prop_name = req.body.prop_name;
