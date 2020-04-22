@@ -76,8 +76,12 @@ export default function CreateAccount() {
                 console.log(res);
                 history.push("/login");
             }).catch(err => {
-                alert('Could not create user. Make sure this is the correct onyen. See your teacher for help if needed.')
-                console.log(err)
+                if (err.response.status === 406) {
+                    alert(err.response.data)
+                } else {
+                    alert('Could not create user. Make sure this is the correct onyen. See your teacher for help if needed.')
+                    console.log('err', err)
+                }
             })
         }
     }
