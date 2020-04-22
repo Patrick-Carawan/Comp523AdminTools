@@ -47,8 +47,13 @@ const parseOptions = {
 function Roster() {
     const classes = useStyles();
     const [roster, setRoster] = useState([]);
+    const [semester, setSemester] = useState('');
     useEffect(() => {
-        axios.get(`http://localhost:5000/roster/Spring2020`).then((res) => {
+        axios.get(`http://localhost:5000/roster/Spring2020`,{
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+        }).then((res) => {
             if (res.data[0]) {
                 setRoster(res.data[0].studentList);
             }
@@ -62,12 +67,16 @@ function Roster() {
     function submitRoster() {
         axios.post(`http://localhost:5000/roster/add/Spring2020`, {
             studentList: roster
+        },{
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
         }).then(() => alert('Roster submitted')).catch(e => alert(e))
     }
 
     return (
         <div className={classes.root}>
-            <DashBoard/>
+            <DashBoard updateSemester={(sem) => setSemester(sem)}/>
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
                 {/*<Container maxWidth="md">*/}

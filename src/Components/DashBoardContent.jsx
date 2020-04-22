@@ -68,9 +68,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 export default function Dashboard() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
+  const [semester, setSemester] = React.useState('');
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -81,7 +83,7 @@ export default function Dashboard() {
 
   return (
     <div className={classes.root}>
-      <DashBoard />
+      <DashBoard updateSemester={(sem) => setSemester(sem)}/>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
         <Container maxWidth="lg" className={classes.container}>

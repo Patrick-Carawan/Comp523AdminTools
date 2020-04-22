@@ -32,7 +32,7 @@ import AssignmentIcon from "@material-ui/icons/ExitToApp";
 import axios from 'axios';
 
 import NavPanel from "./NavPanel";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
 import {InputLabel} from "@material-ui/core";
@@ -132,11 +132,24 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function AdminDashboard() {
+export default function AdminDashboard(props) {
+    let history = useHistory();
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     const [semester, setSemester] = useState('');
     const [allSemesters, setAllSemesters] = useState(['test']);
+
+    useEffect(() => {
+        axios.get(`http://localhost:5000/semesters/current`,{
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+        }).then(res =>{
+            console.log('current semester',res['data']);
+            setSemester(res['data']);
+        })
+    }, []);
+
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -146,17 +159,28 @@ export default function AdminDashboard() {
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
     function logout() {
-
+        window.localStorage.setItem('teamId','');
+        window.localStorage.setItem('onyen','');
+        window.localStorage.setItem('token','');
+        window.localStorage.setItem('name','');
+        window.localStorage.setItem('studentUser','false');
+        window.localStorage.setItem('adminUser','false');
+        history.push("/login");
     }
 
     function handleSemesterChange(e){
         setSemester(e.target.value);
         window.localStorage.setItem('semester', e.target.value);
-        console.log(window.localStorage.getItem('semester'))
+        // console.log(window.localStorage.getItem('semester'));
+        props.updateSemester(e.target.value);
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/semesters`).then(res => {
+        axios.get(`http://localhost:5000/semesters`,{
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+        }).then(res => {
             console.log(res['data'][0]);
             setAllSemesters(res['data'][0]['semesters']);
         })

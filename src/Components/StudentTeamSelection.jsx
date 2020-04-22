@@ -48,7 +48,11 @@ function StudentTeamSelection(props) {
     const [typedOnyens, setTypedOnyens] = useState([]);
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/users/students/Spring2020`).then(res => {
+        axios.get(`http://localhost:5000/users/students/Spring2020`, {
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+        }).then(res => {
             console.log('allStudents', res['data'].filter(student => student['admin'] === false));
             setStudents(res['data'].filter(student => student['admin'] === false))
         });
@@ -65,7 +69,7 @@ function StudentTeamSelection(props) {
             tempDragged.push(onyen);
             setDraggedOnyens(tempDragged);
         } else {
-            tempDragged.splice(tempDragged.indexOf(onyen),1);
+            tempDragged.splice(tempDragged.indexOf(onyen), 1);
             setDraggedOnyens(tempDragged);
         }
     };
@@ -92,10 +96,18 @@ function StudentTeamSelection(props) {
                 teamName: `Team ${Math.floor(Math.random() * 100)}`,
                 teamMembers: draggedOnyens,
                 semester: 'Spring2020'
+            }, {
+                headers: {
+                    Authorization: `Token ${window.localStorage.getItem('token')}`
+                }
             }).then((res) => {
                 draggedOnyens.forEach((onyen, i) => {
                     axios.post(`http://localhost:5000/users/updateTeam/${onyen}`, {
                         teamId: res['data']['id']
+                    },{
+                        headers: {
+                            Authorization: `Token ${window.localStorage.getItem('token')}`
+                        }
                     }).then(() => {
                         if (i === draggedOnyens.length - 1) {
                             alert('Team successfully submitted')
@@ -121,16 +133,16 @@ function StudentTeamSelection(props) {
                 <div className={classes.toolbar}/>
                 <TeamBox id="Pending" className={classes.nameBank} setTeam={setTeam}>
                     {students.map((student, index) =>
-                            student['teamId'] === "Pending" ?
-                                <Name key={index} id={index} className="name" draggable="true"
-                                      onyen={student['onyen']} studentIndex={index}
-                                      teamId={student['teamId']}>
-                                    <Card variant="outlined">
-                                        <CardContent>
-                                            {`${student['firstName']} ${student['lastName']}`}
-                                        </CardContent>
-                                    </Card>
-                                </Name> : null
+                        student['teamId'] === "Pending" ?
+                            <Name key={index} id={index} className="name" draggable="true"
+                                  onyen={student['onyen']} studentIndex={index}
+                                  teamId={student['teamId']}>
+                                <Card variant="outlined">
+                                    <CardContent>
+                                        {`${student['firstName']} ${student['lastName']}`}
+                                    </CardContent>
+                                </Card>
+                            </Name> : null
                     )}
                 </TeamBox>
 

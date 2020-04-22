@@ -83,11 +83,13 @@ function ProposalsAdminView(props) {
     const [newProposals, setNewProposals] = useState([]);
     const [pendingProposals, setPendingProposals] = useState([]);
     const [rejectedProposals, setRejectedProposals] = useState([]);
-    useEffect(()=>{
-        console.log(acceptedProposals)
-    },[acceptedProposals])
+    const [semester, setSemester] = useState('');
     useEffect(() => {
-        axios.get("http://localhost:5000/proposals/")
+        axios.get("http://localhost:5000/proposals/", {
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+        })
             .then(response => {
                 console.log(response);
                 const proposals = response['data'];
@@ -108,6 +110,10 @@ function ProposalsAdminView(props) {
         // post to backend, wrap everything else in .then()
         axios.post(`http://localhost:5000/proposals/update/${id}`, {
             status: newStatus
+        }, {
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
         }).then(() => {
 
             let proposal;
@@ -208,7 +214,7 @@ function ProposalsAdminView(props) {
 
     return (
         <div className={classes.root}>
-            <DashBoard/>
+            <DashBoard updateSemester={(sem) => setSemester(sem)}/>
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
                 <Grid container direction="column">
