@@ -40,10 +40,10 @@ function AdminTeamSelection(props) {
     const [students, setStudents] = useState([]);
     const [teams, setTeams] = useState([]);
     const [newTeams, setNewTeams] = useState([]);
-    const [semester, setSemester] = useState('');
+    const [semester, setSemester] = useState(window.localStorage.getItem('semester'));
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/users/students/Spring2020`, {
+        axios.get(`http://localhost:5000/users/students/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
@@ -51,7 +51,7 @@ function AdminTeamSelection(props) {
             console.log('students', res['data'].filter(student => student['admin'] === false));
             setStudents(res['data'].filter(student => student['admin'] === false))
         });
-        axios.get(`http://localhost:5000/teams/semester/Spring2020`, {
+        axios.get(`http://localhost:5000/teams/semester/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
@@ -132,7 +132,7 @@ function AdminTeamSelection(props) {
             axiosPromises.push(axios.post(`http://localhost:5000/teams/add`, {
                 teamName: `Team ${Math.floor(Math.random() * 100)}`,
                 teamMembers: team,
-                semester: 'Spring2020'
+                semester: semester
             },{
                 headers: {
                     Authorization: `Token ${window.localStorage.getItem('token')}`

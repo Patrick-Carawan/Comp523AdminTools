@@ -85,9 +85,9 @@ export default function MeetingPage() {
     const [deliverableStatus, setDeliverableStatus] = React.useState("");
     const [comment, setComment] = React.useState("");
     const [weekTodo, setWeekTodo] = React.useState("");
-    const [semester, setSemester] = React.useState('');
+    const [semester, setSemester] = React.useState(window.localStorage.getItem('semester'));
     useEffect(() => {
-        Axios.get(`http://localhost:5000/teams/semester/Spring2020`, {
+        Axios.get(`http://localhost:5000/teams/semester/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem("token")}`,
             },
@@ -95,7 +95,7 @@ export default function MeetingPage() {
             console.log("teams", res);
             setTeams(res["data"]);
         });
-        Axios.get(`http://localhost:5000/coachMeetings/Spring2020`, {
+        Axios.get(`http://localhost:5000/coachMeetings/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
@@ -116,7 +116,7 @@ export default function MeetingPage() {
         // console.log(team);
         if (week !== -1 && team.hasOwnProperty('_id')) {
             Axios.get(
-                `http://localhost:5000/coachMeetings/Spring2020/${week}/${team._id}`, {
+                `http://localhost:5000/coachMeetings/${semester}/${week}/${team._id}`, {
                     headers: {
                         Authorization: `Token ${window.localStorage.getItem('token')}`
                     }
@@ -133,7 +133,7 @@ export default function MeetingPage() {
     const changeWeek = (week) => {
         if (week !== -1 && selectedTeam.hasOwnProperty('_id')) {
             Axios.get(
-                `http://localhost:5000/coachMeetings/Spring2020/${week}/${selectedTeam._id}`, {
+                `http://localhost:5000/coachMeetings/${semester}/${week}/${selectedTeam._id}`, {
                     headers: {
                         Authorization: `Token ${window.localStorage.getItem('token')}`
                     }

@@ -65,22 +65,20 @@ function AdminFinalReports() {
     const classes = useStyles();
     const [teamReports, setTeamReports] = useState([]);
     const [studentReports, setStudentReports] = useState([]);
-    const [teams, setTeams] = useState([])
     const [currentTeam, setCurrentTeam] = useState({});
     const [tabIndex, setTabIndex] = useState(0);
     const [teamToMembersMap, setTeamToMembersMap] = useState(new Map());
     const [teamIdsToNames, setTeamIdsToNames] = useState(new Map());
-    const [roster, setRoster] = useState([]);
     const [onyenMap, setOnyenMap] = useState(new Map());
     const [semester, setSemester] = useState(window.localStorage.getItem('semester'));
 
-    useEffect(() => {
-        console.log('currentTeam', currentTeam);
-        console.log('teamIdsToNames', teamIdsToNames);
-        console.log('teamToMemebers', teamToMembersMap);
-    }, [currentTeam]);
+    // useEffect(() => {
+    //     console.log('currentTeam', currentTeam);
+    //     console.log('teamIdsToNames', teamIdsToNames);
+    //     console.log('teamToMemebers', teamToMembersMap);
+    // }, [currentTeam]);
 
-    useEffect(() => {
+    const setAllSemesterInfo = () => {
         axios.get(`http://localhost:5000/teams/semester/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
@@ -88,7 +86,6 @@ function AdminFinalReports() {
         }).then((res) => {
             console.log('teams', res['data']);
             const myTeams = res['data'].sort((team1, team2) => team1['teamName'] < team2['teamName'] ? -1 : 1);
-            setTeams(myTeams);
             let tempMap = new Map();
             let tempIdToName = new Map();
             myTeams.forEach(team => {
@@ -99,6 +96,7 @@ function AdminFinalReports() {
             setTeamToMembersMap(tempMap);
             setTeamIdsToNames(tempIdToName);
         });
+
         axios.get(`http://localhost:5000/finalReports/students/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
@@ -107,6 +105,7 @@ function AdminFinalReports() {
             console.log('student reports', res['data']);
             setStudentReports(res['data'].sort((team1, team2) => team1['team'] < team2['team'] ? -1 : 1));
         });
+
         axios.get(`http://localhost:5000/finalReports/teams/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
@@ -115,18 +114,6 @@ function AdminFinalReports() {
             console.log('team reports', res['data']);
             setTeamReports(res['data'].sort((team1, team2) => team1['team'] < team2['team'] ? -1 : 1));
         });
-        if (semester !== '') {
-            axios.get(`http://localhost:5000/roster/${semester}`, {
-                headers: {
-                    Authorization: `Token ${window.localStorage.getItem('token')}`
-                }
-            }).then((res) => {
-                console.log('roster', res.data);
-            })
-        }
-    }, []);
-
-    useEffect(() => {
         axios.get(`http://localhost:5000/roster/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
@@ -140,6 +127,26 @@ function AdminFinalReports() {
                 setOnyenMap(tempOnyenMap);
             }
         })
+    }
+
+    useEffect(() => {
+        setAllSemesterInfo()
+    }, [semester]);
+
+    useEffect(() => {
+        // axios.get(`http://localhost:5000/roster/${semester}`, {
+        //     headers: {
+        //         Authorization: `Token ${window.localStorage.getItem('token')}`
+        //     }
+        // }).then((res) => {
+        //     console.log('roster', res.data);
+        //     let tempOnyenMap = new Map();
+        //     if (res.data[0]) {
+        //         res.data[0].studentList.forEach(obj => tempOnyenMap.set(obj.onyen, obj.name));
+        //         console.log(tempOnyenMap);
+        //         setOnyenMap(tempOnyenMap);
+        //     }
+        // })
     }, [semester]);
 
     const handleChange = (event) => {

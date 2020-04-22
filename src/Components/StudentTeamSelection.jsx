@@ -46,9 +46,10 @@ function StudentTeamSelection(props) {
     const [students, setStudents] = useState([]);
     const [draggedOnyens, setDraggedOnyens] = useState([]);
     const [typedOnyens, setTypedOnyens] = useState([]);
+    const [semester, setSemester] = useState(window.localStorage.getItem('semester'));
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/users/students/Spring2020`, {
+        axios.get(`http://localhost:5000/users/students/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
@@ -95,7 +96,7 @@ function StudentTeamSelection(props) {
             axios.post(`http://localhost:5000/teams/add`, {
                 teamName: `Team ${Math.floor(Math.random() * 100)}`,
                 teamMembers: draggedOnyens,
-                semester: 'Spring2020'
+                semester: semester
             }, {
                 headers: {
                     Authorization: `Token ${window.localStorage.getItem('token')}`
