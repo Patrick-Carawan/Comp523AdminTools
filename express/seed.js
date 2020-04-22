@@ -203,6 +203,14 @@ connection.once('open', () => {
         }
     });
 
+    User.collection.deleteMany({}, function(err, result) {
+        if (err) {
+            return console.error(err);
+        } else {
+            console.log(result);
+        }
+    });
+
     CoachMeeting.collection.deleteMany({}, function(err, result) {
         if (err) {
             return console.error(err);
@@ -227,7 +235,7 @@ connection.once('open', () => {
             console.log(result);
         }
     });
-    
+
     Proposal.collection.deleteMany({}, function(err, result) {
         if (err) {
             console.error(err);
@@ -261,11 +269,11 @@ connection.once('open', () => {
     });
     
     console.log("Data cleared.");
-    
+
     Team.collection.insertMany(teams, function(err) {
         console.error(err);
     });
-    
+
     for (let user of users) {
         user.setPassword("password");
     }

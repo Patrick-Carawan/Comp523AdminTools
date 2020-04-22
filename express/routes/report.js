@@ -22,12 +22,11 @@ router.post('/students', auth.required, (req, res, next) => {
     const _onyen = req.body.onyen;
     const _text = req.body.text;
 
-    newReport = new StudentReport({
+   const newReport = new StudentReport({
         onyen: _onyen,
         text: _text,
     });
-
-    newReport.save()
+newReport.save()
         .then(() => res.json("Student report added."))
         .catch(err => res.status(400).json('Error: ' + err));
 });
