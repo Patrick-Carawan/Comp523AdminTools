@@ -40,13 +40,22 @@ function AdminTeamSelection(props) {
     const [students, setStudents] = useState([]);
     const [teams, setTeams] = useState([]);
     const [newTeams, setNewTeams] = useState([]);
+    const [semester, setSemester] = useState('');
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/users/students/Spring2020`).then(res => {
-            // console.log('students', res['data'].filter(student => student['admin'] === false));
+        axios.get(`http://localhost:5000/users/students/Spring2020`, {
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+        }).then(res => {
+            console.log('students', res['data'].filter(student => student['admin'] === false));
             setStudents(res['data'].filter(student => student['admin'] === false))
         });
-        axios.get(`http://localhost:5000/teams/semester/Spring2020`).then(res => {
+        axios.get(`http://localhost:5000/teams/semester/Spring2020`, {
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+        }).then(res => {
             console.log(res['data']);
             setTeams(res['data'].sort((t1, t2) => t1['teamName'] < t2['teamName'] ? -1 : 1))
         })
@@ -74,7 +83,7 @@ function AdminTeamSelection(props) {
             modifiedTeams.add(newTeamId);
             reassignedStudents.add(students[studentIndex]);
             // console.log('reassignedStudents', reassignedStudents);
-        } else{
+        } else {
             // console.log('moved to new team')
         }
     };
@@ -95,31 +104,47 @@ function AdminTeamSelection(props) {
                 // console.log('teamMembers', teamMemberMap.get(team))
                 axiosPromises.push(axios.post(`http://localhost:5000/teams/updateMembers/${team}`, {
                     teamMembers: teamMemberMap.get(team) ? teamMemberMap.get(team) : [""]
+                }, {
+                    headers: {
+                        Authorization: `Token ${window.localStorage.getItem('token')}`
+                    }
                 }));
             }
         });
         reassignedStudents.forEach(student => {
             axiosPromises.push(axios.post(`http://localhost:5000/users/updateTeam/${student.onyen}`, {
                 teamId: student.teamId
+            },{
+                headers: {
+                    Authorization: `Token ${window.localStorage.getItem('token')}`
+                }
             }));
         });
         let tempNewTeams = [...newTeams];
-        tempNewTeams.forEach((newTeam,index) => tempNewTeams[index] =[]);
-        students.filter(student => student['teamId'].includes('new')).forEach(student =>{
+        tempNewTeams.forEach((newTeam, index) => tempNewTeams[index] = []);
+        students.filter(student => student['teamId'].includes('new')).forEach(student => {
             let regex = /[0-9]+/;
-           let index = student['teamId'].match(regex);
-           // console.log(index);
-           tempNewTeams[index-1].push(student['onyen']);
+            let index = student['teamId'].match(regex);
+            // console.log(index);
+            tempNewTeams[index - 1].push(student['onyen']);
         });
-        tempNewTeams.forEach(team =>{
+        tempNewTeams.forEach(team => {
             axiosPromises.push(axios.post(`http://localhost:5000/teams/add`, {
                 teamName: `Team ${Math.floor(Math.random() * 100)}`,
                 teamMembers: team,
                 semester: 'Spring2020'
+            },{
+                headers: {
+                    Authorization: `Token ${window.localStorage.getItem('token')}`
+                }
             }).then((res) => {
                 team.forEach((onyen, i) => {
                     axios.post(`http://localhost:5000/users/updateTeam/${onyen}`, {
                         teamId: res['data']['id']
+                    },{
+                        headers: {
+                            Authorization: `Token ${window.localStorage.getItem('token')}`
+                        }
                     }).then(() => {
                         // if (i === team.length - 1) {
                         //     alert('Team successfully submitted')
@@ -144,7 +169,7 @@ function AdminTeamSelection(props) {
 
     return (
         <div className={classes.root}>
-            <DashBoard/>
+            <DashBoard updateSemester={(sem) => setSemester(sem)}/>
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
                 <TeamBox id="Pending" className={classes.nameBank} setTeam={setTeam}>
@@ -192,7 +217,8 @@ function AdminTeamSelection(props) {
                         )}
                     </Grid>
 
-                    <Button variant="outlined" style={{'marginBottom': '2em', 'marginTop':'2em'}} onClick={addNewTeam}>Add new
+                    <Button variant="outlined" style={{'marginBottom': '2em', 'marginTop': '2em'}} onClick={addNewTeam}>Add
+                        new
                         Team</Button>
                     <Grid container spacing={3}>
                         {newTeams.map((team, index) =>

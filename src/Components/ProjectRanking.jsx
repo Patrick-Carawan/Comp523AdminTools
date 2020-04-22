@@ -26,7 +26,11 @@ const ProjectRanking = () => {
     const [proposals, setProposals] = useState([]);
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/proposals/`).then((res) => {
+        axios.get(`http://localhost:5000/proposals/`, {
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+        }).then((res) => {
             console.log(res['data']);
             setProposals(res['data'].filter(proposal => proposal['status'].toLowerCase() === "accepted"))
         })
@@ -35,11 +39,15 @@ const ProjectRanking = () => {
     useEffect(() => console.log(proposals), [proposals]);
 
     const submitRanking = function () {
-        // let teamId = window.localStorage.getItem('teamId');
-        let rankings = proposals.map(proposal => proposal['_id'])
-        axios.post(`http://localhost:5000/teams/updateRankings/######put id here`,{
+        let teamId = window.localStorage.getItem('teamId');
+        let rankings = proposals.map(proposal => proposal['_id']);
+        axios.post(`http://localhost:5000/teams/updateRankings/${teamId}`, {
             proposalRanks: rankings
-        })
+        }, {
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+        }).then(()=>alert('Project preferences submitted')).catch(err => alert(err))
     };
 
     const moveCard = (dragIndex, hoverIndex) => {
@@ -56,11 +64,10 @@ const ProjectRanking = () => {
     return (
         <div className={classes.root}>
             <DashBoard/>
-            {console.log(window.innerHeight)}
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
                 <Container maxWidth="lg">
-                    <Button>Submit Rankings</Button>
+                    <Button variant="contained" color="secondary" onClick={submitRanking}>Submit Rankings</Button>
                     {proposals.map((proposal, i) => (
                         <Grid container direction="column" justify="flex-start" alignItems="stretch" key={i}>
                             <Grid item>

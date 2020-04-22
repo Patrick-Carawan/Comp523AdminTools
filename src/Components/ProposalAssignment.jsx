@@ -56,15 +56,20 @@ function ProposalAssignment(props) {
     const classes = useStyles();
     const [teams, setTeams] = useState([]);
     const [titleMap, setTitleMap] = useState(new Map());
+    const [idMap, setIdMap] = useState(new Map());
     const [pairings, setPairings] = useState([]);
     const [showPairings, setShowPairings] = useState(false);
-
+    const [semester, setSemester] = useState('');
     const [selectedProjects, setSelectedProjects] = useState([]);
     const [remainingProjects, setRemainingProjects] = useState([]);
     const [disableButton, setDisableButton] = useState(true);
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/proposals`).then((res) => {
+        axios.get(`http://localhost:5000/proposals`, {
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+        }).then((res) => {
             let acceptedProps = res["data"].filter(
                 (proposal) => proposal["status"] === "Accepted"
             );
@@ -76,9 +81,15 @@ function ProposalAssignment(props) {
                     tempIdMap.set(project["_id"], project);
                 }
             );
+            console.log('tempIdMap', tempIdMap)
             setTitleMap(tempMap);
+            setIdMap(tempIdMap);
         });
-        axios.get(`http://localhost:5000/teams`).then((res) => {
+        axios.get(`http://localhost:5000/teams`, {
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+        }).then((res) => {
             // console.log('teams', res);
             setTeams(res.data);
             const fillArray = new Array(res.data.length);
@@ -129,7 +140,7 @@ function ProposalAssignment(props) {
 
     return (
         <div className={classes.root}>
-            <DashBoard/>
+            <DashBoard updateSemester={(sem) => setSemester(sem)}/>
             <main className={classes.content}>
                 <div className={classes.toolbar}/>
                 <Container maxWidth="md">
@@ -164,7 +175,9 @@ function ProposalAssignment(props) {
                                         </Grid>
                                         {team.proposalRanks.map((t, i) => (
                                             <Grid item key={i}>
-                                                <Typography>{t}</Typography>
+                                                {idMap.get(t) ?
+                                                    <Typography>{i + 1}. {idMap.get(t).title}</Typography>
+                                                    : null}
                                             </Grid>
                                         ))}
                                     </Grid>

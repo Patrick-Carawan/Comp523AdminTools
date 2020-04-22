@@ -31,8 +31,12 @@ const TeamFinalReport = () => {
 
     const submitReport = function () {
         axios.post(`http://localhost:5000/finalReports/teams`, {
-            // team: window.location.get('teamId');
+            team: window.localStorage.getItem('teamId'),
             text: report
+        },{
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
         }).then((res) => {
             alert('Final Report Submitted')
         })
@@ -48,7 +52,7 @@ const TeamFinalReport = () => {
                     <Grid container direction="column" alignItems="center">
                         <Grid item>
                             <Typography variant="h3">
-                                Individual Final Report
+                                Team Final Report
                             </Typography>
                         </Grid>
                         <Grid item>
