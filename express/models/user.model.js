@@ -15,6 +15,7 @@ const userSchema = new Schema({
     semester: { type: String, required: true },   
     admin: { type: Boolean, required: true, default: false },
     teamId: {type: String, default: "Pending"},
+    verified: {type: Boolean, required: true, default: false},
     hash: String,
     salt: String 
 }, {
@@ -65,11 +66,12 @@ userSchema.methods.sendPasswordResetEmail = function() {
         if (err) {
             console.log(err);
         }
+        let messageHtml = `Please click the following link to reset your password for COMP 523:\n <a href="http://localhost:3000/passwordReset/${this.onyen}/${emailToken}">Reset Password</a>`;
         let resetEmail = {
         from: process.env.NOREPLY_EMAIL,
         to: `${this.onyen}${process.env.NOREPLY_RECIPIENT_DOMAIN}`,
         subject: 'Password Reset for COMP 523',
-        html: `Please click the following link to reset your password for COMP 523:\n <a href='www.google.com'>gettheurlfromdaniel.com/${emailToken}</a>`
+        html: messageHtml
         };
         transporter.sendMail(resetEmail, function (error, info) {
             if (error) {
@@ -92,7 +94,6 @@ userSchema.methods.generateVerificationEmail = function() {
           pass: process.env.NOREPLY_PASSWORD
         }
     });
-
     jwt.sign({
         onyen: this.onyen,
         id: this._id,
@@ -102,11 +103,13 @@ userSchema.methods.generateVerificationEmail = function() {
         if (err) {
             console.log(err);
         }
+        let url = `http://localhost:3000/verify/${emailToken}`;
+        let messageHtml = `Please click the following link to verify your account for COMP 523:\n <a href="http://localhost:3000/verify/${this.onyen}/${emailToken}">Verify Account</a>`;
         let verificationEmail = {
         from: process.env.NOREPLY_EMAIL,
         to: `${this.onyen}${process.env.NOREPLY_RECIPIENT_DOMAIN}`,
         subject: 'Verification for COMP 523',
-        html: `Please click the following link to verify your account for COMP 523:\n <a href='www.google.com'>gettheurlfromdaniel.com/${emailToken}</a>`
+        html: messageHtml
         };
         transporter.sendMail(verificationEmail, function (error, info) {
             if (error) {
