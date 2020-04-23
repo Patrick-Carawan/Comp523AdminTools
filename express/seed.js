@@ -277,17 +277,17 @@ connection.once('open', () => {
     
     console.log("Data cleared.");
     
-    Team.collection.insertMany(teams, function(err) {
-        console.error(err);
-    });
-    
-    for (let user of users) {
-        user.setPassword("password");
-    }
-
-    User.collection.insertMany(users, function(err) {
-        console.error(err);
-    });
+    // Team.collection.insertMany(teams, function(err) {
+    //     console.error(err);
+    // });
+    //
+    // for (let user of users) {
+    //     user.setPassword("password");
+    // }
+    //
+    // User.collection.insertMany(users, function(err) {
+    //     console.error(err);
+    // });
 
     Semesters.collection.insertMany(semesters, function(err){
         console.error(err);
@@ -301,13 +301,13 @@ connection.once('open', () => {
         console.error(err);
     });
 
-    StudentReport.collection.insertMany(studentReports, function(err) {
-        console.error(err);
-    });
-
-    TeamReport.collection.insertMany(teamReports, function(err) {
-        console.error(err);
-    });
+    // StudentReport.collection.insertMany(studentReports, function(err) {
+    //     console.error(err);
+    // });
+    //
+    // TeamReport.collection.insertMany(teamReports, function(err) {
+    //     console.error(err);
+    // });
 
     console.log("Seed data added.");
 
