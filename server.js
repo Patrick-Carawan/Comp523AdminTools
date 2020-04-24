@@ -15,6 +15,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.urlencoded({ extended: false })); // May not need this line
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "client", "build")));
 
 // if(!isProduction) {
 //   app.use(errorHandler);
@@ -72,6 +73,10 @@ app.use((err, req, res, next) => {
       error: {},
     },
   });
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
 
 app.listen(port, () => {
