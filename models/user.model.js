@@ -5,6 +5,8 @@ const nodemailer = require('nodemailer');
 
 require('dotenv').config();
 
+const secret = process.env.SECRET || "SkibbedyBop";
+
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
@@ -40,7 +42,7 @@ userSchema.methods.generateJWT = function() {
     return jwt.sign({
         onyen: this.onyen,
         id: this._id
-    }, process.env.SECRET, {
+    }, secret, {
         expiresIn: "7d"
     });
 };
@@ -60,7 +62,7 @@ userSchema.methods.sendPasswordResetEmail = function() {
     jwt.sign({
         onyen: this.onyen,
         id: this._id, 
-    }, process.env.SECRET, {
+    }, secret, {
         expiresIn: "1d"
     }, (err, emailToken) => {
         if (err) {
@@ -97,7 +99,7 @@ userSchema.methods.generateVerificationEmail = function() {
     jwt.sign({
         onyen: this.onyen,
         id: this._id,
-    }, process.env.SECRET, {
+    }, secret, {
         expiresIn: "3d"
     }, (err, emailToken) => {
         if (err) {
