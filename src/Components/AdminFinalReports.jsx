@@ -69,6 +69,7 @@ function AdminFinalReports() {
     const [tabIndex, setTabIndex] = useState(0);
     const [teamToMembersMap, setTeamToMembersMap] = useState(new Map());
     const [teamIdsToNames, setTeamIdsToNames] = useState(new Map());
+    const [teams, setTeams] = useState([]);
     const [onyenMap, setOnyenMap] = useState(new Map());
     const [semester, setSemester] = useState(window.localStorage.getItem('semester'));
 
@@ -95,6 +96,7 @@ function AdminFinalReports() {
                 tempIdToName.set(team['_id'], team['teamName']);
             });
             // console.log(tempMap);
+            setTeams(myTeams);
             setTeamToMembersMap(tempMap);
             setTeamIdsToNames(tempIdToName);
         });
@@ -154,6 +156,7 @@ function AdminFinalReports() {
     const handleChange = (event) => {
         // console.log('will be current team', event.target.value);
         setCurrentTeam(event.target.value);
+        console.log(currentTeam);
     };
 
     const handleTabClick = (event, newValue) => {
@@ -178,17 +181,25 @@ function AdminFinalReports() {
                                     onChange={handleChange}
                                     MenuProps={MenuProps}
                                 >
-                                    {teamReports.map((teamItem, i) => (
-                                        <MenuItem key={i} value={teamItem}>
-                                            {teamIdsToNames.get(teamItem['team'])}
+                                    {/*{teamReports.map((teamItem, i) => (*/}
+                                    {/*    <MenuItem key={i} value={teamItem}>*/}
+                                    {/*        {teamIdsToNames.get(teamItem['team'])}*/}
+                                    {/*    </MenuItem>*/}
+                                    {/*))}*/}
+
+                                    {teams.map((team, i) => (
+                                        <MenuItem key={i} value={team}>
+                                            {team['teamName']}
                                         </MenuItem>
                                     ))}
+
                                 </Select>
                             </FormControl>
                         </Grid>
                     </Grid>
                     {
-                        teamToMembersMap.get(teamIdsToNames.get(currentTeam['team'])) ?
+                        // teamToMembersMap.get(teamIdsToNames.get(currentTeam['team'])) ?
+                        currentTeam.hasOwnProperty('_id') ?
                             <Tabs
                                 value={tabIndex}
                                 onChange={handleTabClick}
@@ -196,12 +207,14 @@ function AdminFinalReports() {
                                 centered
                             >
                                 <Tab label="Team"></Tab>
-                                {
-                                    studentReports.filter(rep => teamToMembersMap.get(teamIdsToNames.get(currentTeam['team'])).includes(rep['onyen'])).map((report, index) =>
-                                        // <Tab label={onyenMap.get(report['onyen'])} key={index}>{onyenMap.get(report['onyen'])}</Tab>
-                                        <Tab label={onyenMap.get(report['onyen'])} key={index}></Tab>
-                                    )
-                                }
+                                {/*{*/}
+                                {/*    studentReports.filter(rep => teamToMembersMap.get(teamIdsToNames.get(currentTeam['team'])).includes(rep['onyen'])).map((report, index) =>*/}
+                                {/*        // <Tab label={onyenMap.get(report['onyen'])} key={index}>{onyenMap.get(report['onyen'])}</Tab>*/}
+                                {/*        <Tab label={onyenMap.get(report['onyen'])} key={index}></Tab>*/}
+                                {/*    )*/}
+                                {/*}*/}
+                                {currentTeam.teamMembers.map((teamMember,i) =>
+                                <Tab label={onyenMap.get(teamMember)} key={i}>{teamMember}</Tab>)}
                             </Tabs>
                             : null
                     }
