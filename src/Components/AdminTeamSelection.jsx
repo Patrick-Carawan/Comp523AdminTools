@@ -42,7 +42,8 @@ function AdminTeamSelection(props) {
     const [newTeams, setNewTeams] = useState([]);
     const [semester, setSemester] = useState(window.localStorage.getItem('semester'));
 
-    useEffect(() => {
+
+    function setSemesterInfo() {
         axios.get(`http://localhost:5000/users/students/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
@@ -59,7 +60,15 @@ function AdminTeamSelection(props) {
             console.log(res['data']);
             setTeams(res['data'].sort((t1, t2) => t1['teamName'] < t2['teamName'] ? -1 : 1))
         })
-    }, []);
+    }
+
+    useEffect(() => {
+        setSemesterInfo();
+    }, [semester]);
+
+    useEffect(()=>{
+
+    }, [semester]);
 
     let groupingArray = [];
     students.forEach(student => groupingArray.push({
