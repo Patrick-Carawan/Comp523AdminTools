@@ -66,6 +66,10 @@ export default function CheckAttendance(props) {
     props.changeAttendance(member, event.target.value);
   };
 
+  useEffect(() => {
+    props.blankTeamMembers();
+  }, [props.semester]);
+
   // Record all attended
   const handleAllAttended = (event) => {
     // setSelectedValue(event.target.value);

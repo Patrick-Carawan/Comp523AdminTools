@@ -86,7 +86,8 @@ export default function MeetingPage() {
     const [comment, setComment] = React.useState("");
     const [weekTodo, setWeekTodo] = React.useState("");
     const [semester, setSemester] = React.useState(window.localStorage.getItem('semester'));
-    useEffect(() => {
+
+    function setSemesterInfo() {
         Axios.get(`http://localhost:5000/teams/semester/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem("token")}`,
@@ -102,7 +103,21 @@ export default function MeetingPage() {
         }).then((res) => {
             console.log("allCoachMeetings", res["data"]);
         });
-    }, []);
+
+        // changeComment('')
+        // setAttendanceMap(new Map());
+        // setWeekTodo('');
+        // setDeliverableStatus('');
+        // setDemoStatus('');
+    }
+
+    useEffect(() => {
+        setSemesterInfo();
+        console.log('semester changed')}, [semester]);
+
+    const blankTeamMembers = () => {
+        setSelectedTeam({});
+    };
 
     const changeAttendance = (member, attendanceValue) => {
         let tempAttendanceMap = new Map(attendanceMap);
@@ -208,6 +223,7 @@ export default function MeetingPage() {
                                 <Calendar/>
                                 <DataSelector
                                     teams={teams}
+                                    semester={semester}
                                     changeSelectedTeam={(team) => {
                                         changeSelectedTeam(team);
                                     }}
@@ -219,6 +235,8 @@ export default function MeetingPage() {
                             <Paper className={fixedHeightPaper}>
                                 <MeetingSelector
                                     team={selectedTeam}
+                                    semester={semester}
+                                    blankTeamMembers = {blankTeamMembers}
                                     changeAttendance={(e, index, member) =>
                                         changeAttendance(e, index, member)
                                     }
@@ -233,6 +251,7 @@ export default function MeetingPage() {
                                     changeDeliverableStatus={(status) =>
                                         changeDeliverableStatus(status)
                                     }
+                                    semester={semester}
                                     changeDemoStatus={(status) => changeDemoStatus(status)}
                                     teams={teams}
                                 />

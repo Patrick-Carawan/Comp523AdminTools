@@ -1,4 +1,4 @@
-import React, {useRef} from "react";
+import React, {useRef, useState} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -33,6 +33,17 @@ export default function MeetingTask(props) {
     const [demoStatus, setDemoStatus] = React.useState("");
     const [deliverableStatus, setDeliverableStatus] = React.useState("");
 
+    useEffect(() => {
+        props.changeComment('');
+        setComment('');
+        props.changeDeliverableStatus('');
+        setDeliverableStatus('');
+        props.changeDeliverableStatus('');
+        setDeliverableStatus('');
+        props.changeDemoStatus('');
+        setDemoStatus('');
+    }, [props.semester]);
+
 
     function debounced(delay, fn) {
         let timerId;
@@ -46,6 +57,7 @@ export default function MeetingTask(props) {
             }, delay);
         }
     }
+
 
 
     const delayedChangeComment = useRef(throttle(comment => props.changeComment(comment), 2000)).current;
@@ -81,7 +93,7 @@ export default function MeetingTask(props) {
                                 row
                                 aria-label="position"
                                 name="position"
-                                defaultValue="top"
+                                value={demoStatus}
                                 onChange={(e) => {
                                     changeDemoStatus(e)
                                 }}
@@ -119,7 +131,7 @@ export default function MeetingTask(props) {
                                 row
                                 aria-label="position"
                                 name="position"
-                                defaultValue="top"
+                                value={deliverableStatus}
                                 onChange={(e) => {
                                     changeDeliverableStatus(e);
                                 }}
@@ -158,7 +170,7 @@ export default function MeetingTask(props) {
                             multiline
                             rows="8"
                             fullWidth
-                            defaultValue=""
+                            value={comment}
                             variant="outlined"
                             onChange={(e) => {
                                 changeComment(e);
@@ -172,7 +184,7 @@ export default function MeetingTask(props) {
                             multiline
                             fullWidth
                             rows="8"
-                            defaultValue=""
+                            value={weeklyTodo}
                             variant="outlined"
                             onChange={(e) => {
                                 changeWeeklyTodo(e);
