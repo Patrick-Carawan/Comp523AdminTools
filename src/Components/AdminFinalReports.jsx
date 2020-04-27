@@ -69,6 +69,8 @@ function AdminFinalReports() {
     const [tabIndex, setTabIndex] = useState(0);
     const [teamToMembersMap, setTeamToMembersMap] = useState(new Map());
     const [teamIdsToNames, setTeamIdsToNames] = useState(new Map());
+    const [teamIdToReport, setTeamIdToReport] = useState(new Map());
+    const [onyenToReport, setOnyenToReport] = useState(new Map());
     const [teams, setTeams] = useState([]);
     const [onyenMap, setOnyenMap] = useState(new Map());
     const [semester, setSemester] = useState(window.localStorage.getItem('semester'));
@@ -80,7 +82,7 @@ function AdminFinalReports() {
     // }, [currentTeam]);
 
     const setAllSemesterInfo = () => {
-        console.log(onyenMap)
+        console.log(onyenMap);
         setCurrentTeam({});
         axios.get(`http://localhost:5000/teams/semester/${semester}`, {
             headers: {
@@ -108,6 +110,9 @@ function AdminFinalReports() {
         }).then((res) => {
             console.log('student reports', res['data']);
             setStudentReports(res['data'].sort((team1, team2) => team1['team'] < team2['team'] ? -1 : 1));
+            let tempReportMap = new Map();
+            res['data'].forEach(report => tempReportMap.set(report.onyen, report.text));
+            setOnyenToReport(tempReportMap);
         });
 
         axios.get(`http://localhost:5000/finalReports/teams/${semester}`, {
@@ -117,6 +122,10 @@ function AdminFinalReports() {
         }).then((res) => {
             console.log('team reports', res['data']);
             setTeamReports(res['data'].sort((team1, team2) => team1['team'] < team2['team'] ? -1 : 1));
+            let tempMap = new Map();
+            res['data'].forEach(report => tempMap.set(report['team'],report['text']));
+            setTeamIdToReport(tempMap);
+
         });
         axios.get(`http://localhost:5000/roster/${semester}`, {
             headers: {
@@ -220,16 +229,16 @@ function AdminFinalReports() {
                     }
                     <TabPanel value={tabIndex} index={0}>
                         <Typography>
-                            {currentTeam['text']}
+                            {teamIdToReport.get(currentTeam['_id']) ? teamIdToReport.get(currentTeam['_id']) : `No Submission for ${currentTeam['teamName']} Yet`}
                         </Typography>
                     </TabPanel>
                     {
-                        teamToMembersMap.get(teamIdsToNames.get(currentTeam['team'])) ?
-                            studentReports.filter(report => teamToMembersMap.get(teamIdsToNames.get(currentTeam['team'])).includes(report['onyen'])).map((rep, i) =>
-                            // studentReports.map((rep, i) =>
+                        currentTeam['teamName'] ?
+                            // studentReports.filter(report => teamToMembersMap.get(currentTeam['teamName']).includes(report['onyen'])).map((rep, i) =>
+                            currentTeam['teamMembers'].map((onyen, i) =>
                                 <TabPanel key={i} value={tabIndex} index={i+1}>
                                     <Typography>
-                                        {rep['text']}
+                                        {onyenToReport.get(onyen) ? onyenToReport.get(onyen) : `No Submission  for ${onyenMap.get(onyen)} Yet`}
                                     </Typography>
                                 </TabPanel>
                             )
