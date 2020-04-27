@@ -48,17 +48,25 @@ function Roster() {
     const classes = useStyles();
     const [roster, setRoster] = useState([]);
     const [semester, setSemester] = useState(window.localStorage.getItem('semester'));
-    useEffect(() => {
+
+    function setAllSemesterInfo() {
         axios.get(`http://localhost:5000/roster/${semester}`,{
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
         }).then((res) => {
             if (res.data[0]) {
+                console.log(res.data)
                 setRoster(res.data[0].studentList);
+            } else{
+                setRoster([]);
             }
-        });
-    }, []);
+        }).catch(err => console.log(err));
+    }
+
+    useEffect(() => {
+      setAllSemesterInfo();
+    }, [semester]);
 
     const readfile = (data) => {
         setRoster(data)
