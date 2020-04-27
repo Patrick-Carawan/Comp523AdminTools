@@ -7,28 +7,33 @@ var User = require('../models/user.model');
 require('dotenv').config();
 
 // Get all users
-router.get('/', auth.required, (req, res, next) => {
+router.get('/', auth.user, (req, res, next) => {
     User.find()
         .then(users => res.json(users))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
 // Get a user by their onyen
-router.get('/:onyen', auth.required, (req, res, next) => {
+router.get('/:onyen', auth.user, (req, res, next) => {
     User.find({onyen: req.params.onyen})
         .then(user => res.json(user))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
 // Get all students for a given semester
-router.get('/students/:semester', auth.required, (req, res, next) => {
+router.get('/students/:semester', auth.user, (req, res, next) => {
     User.find({"semester": req.params.semester})
         .then(users => res.json(users))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
-//Update team for a given student
-router.post('/updateTeam/:onyen', auth.required, (req, res, next) => {
+// Update team for a given student (Students can only assign their own team, and they can only do it once)
+router.post('/updateTeam/', auth.user, (req, res, next) => {
+    
+});
+
+//Update team for a given student (Admins can do this as many times as needed)
+router.post('/updateTeam/:onyen', auth.admin, (req, res, next) => {
     User.findOne({onyen: req.params.onyen})
         .then(student => {
             student.teamId = req.body.teamId;
@@ -163,7 +168,7 @@ router.post('/emailPasswordReset', auth.optional, (req, res, next) => {
 });
 
 // Reset password route
-router.post('/reset', auth.required, (req, res, next) => {
+router.post('/reset', auth.user, (req, res, next) => {
     User.findOne({onyen: req.body.onyen})
         .then(user => {
             // console.log(req.body.user.password);
@@ -182,17 +187,17 @@ router.post('/reset', auth.required, (req, res, next) => {
 });
 
 // GET current route (required, only authenticated users have access)
-router.get('/current', auth.required, (req, res, next) => {
-    const {payload: {id}} = req;
+// router.get('/current', auth.required, (req, res, next) => {
+//     const {payload: {id}} = req;
 
-    return User.findById(id)
-        .then((user) => {
-            if (!user) {
-                return res.sendStatus(400);
-            }
+//     return User.findById(id)
+//         .then((user) => {
+//             if (!user) {
+//                 return res.sendStatus(400);
+//             }
 
-            return res.json({user: user.toAuthJSON()});
-        });
-});
+//             return res.json({user: user.toAuthJSON()});
+//         });
+// });
 
 module.exports = router;

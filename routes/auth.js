@@ -11,7 +11,13 @@ const getTokenFromHeaders = (req) => {
 };
 
 const auth = {
-    required: jwt({
+    admin: jwt({
+        secret: process.env.SECRET,
+        userProperty: 'payload',
+        getToken: getTokenFromHeaders,
+        admin: true
+    }),
+    user: jwt({
         secret: process.env.SECRET,
         userProperty: 'payload',
         getToken: getTokenFromHeaders,
