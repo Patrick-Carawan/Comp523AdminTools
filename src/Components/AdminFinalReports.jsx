@@ -8,6 +8,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
 import {Input} from "@material-ui/icons";
 import MenuItem from "@material-ui/core/MenuItem";
+import PropTypes from 'prop-types';
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Tabs from "@material-ui/core/Tabs";
@@ -25,13 +26,25 @@ function TabPanel(props) {
             component="div"
             role="tabpanel"
             hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
+            id={`scrollable-auto-tabpanel-${index}`}
+            aria-labelledby={`scrollable-auto-tab-${index}`}
             {...other}
         >
             {value === index && <Box p={3}>{children}</Box>}
         </Typography>
     );
+}
+TabPanel.propTypes = {
+    children: PropTypes.node,
+    index: PropTypes.any.isRequired,
+    value: PropTypes.any.isRequired,
+};
+
+function tabProps(index) {
+    return {
+        id: `scrollable-auto-tab-${index}`,
+        'aria-controls': `scrollable-auto-tabpanel-${index}`,
+    };
 }
 
 const useStyles = makeStyles(theme => ({
@@ -172,12 +185,13 @@ function AdminFinalReports() {
                             <Tabs
                                 value={tabIndex}
                                 onChange={handleTabClick}
-                                aria-label="simple tabs example"
-                                centered
+                                aria-label="scrollable auto tabs example"
+                                variant="scrollable"
+                                scrollButtons="auto"
                             >
-                                <Tab label="Team"></Tab>
+                                <Tab label="Team" {...tabProps(0)}></Tab>
                                 {currentTeam.teamMembers.map((teamMember, i) =>
-                                    <Tab label={onyenMap.get(teamMember)} key={i}>{teamMember}</Tab>)}
+                                    <Tab label={onyenMap.get(teamMember)} key={i} {...tabProps(i+1)} >{teamMember}</Tab>)}
                             </Tabs>
                             : null
                     }
