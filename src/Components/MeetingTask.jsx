@@ -35,6 +35,8 @@ export default function MeetingTask(props) {
     useEffect(() => {
         props.changeComment('');
         setComment('');
+        props.changeWeeklyTodo('');
+        setWeeklyTodo('');
         props.changeDeliverableStatus('');
         setDeliverableStatus('');
         props.changeDeliverableStatus('');
@@ -44,8 +46,13 @@ export default function MeetingTask(props) {
     }, [props.semester]);
 
     useEffect(()=>{
-
-    },[props.team]);
+        if(!comment || props.comment === ''){
+            setComment(props.comment);
+        }
+        if(!weeklyTodo || props.weekTodo === ''){
+            setWeeklyTodo(props.weekTodo);
+        }
+    },[props.weekTodo, props.comment]);
 
   function debounced(delay, fn) {
     let timerId;

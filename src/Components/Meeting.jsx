@@ -134,7 +134,7 @@ export default function MeetingPage() {
                     }
                 }
             ).then((res) => {
-                // console.log("SpecificCoachMeetings", res["data"]);
+                console.log("SpecificCoachMeetings", res["data"]);
                 if (res['data'].length !== 0) {
                     setAttendanceObj(res['data'][0]["attendance"]);
                     setDemoStatus(res["data"][0]["demoStatus"]);
@@ -170,7 +170,7 @@ export default function MeetingPage() {
                     }
                 }
             ).then((res) => {
-                // console.log("SpecificCoachMeetings", res["data"]);
+                console.log("SpecificCoachMeetings", res["data"]);
                 // changeDemoStatus(res["data"]["demoStatus"]);
                 if (res["data"].length !== 0) {
                     setAttendanceObj(res["data"][0]["attendance"]);
