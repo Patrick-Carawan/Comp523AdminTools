@@ -139,7 +139,7 @@ export default function AdminDashboard(props) {
     const [semester, setSemester] = useState('');
     const [allSemesters, setAllSemesters] = useState([]);
 
-    useEffect(()=>{console.log('semester',semester)},[semester])
+    // useEffect(()=>{console.log('semester',semester)},[semester])
 
     useEffect(() => {
         axios.get(`http://localhost:5000/semesters/current`,{
@@ -147,7 +147,7 @@ export default function AdminDashboard(props) {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
         }).then(res =>{
-            console.log('current semester',res['data']);
+            // console.log('current semester',res['data']);
             setSemester(res['data']);
             window.localStorage.setItem('semester', res['data']);
         })
@@ -183,7 +183,7 @@ export default function AdminDashboard(props) {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
         }).then(res => {
-            console.log(res['data'][0]);
+            // console.log(res['data'][0]);
             if(res['data'].length === 0){
                 alert('Please upload a list of semesters in Mongo. \n Ex. \'Spring2020\',\'Fall2021\'')
             } else {

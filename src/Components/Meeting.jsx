@@ -100,7 +100,7 @@ export default function MeetingPage() {
                 Authorization: `Token ${window.localStorage.getItem("token")}`,
             },
         }).then((res) => {
-            console.log("teams", res);
+            // console.log("teams", res);
             setTeams(res["data"]);
         });
         Axios.get(`http://localhost:5000/coachMeetings/${semester}`, {
@@ -108,12 +108,12 @@ export default function MeetingPage() {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
         }).then((res) => {
-            console.log("allCoachMeetings", res["data"]);
+            // console.log("allCoachMeetings", res["data"]);
         });
     }
 
   useEffect(() => {
-    console.log("Attendance Status: ", attendanceObj);
+    // console.log("Attendance Status: ", attendanceObj);
   }, [attendanceObj]);
 
   const changeAttendance = (member, attendanceValue) => {
@@ -134,7 +134,7 @@ export default function MeetingPage() {
                     }
                 }
             ).then((res) => {
-                console.log("SpecificCoachMeetings", res["data"]);
+                // console.log("SpecificCoachMeetings", res["data"]);
                 if (res['data'].length !== 0) {
                     setAttendanceObj(res['data'][0]["attendance"]);
                     setDemoStatus(res["data"][0]["demoStatus"]);
@@ -158,7 +158,7 @@ export default function MeetingPage() {
   // Use to update the info in demo&comment section
   const updateInfo = (info) => {
     // changeDemoStatus(info.demoStatus);
-    console.log("demo status: " + info.demoStatus);
+    // console.log("demo status: " + info.demoStatus);
   };
 
     const changeWeek = (week) => {
@@ -170,7 +170,7 @@ export default function MeetingPage() {
                     }
                 }
             ).then((res) => {
-                console.log("SpecificCoachMeetings", res["data"]);
+                // console.log("SpecificCoachMeetings", res["data"]);
                 // changeDemoStatus(res["data"]["demoStatus"]);
                 if (res["data"].length !== 0) {
                     setAttendanceObj(res["data"][0]["attendance"]);
@@ -220,7 +220,7 @@ export default function MeetingPage() {
         // console.log('weekly todo', weekTodo);
         let semester = window.localStorage.getItem("semester");
         let teamId = selectedTeam["_id"];
-        console.log("team", teamId);
+        // console.log("team", teamId);
 
 
     Axios.post(
@@ -265,6 +265,7 @@ export default function MeetingPage() {
                                 <MeetingSelector
                                     team={selectedTeam}
                                     semester={semester}
+                                    week={week}
                                     blankTeamMembers={blankTeamMembers}
                                     attendance={attendanceObj}
                                     changeAttendance={(e, index, member) =>

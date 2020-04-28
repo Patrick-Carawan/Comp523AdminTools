@@ -27,8 +27,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function MeetingTask(props) {
   const classes = useStyles();
-  const [comment, setComment] = React.useState("");
-  const [weeklyTodo, setWeeklyTodo] = React.useState("");
+  const [comment, setComment] = React.useState(props.comment);
+  const [weeklyTodo, setWeeklyTodo] = React.useState(props.weekTodo);
   const [demoStatus, setDemoStatus] = React.useState(props.demoStatus);
   const [deliverableStatus, setDeliverableStatus] = React.useState("");
 
@@ -42,6 +42,10 @@ export default function MeetingTask(props) {
         props.changeDemoStatus('');
         setDemoStatus('');
     }, [props.semester]);
+
+    useEffect(()=>{
+
+    },[props.team]);
 
   function debounced(delay, fn) {
     let timerId;
@@ -60,6 +64,7 @@ export default function MeetingTask(props) {
 
     const delayedChangeComment = useRef(throttle(comment => props.changeComment(comment), 2000)).current;
     const delayedChangeWeeklyTodo = useRef(throttle(todo => props.changeWeeklyTodo(todo), 2000)).current;
+
     const changeComment = (event) => {
         setComment(event.target.value);
         delayedChangeComment(event.target.value);
@@ -171,7 +176,7 @@ export default function MeetingTask(props) {
                             rows="8"
                             fullWidth
                             //check if this needs to comment or props.comment
-                            value={props.comment}
+                            value={comment}
                             variant="outlined"
                             onChange={(e) => {
                                 changeComment(e);
@@ -186,7 +191,7 @@ export default function MeetingTask(props) {
                             fullWidth
                             rows="8"
                             //check if this should be props.weekTodo or just weeklyTodo
-                            value={props.weekTodo}
+                            value={weeklyTodo}
                             variant="outlined"
                             onChange={(e) => {
                                 changeWeeklyTodo(e);
