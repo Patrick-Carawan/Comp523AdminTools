@@ -189,10 +189,10 @@ connection.once('open', () => {
 
     const users = [adminUser, user1, user2, user3, user4, user5, user6];
     const proposals = [prop1, prop2, prop3, prop4];
-    const teams = [team1, team2];
+    // const teams = [team1, team2];
     const letters = [pendingLetter, acceptedLetter, rejectedLetter];
-    const studentReports = [studentReport1, studentReport2];
-    const teamReports = [teamReport1, teamReport2];
+    // const studentReports = [studentReport1, studentReport2];
+    // const teamReports = [teamReport1, teamReport2];
     const semesters=[semester];
 
     Team.collection.deleteMany({}, function(err, result) {
@@ -270,9 +270,9 @@ connection.once('open', () => {
     
     console.log("Data cleared.");
 
-    Team.collection.insertMany(teams, function(err) {
-        console.error(err);
-    });
+    // Team.collection.insertMany(teams, function(err) {
+    //     console.error(err);
+    // });
 
     for (let user of users) {
         user.setPassword("password");
@@ -294,13 +294,13 @@ connection.once('open', () => {
         console.error(err);
     });
 
-    StudentReport.collection.insertMany(studentReports, function(err) {
-        console.error(err);
-    });
-
-    TeamReport.collection.insertMany(teamReports, function(err) {
-        console.error(err);
-    });
+    // StudentReport.collection.insertMany(studentReports, function(err) {
+    //     console.error(err);
+    // });
+    //
+    // TeamReport.collection.insertMany(teamReports, function(err) {
+    //     console.error(err);
+    // });
 
     console.log("Seed data added.");
 
