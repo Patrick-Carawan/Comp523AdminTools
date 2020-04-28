@@ -34,6 +34,7 @@ connection.once('open', () => {
         email: "stotts@cs.unc.edu",
         semester: "Spring2020",
         teamId: "ADMIN",
+        verified: true,
         admin: true
     });
 
@@ -43,6 +44,7 @@ connection.once('open', () => {
         lastName: "Carawan",
         phone: "919-441-6244",
         email: "pat1@live.unc.edu",
+        verified: true,
         semester: "Spring2020"
     });
     
@@ -52,6 +54,7 @@ connection.once('open', () => {
         lastName: "Weber",
         phone: "336-831-6140",
         email: "dan97w@live.unc.edu",
+        verified: false,
         semester: "Spring2020"
     });
     
@@ -61,6 +64,7 @@ connection.once('open', () => {
         lastName: "Wu",
         phone: "984-215-8529",
         email: "zionwu@live.unc.edu",
+        verified: true,
         semester: "Spring2020"
     });
     
@@ -70,6 +74,7 @@ connection.once('open', () => {
         lastName: "Close",
         phone: "919-606-0281",
         email: "amclose@live.unc.edu",
+        verified: true,
         semester: "Spring2020"
     });
     const user5 = new User({
@@ -78,6 +83,7 @@ connection.once('open', () => {
         lastName: "Doe",
         phone: "123-456-7890",
         email: "jdoe@live.unc.edu",
+        verified: true,
         semester: "Spring2020"
     });
     const user6 = new User({
@@ -86,6 +92,7 @@ connection.once('open', () => {
         lastName: "Smith",
         phone: "098-765-4321",
         email: "tsmith@live.unc.edu",
+        verified: true,
         semester: "Spring2020"
     });
     
@@ -203,14 +210,6 @@ connection.once('open', () => {
         }
     });
 
-    User.collection.deleteMany({}, function(err, result) {
-        if (err) {
-            return console.error(err);
-        } else {
-            console.log(result);
-        }
-    });
-
     CoachMeeting.collection.deleteMany({}, function(err, result) {
         if (err) {
             return console.error(err);
@@ -235,7 +234,7 @@ connection.once('open', () => {
             console.log(result);
         }
     });
-
+    
     Proposal.collection.deleteMany({}, function(err, result) {
         if (err) {
             console.error(err);
@@ -253,6 +252,14 @@ connection.once('open', () => {
     });
 
     StudentReport.collection.deleteMany({}, function (err, result) {
+        if (err) {
+            console.error(err);
+        } else {
+            console.log(result);
+        }
+    });
+
+    User.collection.deleteMany({}, function (err, result) {
         if (err) {
             console.error(err);
         } else {

@@ -24,7 +24,7 @@ app.use(express.json());
 // Configure and connect to mongoose
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true });
-mongoose.set('debug', true);
+//mongoose.set('debug', true);
 
 const connection = mongoose.connection;
 connection.once('open', () => {
