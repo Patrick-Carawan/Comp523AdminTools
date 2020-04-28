@@ -85,7 +85,7 @@ export default function MeetingPage() {
     const [deliverableStatus, setDeliverableStatus] = React.useState("");
     const [comment, setComment] = React.useState("");
     const [weekTodo, setWeekTodo] = React.useState("");
-    const [semester, setSemester] = React.useState('');
+    const [semester, setSemester] = React.useState(window.localStorage.getItem('semester'));
     useEffect(() => {
       setSemesterInfo()
     }, [semester]);
