@@ -9,6 +9,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {Link, useHistory} from "react-router-dom";
 import axios from 'axios';
+import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -31,8 +32,10 @@ const useStyles = makeStyles(theme => ({
     },
     link: {
         margin: 'auto',
-        color: 'primary',
         textDecoration: 'none'
+    },
+    resetLink: {
+        cursor: 'pointer',
     }
 }));
 
@@ -40,6 +43,7 @@ export default function Login(props) {
     let history = useHistory();
     window.localStorage.setItem("adminUser", "false");
     window.localStorage.setItem("studentUser", "false");
+    console.log(window.localStorage.getItem('token'));
 
     const [onyen, setOnyen] = useState('');
     const [password, setPassword] = useState('');
@@ -75,6 +79,15 @@ export default function Login(props) {
     }
 
 
+    function sendPasswordResetEmail() {
+        if (onyen === '') {
+            alert('Please fill in your onyen');
+        }
+        axios.post(`http://localhost:5000/users/emailPasswordReset`, {
+            onyen: onyen
+        }).then(() => alert('Please check your school email to finish resetting your password.')).catch(err => alert('err'));
+    }
+
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline/>
@@ -92,7 +105,7 @@ export default function Login(props) {
                         required
                         fullWidth
                         id="onyen"
-                        label="Onyen"
+                        label="Onyen (not email)"
                         name="onyen"
                         autoFocus
                         onChange={(e) => setOnyen(e.target.value)}
@@ -109,17 +122,31 @@ export default function Login(props) {
                         autoComplete="current-password"
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                    >
-                        Sign In
-                    </Button>
+                    <Grid container
+                          direction="row"
+                          justify="space-around"
+                          alignItems="center">
+                        <Grid item>
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                className={classes.submit}
+                            >
+                                Sign In
+                            </Button>
+                        </Grid>
+                        <Grid item>
+                            <Link to="/createAccount" className={classes.link}><Typography color="primary">Create
+                                Account</Typography></Link>
+                        </Grid>
+                        <Grid item>
+                            <Typography className={classes.resetLink} onClick={sendPasswordResetEmail} color="secondary">Reset
+                                Password</Typography>
+                        </Grid>
+                    </Grid>
                 </form>
-                <Link to="/createAccount" className={classes.link}>Create Account</Link>
             </div>
         </Container>
     );

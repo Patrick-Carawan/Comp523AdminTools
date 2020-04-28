@@ -74,7 +74,13 @@ export default function CreateAccount() {
                 }
             }).then(res => {
                 console.log(res);
-                history.push("/login");
+                alert('Account Created. Please check your school email to verify account and log in.')
+                setOnyen('');
+                setFirstName('');
+                setLastName('');
+                setPassword('');
+                setConfirmPassword('');
+                setAdminToken('');
             }).catch(err => {
                 if (err.response.status === 406) {
                     alert(err.response.data)
@@ -104,6 +110,7 @@ export default function CreateAccount() {
                                 margin="normal"
                                 required
                                 fullWidth
+                                value={firstName}
                                 label="First Name"
                                 onChange={(e) => setFirstName(e.target.value)}
                             />
@@ -115,6 +122,7 @@ export default function CreateAccount() {
                                 variant="outlined"
                                 margin="normal"
                                 required
+                                value={lastName}
                                 fullWidth
                                 label="Last Name"
                                 onChange={(e) => setLastName(e.target.value)}
@@ -127,6 +135,7 @@ export default function CreateAccount() {
                         margin="normal"
                         required
                         fullWidth
+                        value={onyen}
                         label="Onyen"
                         onChange={(e) => setOnyen(e.target.value)}
                     />
@@ -135,6 +144,7 @@ export default function CreateAccount() {
                         margin="normal"
                         required
                         fullWidth
+                        value={password}
                         name="password"
                         label="Password"
                         type="password"
@@ -145,6 +155,7 @@ export default function CreateAccount() {
                         variant="outlined"
                         margin="normal"
                         required
+                        value={confirmPassword}
                         fullWidth
                         name="password"
                         label="Confirm Password"
@@ -157,6 +168,7 @@ export default function CreateAccount() {
                         margin="normal"
                         fullWidth
                         name="password"
+                        value={adminToken}
                         label="Admin Key"
                         type="password"
                         onChange={(e) => setAdminToken(e.target.value)}

@@ -26,6 +26,8 @@ import Roster from "./Components/Roster";
 import StudentDashboard from "./Components/StudentDashboard";
 import StudentFinalReport from "./Components/StudentFinalReport";
 import TeamFinalReport from "./Components/TeamFinalReport";
+import Verify from "./Components/Verify";
+import PasswordReset from "./Components/PasswordReset";
 
 const theme = createMuiTheme({
     palette: {
@@ -43,6 +45,8 @@ function App() {
                 <BrowserRouter>
                     <Switch>
                         <Route path="/" component={Home} exact={true}/>
+                        <Route path="/verify/" component={Verify} exact={false}/>
+                        <Route path="/passwordReset" component={PasswordReset} exact={false}/>
                         <Route path="/clientForm" component={ClientForm} exact={true}/>
                         <Route path="/login" component={Login} exact={true}/>
                         <Route

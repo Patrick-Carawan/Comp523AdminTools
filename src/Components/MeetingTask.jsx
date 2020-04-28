@@ -1,4 +1,4 @@
-import React, {useRef, useState} from "react";
+import React, {useRef, useState, useEffect} from "react";
 import {makeStyles} from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -7,31 +7,30 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Title from "./Title";
 import FormControl from "@material-ui/core/FormControl";
-import {Typography} from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
-import {useEffect} from "react";
 import Axios from "axios";
-import {debounce, throttle} from 'lodash';
+import { debounce, throttle } from "lodash";
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        "& .MuiTextField-root": {
-            margin: theme.spacing(1),
-            width: "25ch",
-        },
-        "& > *": {
-            margin: theme.spacing(1),
-        },
+  root: {
+    "& .MuiTextField-root": {
+      margin: theme.spacing(1),
+      width: "25ch",
     },
+    "& > *": {
+      margin: theme.spacing(1),
+    },
+  },
 }));
 
 export default function MeetingTask(props) {
-    const classes = useStyles();
-    const [comment, setComment] = React.useState("");
-    const [weeklyTodo, setWeeklyTodo] = React.useState("");
-    const [demoStatus, setDemoStatus] = React.useState("");
-    const [deliverableStatus, setDeliverableStatus] = React.useState("");
+  const classes = useStyles();
+  const [comment, setComment] = React.useState("");
+  const [weeklyTodo, setWeeklyTodo] = React.useState("");
+  const [demoStatus, setDemoStatus] = React.useState(props.demoStatus);
+  const [deliverableStatus, setDeliverableStatus] = React.useState("");
 
     useEffect(() => {
         props.changeComment('');
@@ -44,19 +43,18 @@ export default function MeetingTask(props) {
         setDemoStatus('');
     }, [props.semester]);
 
-
-    function debounced(delay, fn) {
-        let timerId;
-        return function (...args) {
-            if (timerId) {
-                clearTimeout(timerId);
-            }
-            timerId = setTimeout(() => {
-                fn(...args);
-                timerId = null;
-            }, delay);
-        }
-    }
+  function debounced(delay, fn) {
+    let timerId;
+    return function (...args) {
+      if (timerId) {
+        clearTimeout(timerId);
+      }
+      timerId = setTimeout(() => {
+        fn(...args);
+        timerId = null;
+      }, delay);
+    };
+  }
 
 
 
@@ -67,20 +65,20 @@ export default function MeetingTask(props) {
         delayedChangeComment(event.target.value);
     };
 
-    const changeWeeklyTodo = (event) => {
-        setWeeklyTodo(event.target.value);
-        delayedChangeWeeklyTodo(event.target.value);
-    };
+  const changeWeeklyTodo = (event) => {
+    setWeeklyTodo(event.target.value);
+    delayedChangeWeeklyTodo(event.target.value);
+  };
 
-    const changeDeliverableStatus = (event) => {
-        setDeliverableStatus(event.target.value);
-        props.changeDeliverableStatus(event.target.value);
-    };
+  const changeDeliverableStatus = (event) => {
+    setDeliverableStatus(event.target.value);
+    props.changeDeliverableStatus(event.target.value);
+  };
 
-    const changeDemoStatus = (event) => {
-        setDemoStatus(event.target.value);
-        props.changeDemoStatus(event.target.value);
-    };
+  const changeDemoStatus = (event) => {
+    setDemoStatus(event.target.value);
+    props.changeDemoStatus(event.target.value);
+  };
 
     return (
         <div>
@@ -93,7 +91,8 @@ export default function MeetingTask(props) {
                                 row
                                 aria-label="position"
                                 name="position"
-                                value={demoStatus}
+                                //check if this should be props.demostatus or just demoStatus
+                                value={props.demoStatus}
                                 onChange={(e) => {
                                     changeDemoStatus(e)
                                 }}
@@ -131,7 +130,8 @@ export default function MeetingTask(props) {
                                 row
                                 aria-label="position"
                                 name="position"
-                                value={deliverableStatus}
+                                //check if this should be props. or just deliverable status
+                                value={props.deliverableStatus}
                                 onChange={(e) => {
                                     changeDeliverableStatus(e);
                                 }}
@@ -170,7 +170,8 @@ export default function MeetingTask(props) {
                             multiline
                             rows="8"
                             fullWidth
-                            value={comment}
+                            //check if this needs to comment or props.comment
+                            value={props.comment}
                             variant="outlined"
                             onChange={(e) => {
                                 changeComment(e);
@@ -184,7 +185,8 @@ export default function MeetingTask(props) {
                             multiline
                             fullWidth
                             rows="8"
-                            value={weeklyTodo}
+                            //check if this should be props.weekTodo or just weeklyTodo
+                            value={props.weekTodo}
                             variant="outlined"
                             onChange={(e) => {
                                 changeWeeklyTodo(e);
