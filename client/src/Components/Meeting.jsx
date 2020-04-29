@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import clsx from "clsx";
 import {makeStyles} from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
@@ -6,6 +6,7 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Card from "./FunctionalCard/Card";
+import MaterialCard from "@material-ui/core/Card";
 import {Link} from "react-router-dom";
 import DashBoard from "./AdminDashboard";
 import MeetingSelector from "./MeetingSelector";
@@ -86,6 +87,12 @@ export default function MeetingPage() {
     const [weekTodo, setWeekTodo] = React.useState("");
     const [semester, setSemester] = React.useState(window.localStorage.getItem('semester'));
     const [showSummary, setShowSummary] = React.useState(false);
+
+    //states for the ytd summary
+    const[timesDemoFine, setTimesDemoFine] = useState(0);
+    const[timesDemoBad, setTimesDemoBad] = useState(0);
+    const[timesNoDemo, setTimesNoDemo] = useState(0);
+    const[timesDemoNA, setTimesDemoNA] = useState(0);
 
     const pageEndRef = useRef(null);
 
@@ -190,7 +197,7 @@ export default function MeetingPage() {
                 }
             });
         }
-        console.log(week)
+        console.log(week);
         setWeek(week);
     };
 
@@ -247,6 +254,7 @@ export default function MeetingPage() {
             ).then(() => alert("meeting submitted"));
     }
 
+
     useEffect(() => {
         if (showSummary) {
             pageEndRef.current.scrollIntoView({behavior: 'smooth'});
@@ -254,12 +262,15 @@ export default function MeetingPage() {
     }, [showSummary]);
 
     function generateSummary() {
+        if(showSummary === false || week === -1 || !week || !selectedTeam || !selectedTeam.hasOwnProperty('teamMembers')){
+            return null
+        }
         Axios.get(`http://localhost:5000/coachMeetings/${semester}/${selectedTeam["_id"]}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem("token")}`,
             },
         }).then(res => {
-            setShowSummary(true)
+            setShowSummary(true);
             console.log(res['data']);
             let numDemoFine = 0;
             let numDemoBad = 0;
@@ -305,16 +316,14 @@ export default function MeetingPage() {
                 for (let key in report['attendance']) {
 
                 }
-                return (<div>
-                    <p>Count demo fine: {numDemoFine}</p>
-                    <p>Count demo bad: {numDemoBad}</p>
-                    <p>Count demo N/A: {numDemoNA}</p>
-                    <p>Count demo expected but not shown: {numNoDemo}</p>
-                </div>)
 
             })
+            setTimesDemoFine(numDemoFine);
+            setTimesDemoBad(numDemoBad);
+            setTimesDemoNA(numDemoNA);
+            setTimesNoDemo(numNoDemo);
         }).catch(err => {
-            return <p>Nothing to report</p>
+            alert(err)
         });
 
 
@@ -379,7 +388,7 @@ export default function MeetingPage() {
                         <Grid container direction="row">
                             <Grid item>
                                 <Button
-                                    onClick={submitCoachMeeting}
+                                    onClick={generateSummary}
                                     variant="contained"
                                     color="primary"
                                     style={{'marginBottom': '2em'}}
@@ -389,7 +398,7 @@ export default function MeetingPage() {
                             </Grid>
                             <Grid item>
                                 <Button
-                                    onClick={generateSummary}
+                                    onClick={()=>setShowSummary(true)}
                                     variant="contained"
                                     color="primary"
                                     style={{'marginBottom': '2em', 'marginLeft': '2em', 'width': 'fitContent'}}
@@ -401,7 +410,18 @@ export default function MeetingPage() {
                     </Grid>
                     {
                         showSummary ?
-                            <p>Test output</p> : null
+                            <MaterialCard variant="outlined" style={{'padding':'5px', 'marginBottom':'10px'}}>
+                                <Typography>Tally of meeting info to date</Typography>
+                                <Typography>Times demo was fine: {timesDemoFine}</Typography>
+                                <Typography>Times demo was bad: {timesDemoBad}</Typography>
+                                <Typography>Times demo wasn't delivered: {timesNoDemo}</Typography>
+                                <Typography>Times demo was N/A: {timesDemoNA}</Typography>
+                                <Typography>Times deliverable was finished:</Typography>
+                                <Typography>Times deliverable was unfinished/not submitted:</Typography>
+                                <Typography>Times deliverable was excused:</Typography>
+                                <Typography>Times deliverable was N/A:</Typography>
+                                <Typography>Times</Typography>
+                            </MaterialCard> : null
                     }
                     <div ref={pageEndRef}/>
                 </Container>
