@@ -9,7 +9,6 @@ import DashBoard from "./Components/AdminDashboard";
 import StudentSetupPage from "./Components/StudentSetupPage";
 import TeammateSelectionRules from "./Components/TeammateSelectionRules";
 import StudentTeamSelection from "./Components/StudentTeamSelection";
-import TeamPreferences from "./Components/TeamPreferences";
 import RankContainer from "./Components/RankContainer";
 import AdminTeamSelection from "./Components/AdminTeamSelection";
 import {createMuiTheme} from "@material-ui/core/styles";
@@ -117,11 +116,6 @@ function App() {
                         <AdminProtectedRoute
                             path="/teammateSelectionRules"
                             component={TeammateSelectionRules}
-                            exact={true}
-                        />
-                        <AdminProtectedRoute
-                            path="/teamPreferences"
-                            component={TeamPreferences}
                             exact={true}
                         />
                         <AdminProtectedRoute

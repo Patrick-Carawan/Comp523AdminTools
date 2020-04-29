@@ -43,7 +43,7 @@ export default function Login(props) {
     let history = useHistory();
     window.localStorage.setItem("adminUser", "false");
     window.localStorage.setItem("studentUser", "false");
-    console.log(window.localStorage.getItem('token'));
+    // console.log(window.localStorage.getItem('token'));
 
     const [onyen, setOnyen] = useState('');
     const [password, setPassword] = useState('');

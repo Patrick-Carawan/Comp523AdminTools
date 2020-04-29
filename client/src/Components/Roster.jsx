@@ -47,25 +47,33 @@ const parseOptions = {
 function Roster() {
     const classes = useStyles();
     const [roster, setRoster] = useState([]);
-    const [semester, setSemester] = useState('');
-    useEffect(() => {
-        axios.get(`http://localhost:5000/roster/Spring2020`,{
+    const [semester, setSemester] = useState(window.localStorage.getItem('semester'));
+
+    function setAllSemesterInfo() {
+        axios.get(`http://localhost:5000/roster/${semester}`,{
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
         }).then((res) => {
             if (res.data[0]) {
+                console.log(res.data)
                 setRoster(res.data[0].studentList);
+            } else{
+                setRoster([]);
             }
-        });
-    }, []);
+        }).catch(err => console.log(err));
+    }
+
+    useEffect(() => {
+      setAllSemesterInfo();
+    }, [semester]);
 
     const readfile = (data) => {
         setRoster(data)
     };
 
     function submitRoster() {
-        axios.post(`http://localhost:5000/roster/add/Spring2020`, {
+        axios.post(`http://localhost:5000/roster/add/${semester}`, {
             studentList: roster
         },{
             headers: {

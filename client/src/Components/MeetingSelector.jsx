@@ -68,8 +68,8 @@ export default function CheckAttendance(props) {
   };
 
   useEffect(() => {
-    console.log("Team members: ", props.attendance["pat1"]);
-  }, [props.attendance["pat1"]]);
+    props.blankTeamMembers();
+  }, [props.semester]);
 
   // Record all attended
   const handleAllAttended = (event) => {

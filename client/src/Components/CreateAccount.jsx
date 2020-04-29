@@ -44,6 +44,8 @@ export default function CreateAccount() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [adminToken, setAdminToken] = useState('');
+    const [semester, setSemester] = useState(window.localStorage.getItem('semester'));
+
     let history = useHistory();
 
     function toLogin() {
@@ -67,7 +69,7 @@ export default function CreateAccount() {
                     password: password,
                     firstName: firstName,
                     lastName: lastName,
-                    semester: "Spring2020",
+                    semester: semester,
                     adminToken: adminToken
                 }
             }).then(res => {
@@ -80,8 +82,12 @@ export default function CreateAccount() {
                 setConfirmPassword('');
                 setAdminToken('');
             }).catch(err => {
-                alert('Could not create user. Make sure this is the correct onyen. See your teacher for help if needed.')
-                console.log(err)
+                if (err.response.status === 406) {
+                    alert(err.response.data)
+                } else {
+                    alert('Could not create user. Make sure this is the correct onyen. See your teacher for help if needed.')
+                    console.log('err', err)
+                }
             })
         }
     }

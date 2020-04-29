@@ -26,6 +26,8 @@ const ProjectRanking = () => {
     const [proposals, setProposals] = useState([]);
 
     useEffect(() => {
+
+
         axios.get(`http://localhost:5000/proposals/`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
