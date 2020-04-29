@@ -8,6 +8,7 @@ import Container from "@material-ui/core/Container";
 import ClearIcon from "@material-ui/icons/HighlightOff";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
+import Axios from "axios";
 
 const clientAppState = {
   WELCOME: "welcome",
@@ -20,6 +21,7 @@ function ClientForm(props) {
   const [projectTitle, setProjectTitle] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
   const [description, setDescription] = useState("");
   const [URL, setURL] = useState("");
   const [softwareReq, setSoftwareReq] = useState("");
@@ -79,7 +81,17 @@ function ClientForm(props) {
     const submitForm = function (e) {
       e.preventDefault();
       if (firstName && lastName && projectTitle && description) {
-        console.log("submit form called");
+        // console.log("submit form called");
+
+        Axios.post("http://localhost:5000/proposals", {
+          title: projectTitle,
+          email: email,
+          prop_name: `${firstName} ${lastName}`,
+          description: description,
+          info_url: URL,
+          tech_requirements: softwareReq,
+          hardware_requirements: hardwareReq,
+        });
         setAppState(clientAppState.SUBMITTED);
         setShowError(false);
       } else {
@@ -148,7 +160,24 @@ function ClientForm(props) {
             justify="flex-start"
             alignItems="stretch"
           >
-            <span>4. Project description</span>
+            <span>4. EMAIL</span>
+            <br />
+            <TextField
+              id="outlined-basic"
+              label="Email"
+              variant="outlined"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <br />
+          </Grid>
+
+          <Grid
+            container
+            direction="column"
+            justify="flex-start"
+            alignItems="stretch"
+          >
+            <span>5. Project description</span>
             <br />
             <TextField
               id="outlined-basic"
