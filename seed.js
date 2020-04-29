@@ -194,7 +194,8 @@ connection.once('open', () => {
         semesters: ["Spring2020", "Fall2021", "Spring2021"]
     });
 
-    const users = [adminUser, user1, user2, user3, user4, user5, user6];
+    // const users = [adminUser, user1, user2, user3, user4, user5, user6];
+    const users = [adminUser];
     const proposals = [prop1, prop2, prop3, prop4];
     const teams = [team1, team2];
     const letters = [pendingLetter, acceptedLetter, rejectedLetter];
@@ -281,13 +282,13 @@ connection.once('open', () => {
     //     console.error(err);
     // });
     //
-    // for (let user of users) {
-    //     user.setPassword("password");
-    // }
+    for (let user of users) {
+        user.setPassword("password");
+    }
     
-    // User.collection.insertMany(users, function(err) {
-    //     console.error(err);
-    // });
+    User.collection.insertMany(users, function(err) {
+        console.error(err);
+    });
 
     Semesters.collection.insertMany(semesters, function(err){
         console.error(err);
