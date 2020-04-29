@@ -5,9 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import Card from "./FunctionalCard/Card";
 import MaterialCard from "@material-ui/core/Card";
-import {Link} from "react-router-dom";
 import DashBoard from "./AdminDashboard";
 import MeetingSelector from "./MeetingSelector";
 import Calendar from "./FunctionalCard/Calendar";
@@ -87,13 +85,19 @@ export default function MeetingPage() {
     const [weekTodo, setWeekTodo] = React.useState("");
     const [semester, setSemester] = React.useState(window.localStorage.getItem('semester'));
     const [showSummary, setShowSummary] = React.useState(false);
+    const [onyenToNameMap, setOnyenToNameMap] = useState(new Map());
 
     //states for the ytd summary
-    const[timesDemoFine, setTimesDemoFine] = useState(0);
-    const[timesDemoBad, setTimesDemoBad] = useState(0);
-    const[timesNoDemo, setTimesNoDemo] = useState(0);
-    const[timesDemoNA, setTimesDemoNA] = useState(0);
+    const [timesDemoFine, setTimesDemoFine] = useState(0);
+    const [timesDemoBad, setTimesDemoBad] = useState(0);
+    const [timesNoDemo, setTimesNoDemo] = useState(0);
+    const [timesDemoNA, setTimesDemoNA] = useState(0);
 
+    const [timesDeliverableFinished, setTimesDeliverableFinished] = useState(0);
+    const [timesDeliverableUnfinished, setTimesDeliverableUnfinished] = useState(0);
+    const [timesDeliverableNA, setTimesDeliverableNA] = useState(0);
+    const [timesDeliverableExcused, setTimesDeliverableExcused] = useState(0);
+    const [timesMembersAttended, setTimesMembersAttended] = useState([]);
     const pageEndRef = useRef(null);
 
     useEffect(() => {
@@ -120,11 +124,24 @@ export default function MeetingPage() {
         }).then((res) => {
             // console.log("allCoachMeetings", res["data"]);
         });
+        Axios.get(`http://localhost:5000/roster/${semester}`,{
+          headers: {
+                Authorization: `Token ${window.localStorage.getItem('token')}`
+            }
+        }).then(res =>{
+            console.log('roster', res['data']);
+            let tempMap = new Map();
+            res['data'][0]['studentList'].forEach(student =>{
+                tempMap.set(student['onyen'],student['name'])
+            });
+            setOnyenToNameMap(tempMap);
+        })
     }
 
     useEffect(() => {
-        // console.log("Attendance Status: ", attendanceObj);
-    }, [attendanceObj]);
+        generateSummary();
+        setShowSummary(false)
+    }, [selectedTeam]);
 
     const changeAttendance = (member, attendanceValue) => {
         const tempAttendanceObj = Object.assign({}, attendanceObj);
@@ -226,16 +243,8 @@ export default function MeetingPage() {
             alert('Please select a week and team')
             return
         }
-        // console.log('week', week);
-        // console.log('demo', demoStatus);
-        // console.log('deliverable', deliverableStatus);
-        // console.log('attendance', attendanceMap);
-        // console.log('comment', comment);
-        // console.log('weekly todo', weekTodo);
         let semester = window.localStorage.getItem("semester");
         let teamId = selectedTeam["_id"];
-        // console.log("team", teamId);
-
         if (week)
             Axios.post(
                 `http://localhost:5000/coachMeetings/add/${semester}/${week}/${teamId}`,
@@ -262,7 +271,7 @@ export default function MeetingPage() {
     }, [showSummary]);
 
     function generateSummary() {
-        if(showSummary === false || week === -1 || !week || !selectedTeam || !selectedTeam.hasOwnProperty('teamMembers')){
+        if (!selectedTeam || !selectedTeam.hasOwnProperty('teamMembers')) {
             return null
         }
         Axios.get(`http://localhost:5000/coachMeetings/${semester}/${selectedTeam["_id"]}`, {
@@ -270,8 +279,8 @@ export default function MeetingPage() {
                 Authorization: `Token ${window.localStorage.getItem("token")}`,
             },
         }).then(res => {
-            setShowSummary(true);
-            console.log(res['data']);
+            console.log(res['data'])
+            let attendances = {};
             let numDemoFine = 0;
             let numDemoBad = 0;
             let numNoDemo = 0;
@@ -280,11 +289,7 @@ export default function MeetingPage() {
             let numDeliverableUnfinished = 0;
             let numDeliverableExcused = 0;
             let numDeliverableNA = 0;
-            let attendanceCount = new Array(selectedTeam['teamMembers'].length);
-            attendanceCount.fill(new Array(3));
-            attendanceCount.forEach(userArray => userArray.fill(0));
-            console.log('attendance array', attendanceCount);
-            res['data'].forEach(report => {
+            res['data'].forEach((report, index) => {
                 switch (report['deliverableStatus']) {
                     case "N/A":
                         numDeliverableNA++;
@@ -314,19 +319,45 @@ export default function MeetingPage() {
                         break;
                 }
                 for (let key in report['attendance']) {
-
+                    if (!attendances.hasOwnProperty(key)) {
+                        attendances[key] = {
+                            attended: 0,
+                            excused: 0,
+                            unexcused: 0
+                        }
+                    }
+                    switch (report['attendance'][key]) {
+                        case 'attended':
+                            attendances[key]['attended']++;
+                            break;
+                        case 'absent unexcused':
+                            attendances[key]['unexcused']++;
+                            break;
+                        case 'excused':
+                            attendances[key]['excused']++;
+                            break;
+                    }
                 }
-
-            })
+            });
+            // console.log('attendances',attendances);
+            let tempArray = [];
+            for (let key in attendances) {
+                let tempObj = {};
+                tempObj[key] = attendances[key];
+                tempArray.push(tempObj);
+            }
+            setTimesMembersAttended(tempArray);
             setTimesDemoFine(numDemoFine);
             setTimesDemoBad(numDemoBad);
             setTimesDemoNA(numDemoNA);
             setTimesNoDemo(numNoDemo);
+            setTimesDeliverableExcused(numDeliverableExcused);
+            setTimesDeliverableFinished(numDeliverableFinished);
+            setTimesDeliverableUnfinished(numDeliverableUnfinished);
+            setTimesDeliverableNA(numDeliverableNA);
         }).catch(err => {
             alert(err)
         });
-
-
     }
 
     return (
@@ -352,6 +383,7 @@ export default function MeetingPage() {
                         <Grid item xs={6}>
                             <Paper className={fixedHeightPaper}>
                                 <MeetingSelector
+                                    roster={onyenToNameMap}
                                     team={selectedTeam}
                                     semester={semester}
                                     week={week}
@@ -388,7 +420,7 @@ export default function MeetingPage() {
                         <Grid container direction="row">
                             <Grid item>
                                 <Button
-                                    onClick={generateSummary}
+                                    onClick={submitCoachMeeting}
                                     variant="contained"
                                     color="primary"
                                     style={{'marginBottom': '2em'}}
@@ -398,7 +430,7 @@ export default function MeetingPage() {
                             </Grid>
                             <Grid item>
                                 <Button
-                                    onClick={()=>setShowSummary(true)}
+                                    onClick={() => setShowSummary(true)}
                                     variant="contained"
                                     color="primary"
                                     style={{'marginBottom': '2em', 'marginLeft': '2em', 'width': 'fitContent'}}
@@ -410,17 +442,29 @@ export default function MeetingPage() {
                     </Grid>
                     {
                         showSummary ?
-                            <MaterialCard variant="outlined" style={{'padding':'5px', 'marginBottom':'10px'}}>
-                                <Typography>Tally of meeting info to date</Typography>
-                                <Typography>Times demo was fine: {timesDemoFine}</Typography>
-                                <Typography>Times demo was bad: {timesDemoBad}</Typography>
-                                <Typography>Times demo wasn't delivered: {timesNoDemo}</Typography>
-                                <Typography>Times demo was N/A: {timesDemoNA}</Typography>
-                                <Typography>Times deliverable was finished:</Typography>
-                                <Typography>Times deliverable was unfinished/not submitted:</Typography>
-                                <Typography>Times deliverable was excused:</Typography>
-                                <Typography>Times deliverable was N/A:</Typography>
-                                <Typography>Times</Typography>
+                            <MaterialCard variant="outlined" style={{'padding': '5px', 'marginBottom': '10px'}}>
+                                <Grid container direction="row">
+                                    <Grid item>
+                                        <Typography>Times demo was fine: {timesDemoFine}</Typography>
+                                        <Typography>Times demo was bad: {timesDemoBad}</Typography>
+                                        <Typography>Times demo wasn't delivered: {timesNoDemo}</Typography>
+                                        <Typography>Times demo was N/A: {timesDemoNA}</Typography>
+                                        {timesMembersAttended.map((member, i) =>
+                                            <Typography key={i}>{onyenToNameMap.get(Object.keys(member)[0])}-
+                                                Attended: {member[Object.keys(member)[0]]['attended']} Excused: {member[Object.keys(member)[0]]['excused']} Unexcused: {member[Object.keys(member)[0]]['unexcused']}</Typography>)}
+                                    </Grid>
+                                    <Grid item>
+                                        <Typography>Times deliverable was
+                                            finished: {timesDeliverableFinished}</Typography>
+                                        <Typography>Times deliverable was unfinished/not
+                                            submitted: {timesDeliverableUnfinished}</Typography>
+                                        <Typography>Times deliverable was
+                                            excused: {timesDeliverableExcused}</Typography>
+                                        <Typography>Times deliverable was N/A: {timesDeliverableNA}</Typography>
+                                    </Grid>
+                                </Grid>
+
+
                             </MaterialCard> : null
                     }
                     <div ref={pageEndRef}/>
