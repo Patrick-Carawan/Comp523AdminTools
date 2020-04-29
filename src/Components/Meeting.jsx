@@ -1,16 +1,15 @@
-import React from "react";
+import React, {useEffect, useRef} from "react";
 import clsx from "clsx";
-import { makeStyles } from "@material-ui/core/styles";
+import {makeStyles} from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Card from "./FunctionalCard/Card";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 import DashBoard from "./AdminDashboard";
 import MeetingSelector from "./MeetingSelector";
 import Calendar from "./FunctionalCard/Calendar";
-import { useEffect } from "react";
 import MeetingTask from "./MeetingTask";
 import Button from "@material-ui/core/Button";
 import Axios from "axios";
@@ -19,61 +18,61 @@ import DataSelector from "./FunctionalCard/DataSelector";
 const drawerWidth = 260;
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-  },
-  drawerPaper: {
-    position: "relative",
-    whiteSpace: "nowrap",
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerPaperClose: {
-    overflowX: "hidden",
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up("sm")]: {
-      width: theme.spacing(9),
+    root: {
+        display: "flex",
     },
-  },
-  appBarSpacer: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-    height: "100vh",
-    overflow: "auto",
-  },
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: "flex",
-    overflow: "auto",
-    flexDirection: "column",
-  },
-  fixedHeight: {
-    height: 430,
-  },
-  meetingTaskHeight: {
-    height: 260,
-  },
-  link: {
-    display: "flex",
-    flexDirection: "row",
-    width: "100%",
-    margin: 0,
-    padding: "10px",
-    textDecoration: "none",
-    color: "black",
-    decoration: "none",
-  },
+    drawerPaper: {
+        position: "relative",
+        whiteSpace: "nowrap",
+        width: drawerWidth,
+        transition: theme.transitions.create("width", {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+    },
+    drawerPaperClose: {
+        overflowX: "hidden",
+        transition: theme.transitions.create("width", {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+        width: theme.spacing(7),
+        [theme.breakpoints.up("sm")]: {
+            width: theme.spacing(9),
+        },
+    },
+    appBarSpacer: theme.mixins.toolbar,
+    content: {
+        flexGrow: 1,
+        height: "100vh",
+        overflow: "auto",
+    },
+    container: {
+        paddingTop: theme.spacing(4),
+        paddingBottom: theme.spacing(4),
+    },
+    paper: {
+        padding: theme.spacing(2),
+        display: "flex",
+        overflow: "auto",
+        flexDirection: "column",
+    },
+    fixedHeight: {
+        height: 430,
+    },
+    meetingTaskHeight: {
+        height: 260,
+    },
+    link: {
+        display: "flex",
+        flexDirection: "row",
+        width: "100%",
+        margin: 0,
+        padding: "10px",
+        textDecoration: "none",
+        color: "black",
+        decoration: "none",
+    },
 }));
 
 export default function MeetingPage() {
@@ -86,15 +85,19 @@ export default function MeetingPage() {
     const [comment, setComment] = React.useState("");
     const [weekTodo, setWeekTodo] = React.useState("");
     const [semester, setSemester] = React.useState(window.localStorage.getItem('semester'));
+    const [showSummary, setShowSummary] = React.useState(false);
+
+    const pageEndRef = useRef(null);
+
     useEffect(() => {
-      setSemesterInfo()
+        setSemesterInfo()
     }, [semester]);
 
     const blankTeamMembers = () => {
         setSelectedTeam({});
     };
 
-    function setSemesterInfo(){
+    function setSemesterInfo() {
         Axios.get(`http://localhost:5000/teams/semester/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem("token")}`,
@@ -112,16 +115,16 @@ export default function MeetingPage() {
         });
     }
 
-  useEffect(() => {
-    // console.log("Attendance Status: ", attendanceObj);
-  }, [attendanceObj]);
+    useEffect(() => {
+        // console.log("Attendance Status: ", attendanceObj);
+    }, [attendanceObj]);
 
-  const changeAttendance = (member, attendanceValue) => {
-    const tempAttendanceObj = Object.assign({}, attendanceObj);
-    tempAttendanceObj[`${member}`] = attendanceValue;
-    // console.log(tempAttendanceObj);
-    setAttendanceObj(tempAttendanceObj);
-  };
+    const changeAttendance = (member, attendanceValue) => {
+        const tempAttendanceObj = Object.assign({}, attendanceObj);
+        tempAttendanceObj[`${member}`] = attendanceValue;
+        // console.log(tempAttendanceObj);
+        setAttendanceObj(tempAttendanceObj);
+    };
 
     const changeSelectedTeam = (team) => {
         setSelectedTeam(team);
@@ -151,15 +154,15 @@ export default function MeetingPage() {
             });
         }
 
-    // console.log("selectedTeam", team._id);
-    // console.log("week", team._id);
-  };
+        // console.log("selectedTeam", team._id);
+        // console.log("week", team._id);
+    };
 
-  // Use to update the info in demo&comment section
-  const updateInfo = (info) => {
-    // changeDemoStatus(info.demoStatus);
-    // console.log("demo status: " + info.demoStatus);
-  };
+    // Use to update the info in demo&comment section
+    const updateInfo = (info) => {
+        // changeDemoStatus(info.demoStatus);
+        // console.log("demo status: " + info.demoStatus);
+    };
 
     const changeWeek = (week) => {
         if (week !== -1 && selectedTeam.hasOwnProperty('_id')) {
@@ -191,27 +194,31 @@ export default function MeetingPage() {
         setWeek(week);
     };
 
-  const changeDemoStatus = (status) => {
-    setDemoStatus(status);
-  };
-  const changeDeliverableStatus = (status) => {
-    setDeliverableStatus(status);
-  };
+    const changeDemoStatus = (status) => {
+        setDemoStatus(status);
+    };
+    const changeDeliverableStatus = (status) => {
+        setDeliverableStatus(status);
+    };
 
-  const changeComment = (comment) => {
-    setComment(comment);
-  };
+    const changeComment = (comment) => {
+        setComment(comment);
+    };
 
-  const changeWeekTodo = (weekTodo) => {
-    setWeekTodo(weekTodo);
-  };
+    const changeWeekTodo = (weekTodo) => {
+        setWeekTodo(weekTodo);
+    };
 
-  const classes = useStyles();
+    const classes = useStyles();
 
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
-  const MeetingTaskPaper = clsx(classes.paper, classes.meetingTaskHeight);
+    const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+    const MeetingTaskPaper = clsx(classes.paper, classes.meetingTaskHeight);
 
     function submitCoachMeeting() {
+        if (!(week && selectedTeam) || week === -1 || !selectedTeam.hasOwnProperty('teamMembers')) {
+            alert('Please select a week and team')
+            return
+        }
         // console.log('week', week);
         // console.log('demo', demoStatus);
         // console.log('deliverable', deliverableStatus);
@@ -222,23 +229,96 @@ export default function MeetingPage() {
         let teamId = selectedTeam["_id"];
         // console.log("team", teamId);
 
+        if (week)
+            Axios.post(
+                `http://localhost:5000/coachMeetings/add/${semester}/${week}/${teamId}`,
+                {
+                    demoStatus: demoStatus,
+                    deliverableStatus: deliverableStatus,
+                    comment: comment,
+                    weekTodo: weekTodo,
+                    attendance: attendanceObj,
+                },
+                {
+                    headers: {
+                        Authorization: `Token ${window.localStorage.getItem("token")}`,
+                    },
+                }
+            ).then(() => alert("meeting submitted"));
+    }
 
-    Axios.post(
-      `http://localhost:5000/coachMeetings/add/${semester}/${week}/${teamId}`,
-      {
-        demoStatus: demoStatus,
-        deliverableStatus: deliverableStatus,
-        comment: comment,
-        weekTodo: weekTodo,
-        attendance: attendanceObj,
-      },
-      {
-        headers: {
-          Authorization: `Token ${window.localStorage.getItem("token")}`,
-        },
-      }
-    ).then(() => alert("meeting submitted"));
-  }
+    useEffect(() => {
+        if (showSummary) {
+            pageEndRef.current.scrollIntoView({behavior: 'smooth'});
+        }
+    }, [showSummary]);
+
+    function generateSummary() {
+        Axios.get(`http://localhost:5000/coachMeetings/${semester}/${selectedTeam["_id"]}`, {
+            headers: {
+                Authorization: `Token ${window.localStorage.getItem("token")}`,
+            },
+        }).then(res => {
+            setShowSummary(true)
+            console.log(res['data']);
+            let numDemoFine = 0;
+            let numDemoBad = 0;
+            let numNoDemo = 0;
+            let numDemoNA = 0;
+            let numDeliverableFinished = 0;
+            let numDeliverableUnfinished = 0;
+            let numDeliverableExcused = 0;
+            let numDeliverableNA = 0;
+            let attendanceCount = new Array(selectedTeam['teamMembers'].length);
+            attendanceCount.fill(new Array(3));
+            attendanceCount.forEach(userArray => userArray.fill(0));
+            console.log('attendance array', attendanceCount);
+            res['data'].forEach(report => {
+                switch (report['deliverableStatus']) {
+                    case "N/A":
+                        numDeliverableNA++;
+                        break;
+                    case "unfinished":
+                        numDeliverableUnfinished++;
+                        break;
+                    case "finished":
+                        numDeliverableFinished++;
+                        break;
+                    case "excused":
+                        numDeliverableExcused++;
+                        break;
+                }
+                switch (report['demoStatus']) {
+                    case "N/A":
+                        numDemoNA++;
+                        break;
+                    case "no demo":
+                        numNoDemo++;
+                        break;
+                    case "demo fine":
+                        numDemoFine++;
+                        break;
+                    case "demo bad":
+                        numDemoBad++;
+                        break;
+                }
+                for (let key in report['attendance']) {
+
+                }
+                return (<div>
+                    <p>Count demo fine: {numDemoFine}</p>
+                    <p>Count demo bad: {numDemoBad}</p>
+                    <p>Count demo N/A: {numDemoNA}</p>
+                    <p>Count demo expected but not shown: {numNoDemo}</p>
+                </div>)
+
+            })
+        }).catch(err => {
+            return <p>Nothing to report</p>
+        });
+
+
+    }
 
     return (
         <div className={classes.root}>
@@ -296,20 +376,34 @@ export default function MeetingPage() {
                 </Container>
                 <Container>
                     <Grid container>
-                        <Grid item xs={5}>
-                            <Grid item xs={2}>
-                                <div className={classes.root}>
-                                    <Button
-                                        onClick={submitCoachMeeting}
-                                        variant="contained"
-                                        color="primary"
-                                    >
-                                        Submit
-                                    </Button>
-                                </div>
+                        <Grid container direction="row">
+                            <Grid item>
+                                <Button
+                                    onClick={submitCoachMeeting}
+                                    variant="contained"
+                                    color="primary"
+                                    style={{'marginBottom': '2em'}}
+                                >
+                                    Submit
+                                </Button>
+                            </Grid>
+                            <Grid item>
+                                <Button
+                                    onClick={generateSummary}
+                                    variant="contained"
+                                    color="primary"
+                                    style={{'marginBottom': '2em', 'marginLeft': '2em', 'width': 'fitContent'}}
+                                >
+                                    Generate YTD Summary
+                                </Button>
                             </Grid>
                         </Grid>
                     </Grid>
+                    {
+                        showSummary ?
+                            <p>Test output</p> : null
+                    }
+                    <div ref={pageEndRef}/>
                 </Container>
             </main>
         </div>
