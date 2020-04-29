@@ -8,7 +8,7 @@ const teamSchema = new Schema({
     projectTitle: { type: String, required: true, default: "Pending"},
     teamMembers: { type: Array, required: true },
     proposalRanks: { type: Array, required: true, default: [] },
-    semester: { type: String, required: true }
+    semester: { type: String, required: true, default: process.env.CURRENT_SEMESTER }
 }, {
     timestamps: true
 });

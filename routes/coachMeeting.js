@@ -29,6 +29,13 @@ router.post('/add/:semester/:week/:teamId', auth.required, (req, res, next) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
+//Get all coach meetings is a semester for a single team
+
+router.get('/:semester/:teamId', auth.required, (req, res, next) => {
+    CoachMeeting.find({"semester": req.params.semester, "teamId": req.params.teamId})
+        .then(meeting => res.json(meeting))
+        .catch(err => res.status(400).json('Error: ' + err));
+});
 
 // Get coach meeting
 router.get('/:semester/:week/:teamId', auth.required, (req, res, next) => {

@@ -25,6 +25,7 @@ app.use(express.static(path.join(__dirname, "client", "build")));
 // Configure and connect to mongoose
 const uri = process.env.MONGODB_URI || "mongodb+srv://Patrick:Patrick@cluster0-wqpir.mongodb.net/test?retryWrites=true&w=majority";
 mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true });
+//mongoose.set('debug', true);
 
 const connection = mongoose.connection;
 connection.once('open', () => {
@@ -50,6 +51,18 @@ app.use('/roster', rosterRouter);
 app.use('/coachMeetings', meetingRouter);
 app.use('/semesters', semesterRouter);
 
+// if(!isProduction) {
+//   app.use((err, req, res) => {
+//     res.status(err.status || 500);
+
+//     res.json({
+//       errors: {
+//         message: err.message,
+//         error: err,
+//       },
+//     });
+//   });
+// }
 
 app.use((err, req, res, next) => {
   res.status(err.status || 500);
@@ -62,9 +75,15 @@ app.use((err, req, res, next) => {
   });
 });
 
+<<<<<<< HEAD:server.js
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
+=======
+if(process.env.NODE_ENV === 'production'){
+    app.use(express.static('523-admin-tools-frontend/build'))
+}
+>>>>>>> b71e2ce4a38a2aa7efb569add3c05fdaece563fe:express/server.js
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);

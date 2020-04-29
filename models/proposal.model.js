@@ -6,7 +6,7 @@ const proposalSchema = new Schema({
     title: { type: String, required: true },
     email: { type: String, required: true },
     prop_name: { type: String, required: true },
-    semester: { type: String, required: true },
+    semester: { type: String, required: true, default: process.env.CURRENT_SEMESTER },
     description: { type: String, required: true },
     info_url:  { type: String },
     tech_requirements: { type: String },

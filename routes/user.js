@@ -67,6 +67,13 @@ router.post('/', auth.optional, (req, res, next) => {
         finalUser.admin = false;
     }
 
+    if (user.adminToken !== '' && user.adminToken && user.adminToken !== process.env.ADMIN_TOKEN) {
+        res.status(406).send("Admin Key is incorrect. Please log in as a student without an admin key, or enter the correct key.");
+        return
+    }
+
+    console.log(user);
+
     finalUser.setPassword(user.password);
     finalUser.verified = false;
 
