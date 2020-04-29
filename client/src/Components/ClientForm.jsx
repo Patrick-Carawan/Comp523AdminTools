@@ -80,7 +80,7 @@ function ClientForm(props) {
   function Form() {
     const submitForm = function (e) {
       e.preventDefault();
-      if (firstName && lastName && projectTitle && description) {
+      if (firstName && lastName && projectTitle && description && email) {
         // console.log("submit form called");
 
         Axios.post("http://localhost:5000/proposals", {
@@ -265,7 +265,7 @@ function ClientForm(props) {
                     onClick={() => setShowError(false)}
                   >
                     <ClearIcon style={{ marginRight: "8px" }} />
-                    Please fill out the first 4 fields
+                    Please fill out the first 5 fields
                   </Button>
                 ) : null}
               </Grid>
