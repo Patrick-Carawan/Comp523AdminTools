@@ -80,7 +80,7 @@ export default function CreateAccount() {
         if (password !== confirmPassword) {
             alert('Passwords must match')
         } else {
-            axios.post(`http://localhost:5000/users`, data).then(res => {
+            axios.post(`/users`, data).then(res => {
                 console.log(res);
                 alert('Account Created. Please check your school email to verify account and log in.')
                 setOnyen('');

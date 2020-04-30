@@ -20,17 +20,21 @@ router.get('/rankings/:semester', auth.required, (req, res, next) => {
 // Add a new team to the database
 router.post('/add', auth.required, (req, res, next) => {
     // const _teamName = req.body.teamName;
-    const _teamName = Team.collection.count({"semester":process.env.CURRENT_SEMESTER}) +1;
-    const _teamMembers = req.body.teamMembers;
+    let _teamName;
+    Team.collection.countDocuments({"semester":process.env.CURRENT_SEMESTER}).then(response => {
+        _teamName = 'Team ' + (response+1);
+        const _teamMembers = req.body.teamMembers;
 
-    const newTeam = new Team({
-        teamName:  _teamName,
-        teamMembers: _teamMembers,
-    });
+        const newTeam = new Team({
+            teamName:  _teamName,
+            teamMembers: _teamMembers,
+        });
 
-    newTeam.save()
-        .then((team) => res.json({id: team._id}))
-        .catch(err => res.status(400).json('Error: ' + err));
+        newTeam.save()
+            .then((team) => res.json({id: team._id}))
+            .catch(err => res.status(400).json('Error: ' + err));
+    }).catch(err => res.status(400).json('Error' + err));
+
 });
 
 // Delete a team
@@ -51,7 +55,7 @@ router.get('/semester/:semester', auth.required, (req, res, next) => {
 router.get('/:id', auth.required, (req, res, next) => {
     Team.findById(req.params.id)
         .then(team => res.json(team))
-        .catch(err => res.status(400).json('Error: ' + err));
+        .catch(err => err.status(400).json('Error: ' + err));
 });
 
 /*  

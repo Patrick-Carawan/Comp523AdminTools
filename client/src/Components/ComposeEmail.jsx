@@ -42,7 +42,7 @@ function ComposeEmail(props) {
   const [semester, setSemester] = useState("");
   useEffect(() => {
     axios
-      .get("http://localhost:5000/proposals/emails", {
+      .get("/proposals/emails", {
         headers: {
           Authorization: `Token ${window.localStorage.getItem("token")}`,
         },
@@ -69,7 +69,7 @@ function ComposeEmail(props) {
         console.log(error);
       });
     axios
-      .get("http://localhost:5000/proposals/pendingLetter", {
+      .get("/proposals/pendingLetter", {
         headers: {
           Authorization: `Token ${window.localStorage.getItem("token")}`,
         },
@@ -84,7 +84,7 @@ function ComposeEmail(props) {
         setPendingLetter("Your project proposal is still pending.");
       });
     axios
-      .get("http://localhost:5000/proposals/rejectionLetter", {
+      .get("/proposals/rejectionLetter", {
         headers: {
           Authorization: `Token ${window.localStorage.getItem("token")}`,
         },
@@ -99,7 +99,7 @@ function ComposeEmail(props) {
         setRejectionLetter("Your project proposal has been rejected.");
       });
     axios
-      .get("http://localhost:5000/proposals/acceptanceLetter", {
+      .get("/proposals/acceptanceLetter", {
         headers: {
           Authorization: `Token ${window.localStorage.getItem("token")}`,
         },
@@ -194,7 +194,7 @@ function ComposeEmail(props) {
     }
 
     Axios.post(
-      `http://localhost:5000/proposals/${path}Letter`,
+      `/proposals/${path}Letter`,
       { text: letter },
       {
         headers: {

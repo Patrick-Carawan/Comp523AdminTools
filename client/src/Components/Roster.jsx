@@ -50,7 +50,7 @@ function Roster() {
     const [semester, setSemester] = useState(window.localStorage.getItem('semester'));
 
     function setAllSemesterInfo() {
-        axios.get(`http://localhost:5000/roster/${semester}`,{
+        axios.get(`/roster/${semester}`,{
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
@@ -73,7 +73,7 @@ function Roster() {
     };
 
     function submitRoster() {
-        axios.post(`http://localhost:5000/roster/add/${semester}`, {
+        axios.post(`/roster/add/${semester}`, {
             studentList: roster
         },{
             headers: {

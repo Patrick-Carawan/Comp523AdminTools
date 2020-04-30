@@ -109,7 +109,7 @@ export default function MeetingPage() {
     };
 
     function setSemesterInfo() {
-        Axios.get(`http://localhost:5000/teams/semester/${semester}`, {
+        Axios.get(`/teams/semester/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem("token")}`,
             },
@@ -117,14 +117,14 @@ export default function MeetingPage() {
             // console.log("teams", res);
             setTeams(res["data"]);
         });
-        Axios.get(`http://localhost:5000/coachMeetings/${semester}`, {
+        Axios.get(`/coachMeetings/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
         }).then((res) => {
             // console.log("allCoachMeetings", res["data"]);
         });
-        Axios.get(`http://localhost:5000/roster/${semester}`,{
+        Axios.get(`/roster/${semester}`,{
           headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
@@ -155,7 +155,7 @@ export default function MeetingPage() {
         // console.log(team);
         if (week !== -1 && team.hasOwnProperty('_id')) {
             Axios.get(
-                `http://localhost:5000/coachMeetings/${semester}/${week}/${team._id}`, {
+                `/coachMeetings/${semester}/${week}/${team._id}`, {
                     headers: {
                         Authorization: `Token ${window.localStorage.getItem('token')}`
                     }
@@ -191,7 +191,7 @@ export default function MeetingPage() {
     const changeWeek = (week) => {
         if (week !== -1 && selectedTeam.hasOwnProperty('_id')) {
             Axios.get(
-                `http://localhost:5000/coachMeetings/${semester}/${week}/${selectedTeam._id}`, {
+                `/coachMeetings/${semester}/${week}/${selectedTeam._id}`, {
                     headers: {
                         Authorization: `Token ${window.localStorage.getItem('token')}`
                     }
@@ -247,7 +247,7 @@ export default function MeetingPage() {
         let teamId = selectedTeam["_id"];
         if (week)
             Axios.post(
-                `http://localhost:5000/coachMeetings/add/${semester}/${week}/${teamId}`,
+                `/coachMeetings/add/${semester}/${week}/${teamId}`,
                 {
                     demoStatus: demoStatus,
                     deliverableStatus: deliverableStatus,
@@ -274,7 +274,7 @@ export default function MeetingPage() {
         if (!selectedTeam || !selectedTeam.hasOwnProperty('teamMembers')) {
             return null
         }
-        Axios.get(`http://localhost:5000/coachMeetings/${semester}/${selectedTeam["_id"]}`, {
+        Axios.get(`/coachMeetings/${semester}/${selectedTeam["_id"]}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem("token")}`,
             },

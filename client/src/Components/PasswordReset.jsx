@@ -17,7 +17,7 @@ function PasswordReset(props) {
 
 
     function submitNewPassword() {
-        axios.post(`http://localhost:5000/users/reset`, {onyen: onyenAndToken[0], password: password}, {
+        axios.post(`/users/reset`, {onyen: onyenAndToken[0], password: password}, {
             headers: {
                 Authorization: `Token ${onyenAndToken[1]}`
             }

@@ -53,7 +53,7 @@ export default function Login(props) {
     function submit(e) {
         e.preventDefault();
         console.log('submitted');
-        axios.post(`http://localhost:5000/users/login`, {
+        axios.post(`/users/login`, {
             user: {
                 onyen: onyen,
                 password: password
@@ -83,7 +83,7 @@ export default function Login(props) {
         if (onyen === '') {
             alert('Please fill in your onyen');
         }
-        axios.post(`http://localhost:5000/users/emailPasswordReset`, {
+        axios.post(`/users/emailPasswordReset`, {
             onyen: onyen
         }).then(() => alert('Please check your school email to finish resetting your password.')).catch(err => alert('err'));
     }

@@ -87,7 +87,7 @@ function AdminFinalReports() {
     const setAllSemesterInfo = () => {
         console.log(onyenMap);
         setCurrentTeam({});
-        axios.get(`http://localhost:5000/teams/semester/${semester}`, {
+        axios.get(`/teams/semester/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
@@ -102,7 +102,7 @@ function AdminFinalReports() {
             setTeams(myTeams);
         });
 
-        axios.get(`http://localhost:5000/finalReports/students/${semester}`, {
+        axios.get(`/finalReports/students/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
@@ -113,7 +113,7 @@ function AdminFinalReports() {
             setOnyenToReport(tempReportMap);
         });
 
-        axios.get(`http://localhost:5000/finalReports/teams/${semester}`, {
+        axios.get(`/finalReports/teams/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
@@ -124,7 +124,7 @@ function AdminFinalReports() {
             setTeamIdToReport(tempMap);
 
         });
-        axios.get(`http://localhost:5000/roster/${semester}`, {
+        axios.get(`/roster/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }

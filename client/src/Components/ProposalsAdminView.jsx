@@ -57,7 +57,7 @@ function ProposalsAdminView(props) {
   const [semester, setSemester] = useState("");
   useEffect(() => {
     axios
-      .get("http://localhost:5000/proposals/", {
+      .get("/proposals/", {
         headers: {
           Authorization: `Token ${window.localStorage.getItem("token")}`,
         },
@@ -88,7 +88,7 @@ function ProposalsAdminView(props) {
     // post to backend, wrap everything else in .then()
     axios
       .post(
-        `http://localhost:5000/proposals/update/${id}`,
+        `/proposals/update/${id}`,
         {
           status: newStatus,
         },

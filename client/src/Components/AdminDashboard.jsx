@@ -142,7 +142,7 @@ export default function AdminDashboard(props) {
     // useEffect(()=>{console.log('semester',semester)},[semester])
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/semesters/current`,{
+        axios.get(`/semesters/current`,{
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
@@ -178,7 +178,7 @@ export default function AdminDashboard(props) {
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/semesters`,{
+        axios.get(`/semesters`,{
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }

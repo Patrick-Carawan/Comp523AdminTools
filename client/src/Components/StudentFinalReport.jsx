@@ -30,7 +30,7 @@ const StudentFinalReport = () => {
     const [report, setReport] = useState('');
 
     const submitReport = function () {
-        axios.post(`http://localhost:5000/finalReports/students`, {
+        axios.post(`/finalReports/students`, {
             onyen: window.localStorage.getItem('onyen'),
             text: report
         },{

@@ -49,14 +49,14 @@ function StudentTeamSelection(props) {
     const [semester, setSemester] = useState('');
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/semesters/current`, {
+        axios.get(`/semesters/current`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
         }).then(res => {
             setSemester(res['data']);
             let currentSemester = res['data'];
-            axios.get(`http://localhost:5000/users/students/${currentSemester}`, {
+            axios.get(`/users/students/${currentSemester}`, {
                 headers: {
                     Authorization: `Token ${window.localStorage.getItem('token')}`
                 }
@@ -101,7 +101,7 @@ function StudentTeamSelection(props) {
         ) || typedOnyens.length !== draggedOnyens.length || typedOnyens.length === 0) {
             alert(`Onyens must all match their student's names to submit your team.`)
         } else {
-            axios.post(`http://localhost:5000/teams/add`, {
+            axios.post(`/teams/add`, {
                 teamName: `Team ${Math.floor(Math.random() * 100)}`,
                 teamMembers: draggedOnyens,
                 semester: semester
@@ -111,7 +111,7 @@ function StudentTeamSelection(props) {
                 }
             }).then((res) => {
                 draggedOnyens.forEach((onyen, i) => {
-                    axios.post(`http://localhost:5000/users/updateTeam/${onyen}`, {
+                    axios.post(`/users/updateTeam/${onyen}`, {
                         teamId: res['data']['id']
                     },{
                         headers: {

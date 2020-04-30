@@ -66,7 +66,7 @@ function ProposalAssignment(props) {
 
 
     function setAllSemesterInfo() {
-        axios.get(`http://localhost:5000/proposals`, {
+        axios.get(`/proposals`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
@@ -86,7 +86,7 @@ function ProposalAssignment(props) {
             setTitleMap(tempMap);
             setIdMap(tempIdMap);
         });
-        axios.get(`http://localhost:5000/teams/semester/${semester}`, {
+        axios.get(`/teams/semester/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
@@ -134,7 +134,7 @@ function ProposalAssignment(props) {
         });
         setPairings(localPairingsArray);
         axios
-            .post(`http://localhost:5000/teams/assignments`, {
+            .post(`/teams/assignments`, {
                 assignments: assignmentArray,
             })
             .then(() => {

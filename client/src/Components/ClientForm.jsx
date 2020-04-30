@@ -31,7 +31,7 @@ function ClientForm(props) {
   const [instructions, setInstructions] = useState('');
 
   useEffect(()=>{
-    Axios.get("http://localhost:5000/proposals/clientForm").then(res => {
+    Axios.get("/proposals/clientForm").then(res => {
       setInstructions(res['data'][0]['text']);
       console.log(res)
     }).catch(err => console.log(err));
@@ -87,7 +87,7 @@ function ClientForm(props) {
       if (firstName && lastName && projectTitle && description && email) {
         // console.log("submit form called");
 
-        Axios.post("http://localhost:5000/proposals", {
+        Axios.post("/proposals", {
           title: projectTitle,
           email: email,
           prop_name: `${firstName} ${lastName}`,
