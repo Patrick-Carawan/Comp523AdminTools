@@ -59,7 +59,7 @@ export default function Login(props) {
                 password: password
             }
         }).then(res => {
-            console.log(res);
+            // console.log(res);
             window.localStorage.setItem('token', res.data.user.token);
             window.localStorage.setItem('onyen', res.data.onyen);
             window.localStorage.setItem('name', res.data.name);
