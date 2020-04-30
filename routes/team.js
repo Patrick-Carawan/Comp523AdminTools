@@ -19,7 +19,8 @@ router.get('/rankings/:semester', auth.required, (req, res, next) => {
 
 // Add a new team to the database
 router.post('/add', auth.required, (req, res, next) => {
-    const _teamName = req.body.teamName;
+    // const _teamName = req.body.teamName;
+    const _teamName = Team.collection.count({"semester":process.env.CURRENT_SEMESTER}) +1;
     const _teamMembers = req.body.teamMembers;
 
     const newTeam = new Team({
