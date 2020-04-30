@@ -23,7 +23,8 @@ app.use(express.static(path.join(__dirname, "client", "build")));
 
 
 // Configure and connect to mongoose
-const uri = process.env.MONGODB_URI || "mongodb+srv://Patrick:Patrick@cluster0-wqpir.mongodb.net/test?retryWrites=true&w=majority";
+const uri = process.env.MONGODB_URI;
+    // || "mongodb+srv://Patrick:Patrick@cluster0-wqpir.mongodb.net/test?retryWrites=true&w=majority";
 mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true });
 
 const connection = mongoose.connection;
