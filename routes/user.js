@@ -80,10 +80,13 @@ router.post('/', auth.optional, (req, res, next) => {
     finalUser.generateVerificationEmail();
 
     return finalUser.save()
-        .then(() => res.json({
-            onyen: finalUser.onyen,
-            name: `${finalUser.firstName} ${finalUser.lastName}`
-        }))
+        .then(() => {
+            //finalUser.generateVerificationEmail();
+            res.json({
+                onyen: finalUser.onyen,
+                name: `${finalUser.firstName} ${finalUser.lastName}`
+            });
+        })
         .catch(err => res.status(400).json('Error saving student: ' + err));
 });
 
