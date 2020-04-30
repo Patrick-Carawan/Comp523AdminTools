@@ -20,6 +20,19 @@ router.get('/:onyen', auth.required, (req, res, next) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
+// Check if a user exists (useful for preventing multiple registrations)
+router.get('/exists/:onyen', auth.optional, (req, res, next) => {
+    User.find({ onyen: req.params.onyen })
+        .then((user)=> {
+            if (user) {
+                res.json(true);
+            } else {
+                res.json(false);
+            }
+        })
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+
 // Get all students for a given semester
 router.get('/students/:semester', auth.required, (req, res, next) => {
     User.find({"semester": req.params.semester})
