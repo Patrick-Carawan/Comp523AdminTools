@@ -80,12 +80,7 @@ export default function CreateAccount() {
                 setConfirmPassword('');
                 setAdminToken('');
             }).catch(err => {
-                if (err.response.status === 406) {
-                    alert(err.response.data)
-                } else {
-                    alert('Could not create user. Make sure this is the correct onyen. See your teacher for help if needed.')
-                    console.log('err', err)
-                }
+              alert(err)
             })
         }
     }
