@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -28,6 +28,15 @@ function ClientForm(props) {
   const [softwareReq, setSoftwareReq] = useState("");
   const [hardwareReq, setHardwareReq] = useState("");
   const [showError, setShowError] = useState(false);
+  const [instructions, setInstructions] = useState('');
+
+  useEffect(()=>{
+    Axios.get("http://localhost:5000/proposals/clientForm").then(res => {
+      setInstructions(res['data'][0]['text']);
+      console.log(res)
+    }).catch(err => console.log(err));
+  },[]);
+
   switch (appState) {
     case clientAppState.WELCOME:
       return Welcome();
@@ -39,6 +48,8 @@ function ClientForm(props) {
       return Welcome();
   }
 
+
+
   function Welcome() {
     return (
       <Container>
@@ -49,19 +60,7 @@ function ClientForm(props) {
             </Typography>
             <br />
             <Typography component="h1" variant="h5">
-              This is where we'll put all the information that Stotts wants the
-              clients to know before they send in an application to work with
-              523 students for this project. Lorem ipsum dolor sit amet,
-              consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-              labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-              nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-              consequat. Duis aute irure dolor in reprehenderit in voluptate
-              velit esse cillum dolore eu fugiat nulla pariatur.Lorem ipsum
-              dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-              incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-              veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-              ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-              voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+              {instructions}
             </Typography>
             <br />
             <br />

@@ -67,6 +67,14 @@ router.post("/addLetter", auth.required, (req, res, next) => {
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
+
+// Get message to show clients on clientForm
+router.get("/clientForm", auth.optional, (req, res, next) => {
+  Letter.find({ status: "ClientForm" })
+      .then((pending) => res.json(pending))
+      .catch((err) => res.status(400).json("Error: " + err));
+});
+
 // Get pending letter
 router.get("/pendingLetter", auth.required, (req, res, next) => {
   Letter.find({ status: "Pending" })
