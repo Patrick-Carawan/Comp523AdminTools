@@ -11,6 +11,7 @@ import DashBoard from "./AdminDashboard";
 import axios from "axios";
 import Button from "@material-ui/core/Button";
 import Axios from "axios";
+import Typography from "@material-ui/core/Typography";
 
 const clientGroups = {
   ACCEPTED: "Accepted",
@@ -209,7 +210,9 @@ function ComposeEmail(props) {
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Container maxWidth="sm">
-          <h1>Compose Email to Send to Clients</h1>
+          <Typography variant="h4" gutterBottom>
+            Compose Email to Send to Clients
+          </Typography>
           <form onSubmit={sendEmail}>
             <Grid
               container
@@ -217,7 +220,9 @@ function ComposeEmail(props) {
               justify="flex-start"
               alignItems="stretch"
             >
-              <span>1. Choose which group of clients you'd like to email</span>
+              <Typography variant="subtitle1">
+                1. Choose which group of clients you'd like to email
+              </Typography>
               <FormControl>
                 <InputLabel>Client Group</InputLabel>
                 <Select
@@ -234,22 +239,13 @@ function ComposeEmail(props) {
               <br />
             </Grid>
 
-            <Button
-              title="Save the current message body to be the default message for this client group"
-              variant="contained"
-              color="secondary"
-              onClick={() => setMessage()}
-            >
-              Save Message Body
-            </Button>
-
             <Grid
               container
               direction="column"
               justify="flex-start"
               alignItems="stretch"
             >
-              <span>2. Subject</span>
+              <Typography variant="subtitle1">2. Subject</Typography>
               <br />
               <TextField
                 id="outlined-basic"
@@ -266,7 +262,7 @@ function ComposeEmail(props) {
               justify="flex-start"
               alignItems="stretch"
             >
-              <span>3. Message Body</span>
+              <Typography variant="subtitle1">3. Message Body</Typography>
               <br />
               <TextField
                 id="outlined-basic"
@@ -278,24 +274,38 @@ function ComposeEmail(props) {
               <br />
             </Grid>
 
-            <Grid
-              container
-              direction="column"
-              justify="flex-start"
-              alignItems="center"
-            >
-              <a
-                style={{
-                  padding: "10px",
-                  color: "white",
-                  borderRadius: "5px",
-                  backgroundColor: "#003b9e",
-                  //   text-decoration: "none",
-                }}
-                href={`mailto:${arrToStringList()}?body=${letter}&subject=${subject}`}
-              >
-                Email Clients
-              </a>
+            <Grid container justify="flex-start" alignItems="center">
+              <br />
+
+              <Grid item sm>
+                <Button
+                  title="Save the current message body to be the default message for this client group"
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => setMessage()}
+                  style={{ "margin-left": "50px" }}
+                >
+                  Save Message Body
+                </Button>
+              </Grid>
+              <Grid item sm>
+                {" "}
+                <Button
+                  title="Send the email to client"
+                  variant="contained"
+                  color="primary"
+                >
+                  <a
+                    style={{
+                      "text-decoration": "none",
+                      color: "inherit",
+                    }}
+                    href={`mailto:${arrToStringList()}?body=${letter}&subject=${subject}`}
+                  >
+                    Email Clients
+                  </a>
+                </Button>
+              </Grid>
             </Grid>
           </form>
         </Container>
