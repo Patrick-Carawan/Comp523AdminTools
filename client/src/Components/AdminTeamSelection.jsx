@@ -226,7 +226,7 @@ function AdminTeamSelection(props) {
                         )}
                     </Grid>
 
-                    <Button variant="outlined" style={{'marginBottom': '2em', 'marginTop': '2em'}} onClick={addNewTeam}>Add
+                    <Button title="To add multiple new teams, submit one new team then refresh the page" disabled={newTeams.length > 0} variant="outlined" style={{'marginBottom': '2em', 'marginTop': '2em'}} onClick={addNewTeam}>Add
                         new
                         Team</Button>
                     <Grid container spacing={3}>
