@@ -44,7 +44,6 @@ export default function CreateAccount() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [adminToken, setAdminToken] = useState('');
-    const [semester, setSemester] = useState(window.localStorage.getItem('semester'));
 
     let history = useHistory();
 
@@ -69,7 +68,6 @@ export default function CreateAccount() {
                     password: password,
                     firstName: firstName,
                     lastName: lastName,
-                    semester: semester,
                     adminToken: adminToken
                 }
             }).then(res => {
