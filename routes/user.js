@@ -44,7 +44,7 @@ router.get('/students/:semester', auth.required, (req, res, next) => {
 router.post('/updateTeam/:onyen', auth.required, (req, res, next) => {
     User.findOne({onyen: req.params.onyen})
             .then(student => {
-                if (student.teamId === "Pending") {
+                if (student.teamId === "Pending" || req.payload.admin) {
                     student.teamId = req.body.teamId;
                     student.save()
                         .then(() => res.json("Student's teamId updated. "))

@@ -93,7 +93,7 @@ function AdminFinalReports() {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
         }).then((res) => {
-            console.log('teams', res['data']);
+            // console.log('teams', res['data']);
             const myTeams = res['data'].sort((team1, team2) => team1['teamName'] < team2['teamName'] ? -1 : 1);
             let tempMap = new Map();
             myTeams.forEach(team => {
@@ -108,7 +108,7 @@ function AdminFinalReports() {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
         }).then((res) => {
-            console.log('student reports', res['data']);
+            // console.log('student reports', res['data']);
             let tempReportMap = new Map();
             res['data'].forEach(report => tempReportMap.set(report.onyen, report.text));
             setOnyenToReport(tempReportMap);
@@ -119,7 +119,7 @@ function AdminFinalReports() {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
         }).then((res) => {
-            console.log('team reports', res['data']);
+            // console.log('team reports', res['data']);
             let tempMap = new Map();
             res['data'].forEach(report => tempMap.set(report['team'], report['text']));
             setTeamIdToReport(tempMap);
