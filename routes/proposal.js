@@ -20,12 +20,6 @@ router.get("/pendingOrCurrent/:semester", auth.required, (req, res, next) => {
 
 
 
-// Get a proposal by its id
-router.get("/:id", auth.required, (req, res, next) => {
-  Proposal.findOne({_id: req.params.id})
-    .then((proposals) => res.json(proposals))
-    .catch((err) => res.status(400).json("Error: " + err));
-});
 
 // Delete a proposal
 router.delete("/:id", auth.required, (req, res, next) => {
@@ -102,7 +96,7 @@ router.post("/addLetter", auth.required, (req, res, next) => {
 
 // Get message to show clients on clientForm
 router.get("/clientForm", auth.optional, (req, res, next) => {
-  Letter.findOne({ status: "ClientForm" })
+  Letter.find({ status: "ClientForm" })
       .then((pending) => res.json(pending))
       .catch((err) => res.status(400).json("Error: " + err));
 });
@@ -110,7 +104,7 @@ router.get("/clientForm", auth.optional, (req, res, next) => {
 // Get pending letter
 router.get("/pendingLetter", auth.required, (req, res, next) => {
   if (req.payload.admin) {
-    Letter.findOne({ status: "Pending" })
+    Letter.find({ status: "Pending" })
       .then((pending) => res.json(pending))
       .catch((err) => res.status(400).json("Error: " + err));
   } else {
@@ -139,9 +133,10 @@ router.post("/pendingLetter", auth.required, (req, res, next) => {
 
 // Get rejection letter
 router.get("/rejectionLetter", auth.required, (req, res, next) => {
+    // console.log('test')
   if (req.payload.admin) {
-    Letter.findOne({ status: "Rejected" })
-      .then((rejection) => res.json(rejection))
+    Letter.find({ status: "Rejected" })
+      .then((rejection) => {res.json(rejection); })
       .catch((err) => res.status(400).json("Error: " + err));
   } else {
       res.status(403).json("Not authorized");
@@ -169,8 +164,9 @@ router.post("/rejectionLetter", auth.required, (req, res, next) => {
 
 // Get acceptance letter
 router.get("/acceptanceLetter", auth.required, (req, res, next) => {
+    // console.log('req.payload.admin', req.payload.admin)
   if (req.payload.admin) {
-    Letter.findOne({ status: "Accepted" })
+    Letter.find({ status: "Accepted" })
       .then((acceptance) => res.json(acceptance))
       .catch((err) => res.status(400).json("Error: " + err));
   } else {
@@ -213,6 +209,15 @@ router.post("/update/:id", auth.required, (req, res, next) => {
       res.status(403).json("Not authorized");
   }
 
+});
+
+
+
+// Get a proposal by its id
+router.get("/:id", auth.required, (req, res, next) => {
+    Proposal.findOne({_id: req.params.id})
+        .then((proposals) => res.json(proposals))
+        .catch((err) => res.status(400).json("Error: " + err));
 });
 
 module.exports = router;
