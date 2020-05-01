@@ -75,6 +75,8 @@ function Roster() {
   };
 
   function submitRoster() {
+    console.log('roster when submitting', roster
+    )
     axios
       .post(
         `/roster/add/${semester}`,

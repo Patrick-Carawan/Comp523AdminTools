@@ -13,13 +13,19 @@ router.post('/add/:semester', auth.required, (req, res, next) => {
             semester: _semester,
             studentList: _studentList
         };
-        Roster.collection.replaceOne({"semester" : _semester.toString()}, roster, {upsert: true})
-            .then(() => res.json("Roster added."))
-            .catch(err => res.status(400).json('Error: ' + err));
+
+        Roster.findOneAndUpdate({ semester: _semester }, { semester: _semester, studentList: _studentList}, { upsert: true, new: true }, (err, doc) => {
+            if (err) {
+                console.log(err);
+            } else {
+                res.json("Roster updated.");
+            }
+        });
+
     } else {
         res.status(403).json("Not authorized");
     }
-    
+
 });
 
 

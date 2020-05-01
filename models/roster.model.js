@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const rosterSchema = new Schema({
-    semester: { type: String, required: true, unique: true, default: process.env.CURRENT_SEMESTER },
-    studentList: { type: Array, required: true, unique: true }
+    semester: { type: String, required: true, default: process.env.CURRENT_SEMESTER },
+    studentList: { type: Array, unique: false, required: true }
 }, {
     timestamps: true
 });
