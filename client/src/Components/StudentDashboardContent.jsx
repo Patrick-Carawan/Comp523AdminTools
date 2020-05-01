@@ -93,8 +93,10 @@ export default function Dashboard() {
                 Authorization: `Token ${window.localStorage.getItem("token")}`,
             },
         }).then((response) => {
+            if(response["data"]){
             setTeamName(response["data"].teamName);
             setProjectId(response["data"].projectId);
+            }
             // console.log('team', response["data"]);
         });
     }, []);

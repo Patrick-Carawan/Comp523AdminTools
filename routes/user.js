@@ -46,7 +46,7 @@ router.post('/updateTeam/', auth.required, (req, res, next) => {
 });
 
 //Update team for a given student (Admins can do this as many times as needed)
-router.post('/updateTeam/:onyen', auth.required, (req, res, next) => {
+router.post('/updateTeam', auth.required, (req, res, next) => {
     if (req.payload.admin) {
         User.findOne({onyen: req.params.onyen})
             .then(student => {
