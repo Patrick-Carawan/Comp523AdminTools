@@ -125,8 +125,15 @@ function ProposalAssignment(props) {
         let localPairingsArray = [];
         teams.forEach((team, index) => {
             const teamId = team["_id"];
-            const projectId = titleMap.get(selectedProjects[index])["_id"];
-            const projectTitle = titleMap.get(selectedProjects[index])["title"];
+            let projectTitle;
+            let projectId;
+            if (titleMap.get(selectedProjects[index])) {
+                projectTitle = titleMap.get(selectedProjects[index])["title"];
+                projectId = titleMap.get(selectedProjects[index])['_id'];
+            } else {
+                projectTitle = "Pending";
+                projectId = "Pending";
+            }
             assignmentArray.push({teamId: teamId, projectId: projectId, projectTitle: projectTitle});
 
             const teamName = team["teamName"];
@@ -136,11 +143,15 @@ function ProposalAssignment(props) {
         axios
             .post(`/teams/assignments`, {
                 assignments: assignmentArray,
+            }, {
+                headers: {
+                    Authorization: `Token ${window.localStorage.getItem('token')}`
+                }
             })
             .then(() => {
                 alert("Assignments submitted");
                 setShowPairings(true);
-            });
+            }).catch(err => alert(err));
     }
 
     return (

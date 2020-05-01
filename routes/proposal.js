@@ -10,6 +10,16 @@ router.get("/", auth.required, (req, res, next) => {
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
+
+// Get proposals in a given semester
+router.get("/pendingOrCurrent/:semester", auth.required, (req, res, next) => {
+  Proposal.find({$or: [{semester: req.params.semester}, {status: "Pending"} ]})
+      .then((proposals) => res.json(proposals))
+      .catch((err) => res.status(400).json("Error: " + err));
+});
+
+
+
 // Delete a proposal
 router.delete("/:id", auth.required, (req, res, next) => {
   Proposal.findByIdAndDelete(req.params.id)

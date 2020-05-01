@@ -8,10 +8,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import DashBoard from "./AdminDashboard";
 import Box from "@material-ui/core/Box";
 import axios from "axios";
-import { ExpansionPanel, ExpansionPanelDetails } from "@material-ui/core";
+import {createMuiTheme, ExpansionPanel, ExpansionPanelDetails, withStyles} from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import Typography from "@material-ui/core/Typography";
+import {green, red} from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
   rejectButton: {
     margin: "0px 5px",
   },
+
   heading: {
     fontSize: theme.typography.pxToRem(15),
     fontWeight: theme.typography.fontWeightRegular,
@@ -46,15 +48,41 @@ const useStyles = makeStyles((theme) => ({
   pendingBackground: {
     backgroundColor: "rgba(183,183,175,0.34)",
   },
+  completedBackground: {
+    backgroundColor: "rgba(112,197,255,0.69)",
+  },
 }));
+const theme = createMuiTheme({
+  palette: {
+    primary: red,
+  },
+});
+const RedButton = withStyles({
+  root: {
+    color: theme.palette.getContrastText(red[500]),
+    backgroundColor: red[500],
+    '&:hover': {
+      backgroundColor: red[700],
+    },
+  },
+})(Button);
+
+
+const GreenButton = withStyles({
+  root: {
+    color: '#ffffff',
+    backgroundColor: green[400],
+    '&:hover': {
+      backgroundColor: green[700],
+    },
+  },
+})(Button);
+
+
 
 function ProposalsAdminView(props) {
   const classes = useStyles();
-  const [acceptedProposals, setAcceptedProposals] = useState([]);
-  const [newProposals, setNewProposals] = useState([]);
-  const [pendingProposals, setPendingProposals] = useState([]);
-  const [rejectedProposals, setRejectedProposals] = useState([]);
-  const [completedProposals, setCompletedProposals] = useState([]);
+  const [allProposals, setAllProposals] = useState([]);
   const [semester, setSemester] = useState(window.localStorage.getItem('semester'));
   useEffect(() => {
     axios
@@ -66,33 +94,18 @@ function ProposalsAdminView(props) {
       .then((response) => {
         console.log(response);
         const proposals = response["data"];
-        setNewProposals(proposals.filter((prop) => prop["status"] === "New"));
-        setAcceptedProposals(
-          proposals.filter((prop) => prop["status"] === "Accepted")
-        );
-        setRejectedProposals(
-          proposals.filter((prop) => prop["status"] === "Rejected")
-        );
-        setPendingProposals(
-          proposals.filter((prop) => prop["status"] === "Pending")
-        );
-        setCompletedProposals(
-            proposals.filter((prop) => prop["status"] === "Completed")
-        );
+        setAllProposals(response['data'])
       })
       .catch(function (error) {
         console.log(error);
       });
   }, []);
 
-  const changeStatus = function (prevIndex, oldStatus, newStatus, id) {
-    if (oldStatus === newStatus) {
-      return;
-    }
+  const changeStatus = function (proposal, newStatus, index) {
     // post to backend, wrap everything else in .then()
     axios
       .post(
-        `/proposals/update/${id}`,
+        `/proposals/update/${proposal._id}`,
         {
           status: newStatus,
         },
@@ -103,53 +116,14 @@ function ProposalsAdminView(props) {
         }
       )
       .then(() => {
-        let proposal;
-        let copy;
-        switch (oldStatus) {
-          case "Accepted":
-            copy = [...acceptedProposals];
-            proposal = copy.splice(prevIndex, 1)[0];
-            setAcceptedProposals(copy);
-            break;
-          case "Rejected":
-            copy = [...rejectedProposals];
-            proposal = copy.splice(prevIndex, 1)[0];
-            setRejectedProposals(copy);
-            break;
-          case "Pending":
-            copy = [...pendingProposals];
-            proposal = copy.splice(prevIndex, 1)[0];
-            setPendingProposals(copy);
-            break;
-          case "New":
-            copy = [...newProposals];
-            proposal = copy.splice(prevIndex, 1)[0];
-            setNewProposals(copy);
-            break;
-        }
-
-        switch (newStatus) {
-          case "Accepted":
-            copy = [...acceptedProposals];
-            copy.push(proposal);
-            setAcceptedProposals(copy);
-            break;
-          case "Rejected":
-            copy = [...rejectedProposals];
-            copy.push(proposal);
-            setRejectedProposals(copy);
-            break;
-          case "Pending":
-            copy = [...pendingProposals];
-            copy.push(proposal);
-            setPendingProposals(copy);
-            break;
-        }
+        let tempProps = [...allProposals];
+        tempProps[index].status=newStatus;
+        setAllProposals(tempProps);
       })
       .catch((err) => alert(err));
   };
 
-  const proposalGroup = function (propType, label, className) {
+  const proposalGroup = function (label, className) {
     return (
       <>
         <Grid item style={{ marginBottom: "5px" }}>
@@ -164,7 +138,8 @@ function ProposalsAdminView(props) {
             </ExpansionPanelSummary>
             <ExpansionPanelDetails>
               <Grid container direction="column">
-                {propType.map((prop, i) => (
+                {allProposals.map((prop, i) => (
+                    prop.status===label ?
                   <Card variant="outlined" key={i} className={classes.proposal}>
                     <CardContent>
                       <Grid
@@ -184,40 +159,51 @@ function ProposalsAdminView(props) {
                         </Grid>
                         <Box mx="auto">
                           <Grid item>
-                            <Button
+                            <GreenButton
                               variant="contained"
                               color="primary"
                               className={classes.acceptButton}
                               onClick={() =>
-                                changeStatus(i, label, "Accepted", prop["_id"])
+                                changeStatus(prop, "Accepted", i)
                               }
                             >
                               Accept
-                            </Button>
+                            </GreenButton>
                             <Button
                               variant="contained"
                               className={classes.pendingButton}
                               onClick={() =>
-                                changeStatus(i, label, "Pending", prop["_id"])
+                                  changeStatus(prop, "Pending", i)
                               }
                             >
                               Leave Pending
                             </Button>
-                            <Button
+                            <RedButton
                               variant="contained"
-                              color="secondary"
-                              className={classes.rejectButton}
+                              style={{'marginLeft':'5px'}}
+                              // color="danger"
+                              // className={classes.rejectButton}
                               onClick={() =>
-                                changeStatus(i, label, "Rejected", prop["_id"])
+                                changeStatus(prop, "Rejected", i)
                               }
                             >
                               Reject
-                            </Button>
+                            </RedButton>
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              className={classes.rejectButton}
+                              onClick={() =>
+                                  changeStatus(prop, "Completed", i)
+                              }
+                          >
+                            Completed
+                          </Button>
                           </Grid>
                         </Box>
                       </Grid>
                     </CardContent>
-                  </Card>
+                  </Card> : null
                 ))}
               </Grid>
             </ExpansionPanelDetails>
@@ -233,21 +219,21 @@ function ProposalsAdminView(props) {
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Grid container direction="column">
-          {proposalGroup(newProposals, "New")}
+          {proposalGroup("New")}
           {proposalGroup(
-            acceptedProposals,
             "Accepted",
             classes.acceptedBackground
           )}
           {proposalGroup(
-            rejectedProposals,
             "Rejected",
             classes.rejectedBackground
           )}
           {proposalGroup(
-            pendingProposals,
             "Pending",
             classes.pendingBackground
+          )}
+          {proposalGroup(
+              "Completed", classes.completedBackground
           )}
         </Grid>
       </main>

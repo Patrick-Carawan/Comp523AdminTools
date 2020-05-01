@@ -33,7 +33,7 @@ const theme = createMuiTheme({
     palette: {
         primary: {main: "#78b5e8", contrastText: "#ffffff"},
         secondary: {main: "#0a0960", contrastText: "#ffffff"},
-        danger: {main: "rgba(255,24,34,0.96)"},
+        danger: {main: "rgba(255,24,34,0.96)", contrastText:"#ffffff"},
     },
 });
 
