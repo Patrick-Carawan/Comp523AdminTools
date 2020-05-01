@@ -31,7 +31,7 @@ router.get('/rankings/:semester', auth.required, (req, res, next) => {
 // Add a new team to the database once as a user
 router.post('/addAsUser/:onyen', auth.required, (req, res, next) => {
     // const _teamName = req.body.teamName;
-    User.find({ onyen: req.params.onyen })
+    User.findOne({ onyen: req.params.onyen })
         .then(user => {
             if (user.teamId === "Pending") {
                 let _teamName;
@@ -52,7 +52,7 @@ router.post('/addAsUser/:onyen', auth.required, (req, res, next) => {
             }
             
         })
-        .catch(err => res.status(400).json('Error' + err));
+        .catch(err => console.log(err));
     
 
 });

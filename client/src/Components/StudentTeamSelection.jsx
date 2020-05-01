@@ -85,6 +85,7 @@ function StudentTeamSelection(props) {
     };
 
     const submitTeams = function (e) {
+        console.log('submit teams called')
         e.preventDefault();
         // console.log('draggedOnyens', draggedOnyens);
         // console.log('typedOnyens', typedOnyens);
@@ -104,8 +105,7 @@ function StudentTeamSelection(props) {
         ) || typedOnyens.length !== draggedOnyens.length || typedOnyens.length === 0) {
             alert(`Onyens must all match their student's names to submit your team.`)
         } else {
-            axios.post(`/teams/add`, {
-                teamName: `Team ${Math.floor(Math.random() * 100)}`,
+            axios.post(`/teams/addAsUser/${window.localStorage.getItem('onyen')}`, {
                 teamMembers: draggedOnyens,
                 semester: semester
             }, {
@@ -113,6 +113,7 @@ function StudentTeamSelection(props) {
                     Authorization: `Token ${window.localStorage.getItem('token')}`
                 }
             }).then((res) => {
+                alert('posted initial team');
                 draggedOnyens.forEach((onyen, i) => {
                     axios.post(`/users/updateTeam/${onyen}`, {
                         teamId: res['data']['id']
@@ -121,12 +122,13 @@ function StudentTeamSelection(props) {
                             Authorization: `Token ${window.localStorage.getItem('token')}`
                         }
                     }).then(() => {
+
                         if (i === draggedOnyens.length - 1) {
                             alert('Team successfully submitted')
                         }
                     }).catch(err => alert(err))
                 })
-            })
+            }).catch(err => alert(err));
         }
     };
 

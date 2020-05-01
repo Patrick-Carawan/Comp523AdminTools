@@ -22,7 +22,7 @@ router.get("/pendingOrCurrent/:semester", auth.required, (req, res, next) => {
 
 // Get a proposal by its id
 router.get("/:id", auth.required, (req, res, next) => {
-  Proposal.findById(req.params.id)
+  Proposal.findOne({_id: req.params.id})
     .then((proposals) => res.json(proposals))
     .catch((err) => res.status(400).json("Error: " + err));
 });
