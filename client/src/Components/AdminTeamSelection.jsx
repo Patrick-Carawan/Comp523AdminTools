@@ -133,7 +133,7 @@ function AdminTeamSelection(props) {
             tempNewTeams[index - 1].push(student['onyen']);
         });
         tempNewTeams.forEach(team => {
-            axiosPromises.push(axios.post(`/teams/add`, {
+            axiosPromises.push(axios.post(`/teams/addAsAdmin`, {
                 teamName: `Team ${Math.floor(Math.random() * 100)}`,
                 teamMembers: team,
                 semester: semester
@@ -227,7 +227,7 @@ function AdminTeamSelection(props) {
                             <Grid item key={0 - index - 1} xs={3} ml={5}>
                                 <Card variant="outlined" className="teamTile">
                                     <TeamBox id={`new${index + 1}`} setTeam={setTeam}>
-                                        <Typography variant="h6">{`New Team ${index + 1}`}</Typography>
+                                        <Typography variant="h6">{`New Team`}</Typography>
                                         {students.map((student, i) =>
                                             student['teamId'] === `new${index + 1}` ?
                                                 <Name key={i} id={i} className="name" draggable="true"

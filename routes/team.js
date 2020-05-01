@@ -77,9 +77,6 @@ router.post('/addAsAdmin', auth.required, (req, res, next) => {
     } else {
         res.status(418).json("You shouldn't be here, congrats");
     }
-    // const _teamName = req.body.teamName;
-    
-
 });
 
 // Delete a team
