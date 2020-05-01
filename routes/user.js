@@ -41,7 +41,19 @@ router.get('/students/:semester', auth.required, (req, res, next) => {
 });
 
 // Update team for a given student (Students can only assign their own team, and they can only do it once)
-router.post('/updateTeam/', auth.required, (req, res, next) => {
+router.post('/updateTeam/:onyen', auth.required, (req, res, next) => {
+    User.findOne({onyen: req.params.onyen})
+            .then(student => {
+                if (student.teamId === "Pending") {
+                    student.teamId = req.body.teamId;
+                    student.save()
+                        .then(() => res.json("Student's teamId updated. "))
+                        .catch(err => res.status(400).json('Error in saving student: ' + err));
+                } else {
+                    res.status(403).json("Not authorized");
+                }
+            })
+            .catch(err => res.status(400).json('Error in finding student: ' + err));
     
 });
 
