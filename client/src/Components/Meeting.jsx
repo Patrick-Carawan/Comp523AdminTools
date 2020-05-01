@@ -132,7 +132,7 @@ export default function MeetingPage() {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
         }).then(res =>{
-            console.log('roster', res['data']);
+            // console.log('roster', res['data']);
             let tempMap = new Map();
             res['data'][0]['studentList'].forEach(student =>{
                 tempMap.set(student['onyen'],student['name'])
@@ -164,7 +164,7 @@ export default function MeetingPage() {
                     }
                 }
             ).then((res) => {
-                console.log("SpecificCoachMeetings", res["data"]);
+                // console.log("SpecificCoachMeetings", res["data"]);
                 if (res['data'].length !== 0) {
                     setAttendanceObj(res['data'][0]["attendance"]);
                     setDemoStatus(res["data"][0]["demoStatus"]);
@@ -192,7 +192,7 @@ export default function MeetingPage() {
                     }
                 }
             ).then((res) => {
-                console.log("SpecificCoachMeetings", res["data"]);
+                // console.log("SpecificCoachMeetings", res["data"]);
                 // changeDemoStatus(res["data"]["demoStatus"]);
                 if (res["data"].length !== 0) {
                     setAttendanceObj(res["data"][0]["attendance"]);
@@ -209,7 +209,7 @@ export default function MeetingPage() {
                 }
             });
         }
-        console.log(week);
+        // console.log(week);
         setWeek(week);
     };
 
@@ -276,7 +276,7 @@ export default function MeetingPage() {
                 Authorization: `Token ${window.localStorage.getItem("token")}`,
             },
         }).then(res => {
-            console.log(res['data'])
+            // console.log(res['data'])
             let attendances = {};
             let numDemoFine = 0;
             let numDemoBad = 0;

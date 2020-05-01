@@ -86,7 +86,7 @@ function AdminFinalReports() {
     //whenever the semester changes, sets all values, such as teams, final reports, students to be
     //accurate for the new semester
     const setAllSemesterInfo = () => {
-        console.log(onyenMap);
+        // console.log(onyenMap);
         setCurrentTeam({});
         axios.get(`/teams/semester/${semester}`, {
             headers: {
@@ -108,7 +108,7 @@ function AdminFinalReports() {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
         }).then((res) => {
-            console.log('student reports', res['data']);
+            // console.log('student reports', res['data']);
             let tempReportMap = new Map();
             res['data'].forEach(report => tempReportMap.set(report.onyen, report.text));
             setOnyenToReport(tempReportMap);
@@ -119,7 +119,7 @@ function AdminFinalReports() {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
         }).then((res) => {
-            console.log('team reports', res['data']);
+            // console.log('team reports', res['data']);
             let tempMap = new Map();
             res['data'].forEach(report => tempMap.set(report['team'], report['text']));
             setTeamIdToReport(tempMap);
@@ -130,11 +130,11 @@ function AdminFinalReports() {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
         }).then((res) => {
-            console.log('roster', res.data);
+            // console.log('roster', res.data);
             let tempOnyenMap = new Map();
             if (res.data[0]) {
                 res.data[0].studentList.forEach(obj => tempOnyenMap.set(obj.onyen, obj.name));
-                console.log(tempOnyenMap);
+                // console.log(tempOnyenMap);
                 setOnyenMap(tempOnyenMap);
             }
         })
@@ -147,7 +147,7 @@ function AdminFinalReports() {
     const handleChange = (event) => {
         // console.log('will be current team', event.target.value);
         setCurrentTeam(event.target.value);
-        console.log(currentTeam);
+        // console.log(currentTeam);
     };
 
     const handleTabClick = (event, newValue) => {

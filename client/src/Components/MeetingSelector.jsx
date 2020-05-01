@@ -62,7 +62,7 @@ export default function CheckAttendance(props) {
 
     const tempAttendanceObj = Object.assign({}, attendanceObj);
     tempAttendanceObj[`${member}`] = event.target.value;
-    console.log(tempAttendanceObj);
+    // console.log(tempAttendanceObj);
     setAttendanceObj(tempAttendanceObj);
     props.changeAttendance(member, event.target.value);
   };

@@ -87,7 +87,6 @@ export default function Dashboard() {
     useEffect(() => {
         setName(window.localStorage.getItem("name"));
         setTeamId(window.localStorage.getItem("teamId"));
-        console.log('teamId from window', window.localStorage.getItem("teamId"))
 
         Axios.get(`/teams/${window.localStorage.getItem('teamId')}`, {
             headers: {
@@ -96,12 +95,12 @@ export default function Dashboard() {
         }).then((response) => {
             setTeamName(response["data"].teamName);
             setProjectId(response["data"].projectId);
-            console.log('team', response["data"]);
+            // console.log('team', response["data"]);
         });
     }, []);
 
     useEffect(() => {
-        console.log('projectId', projectId)
+        // console.log('projectId', projectId)
         if (projectId === "Pending" || !projectId) {
               setProject("Pending")
         } else {
@@ -110,7 +109,7 @@ export default function Dashboard() {
                     Authorization: `Token ${window.localStorage.getItem("token")}`,
                 },
             }).then((response) => {
-                console.log('project',response["data"]);
+                // console.log('project',response["data"]);
                 //   setProject(response["data"]);
               setProject(response['data']);
             });

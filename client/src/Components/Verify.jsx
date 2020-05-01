@@ -7,7 +7,7 @@ function Verify(props) {
     let url = window.location.href;
     let onyenAndToken = url.replace(new RegExp('.*/verify/'), '');
     onyenAndToken = onyenAndToken.split('/');
-    console.log(onyenAndToken);
+    // console.log(onyenAndToken);
     window.localStorage.setItem('token', onyenAndToken[1]);
     axios.post(`/users/verifyUser`, {onyen: onyenAndToken[0]}, {
         headers: {

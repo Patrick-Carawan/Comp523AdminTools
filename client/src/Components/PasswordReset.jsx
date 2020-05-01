@@ -12,7 +12,7 @@ function PasswordReset(props) {
     let url = window.location.href;
     let onyenAndToken = url.replace(new RegExp('.*/passwordReset/'), '');
     onyenAndToken = onyenAndToken.split('/');
-    console.log(onyenAndToken);
+    // console.log(onyenAndToken);
     window.localStorage.setItem('token', onyenAndToken[1]);
 
     //starts reset password process. will cause an email to be sent to the user to verify

@@ -48,7 +48,7 @@ function ComposeEmail(props) {
         },
       })
       .then((response) => {
-        console.log("emails", response.data);
+        // console.log("emails", response.data);
         let tempAcc = [];
         let tempPend = [];
         let tempRej = [];
@@ -117,7 +117,7 @@ function ComposeEmail(props) {
 
   function sendEmail(e) {
     e.preventDefault();
-    console.log(clientGroup);
+    // console.log(clientGroup);
   }
 
   const [clientGroup, setClientGroup] = useState("");
@@ -175,7 +175,7 @@ function ComposeEmail(props) {
 
   function changeBody(e) {
     setLetter(e.target.value);
-    console.log(e.target.value);
+    // console.log(e.target.value);
   }
 
   //sets the message body of the email template based on client group

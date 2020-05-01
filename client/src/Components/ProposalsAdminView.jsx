@@ -92,7 +92,7 @@ function ProposalsAdminView(props) {
         },
       })
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         const proposals = response["data"];
         setAllProposals(response['data'])
       })

@@ -17,7 +17,7 @@ const useStyles = makeStyles({
 
 export default function Card(props) {
     const classes = useStyles();
-    console.log(props.project.email);
+    // console.log(props.project.email);
     return (
         <React.Fragment>
             <Title>Your assigned project: </Title>

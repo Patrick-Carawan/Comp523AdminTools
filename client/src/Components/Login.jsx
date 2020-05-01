@@ -53,7 +53,7 @@ export default function Login(props) {
     //Logs user in
     function submit(e) {
         e.preventDefault();
-        console.log('submitted');
+        // console.log('submitted');
         axios.post(`/users/login`, {
             user: {
                 onyen: onyen,

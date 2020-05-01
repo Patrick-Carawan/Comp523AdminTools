@@ -82,7 +82,7 @@ function ProposalAssignment(props) {
                     tempIdMap.set(project["_id"], project);
                 }
             );
-            console.log('tempIdMap', tempIdMap)
+            // console.log('tempIdMap', tempIdMap)
             setTitleMap(tempMap);
             setIdMap(tempIdMap);
         });

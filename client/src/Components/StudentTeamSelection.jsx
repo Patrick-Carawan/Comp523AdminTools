@@ -85,11 +85,7 @@ function StudentTeamSelection(props) {
     };
 
     const submitTeams = function (e) {
-        console.log('submit teams called')
         e.preventDefault();
-        // console.log('draggedOnyens', draggedOnyens);
-        // console.log('typedOnyens', typedOnyens);
-
         let assignedStudents = students.filter(student => student['teamId'] !== "Assigned").map(student => student['onyen']);
         for (let i = 0; i < typedOnyens.length; i++) {
             if (assignedStudents.includes(draggedOnyens[i])) {

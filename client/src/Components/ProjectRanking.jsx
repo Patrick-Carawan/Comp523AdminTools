@@ -34,12 +34,12 @@ const ProjectRanking = () => {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
         }).then((res) => {
-            console.log(res['data']);
+            // console.log(res['data']);
             setProposals(res['data'].filter(proposal => proposal['status'].toLowerCase() === "accepted"))
         })
     }, []);
 
-    useEffect(() => console.log(proposals), [proposals]);
+    // useEffect(() => console.log(proposals), [proposals]);
 
 
     const submitRanking = function () {
