@@ -84,23 +84,12 @@ router.post('/assignments/', auth.required, (req, res, next) => {
     }
 });
 
-// Update a team entry, to add or remove a student from a team, change proposal ranking, etc.
-// router.post('/update/:id', auth.required, (req, res, next) => {
-//     Team.findById(req.params.id)
-//         .then(team => {
-//             team.teamName = req.body.teamName;
-//             team.projectId = req.body.projectId;
-//             team.projectTitle = req.body.projectTitle;
-//             team.teamMembers = req.body.teamMembers;
-//             team.proposalRanks = req.body.proposalRanks;
-//             team.save()
-//                 .then(() => res.json("Team updated with new info."))
-//                 .catch(err => res.status(400).json('Error: ' + err));
-//          })
-//          .catch(err => res.status(400).json('Error: ' + err));
-// });
-
-// Update a team's members
+/*  Update a team's members
+    Request should look like
+    {
+        "teamMembers": ["onyen1", "onyen2", "onyen3"]
+    }
+*/
 router.post('/updateMembers/:id', auth.required, (req, res, next) => {
     Team.findById(req.params.id)
         .then(team => {
