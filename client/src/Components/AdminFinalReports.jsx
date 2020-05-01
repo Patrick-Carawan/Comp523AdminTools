@@ -108,7 +108,7 @@ function AdminFinalReports() {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
         }).then((res) => {
-            // console.log('student reports', res['data']);
+            console.log('student reports', res['data']);
             let tempReportMap = new Map();
             res['data'].forEach(report => tempReportMap.set(report.onyen, report.text));
             setOnyenToReport(tempReportMap);
@@ -119,7 +119,7 @@ function AdminFinalReports() {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
         }).then((res) => {
-            // console.log('team reports', res['data']);
+            console.log('team reports', res['data']);
             let tempMap = new Map();
             res['data'].forEach(report => tempMap.set(report['team'], report['text']));
             setTeamIdToReport(tempMap);

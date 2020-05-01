@@ -31,8 +31,9 @@ router.get('/teams/:semester', auth.required, (req, res, next) => {
 router.post('/students', auth.required, (req, res, next) => {
     const _onyen = req.body.onyen;
     const _text = req.body.text;
+    const _semester = process.env.CURRENT_SEMESTER;
 
-    StudentReport.findOneAndUpdate({ onyen: _onyen }, { text: _text}, { upsert: true }, (err, doc) => {
+    StudentReport.findOneAndUpdate({ onyen: _onyen }, { text: _text, semester: _semester}, { upsert: true }, (err, doc) => {
         if (err) {
             console.log(err);
         } else {
@@ -45,8 +46,9 @@ router.post('/students', auth.required, (req, res, next) => {
 router.post('/teams', auth.required, (req, res, next) => {
     const _team = req.body.team;
     const _text = req.body.text;
+    const _semester = process.env.CURRENT_SEMESTER;
 
-    TeamReport.findOneAndUpdate({ team: _team }, { text: _text}, { upsert: true }, (err, doc) => {
+    TeamReport.findOneAndUpdate({ team: _team }, { text: _text, semester: _semester}, { upsert: true }, (err, doc) => {
         if (err) {
             console.log(err);
         } else {
