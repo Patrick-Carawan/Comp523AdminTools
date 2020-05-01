@@ -69,7 +69,7 @@ userSchema.methods.sendPasswordResetEmail = function() {
         if (err) {
             console.log(err);
         }
-        let messageHtml = `Please click the following link to reset your password for COMP 523:\n <a href="https://comp-523-admin-tools.herokuapp.com/verify/${this.onyen}/${emailToken}">Reset Password</a>`;
+        let messageHtml = `Please click the following link to reset your password for COMP 523:\n <a href="https://comp-523-admin-tools.herokuapp.com/passwordReset/${this.onyen}/${emailToken}">Reset Password</a>`;
         let recipient = this.email ? this.email : `${this.onyen}${process.env.NOREPLY_RECIPIENT_DOMAIN}`;
         console.log('user.model this.email',this.email);
         let resetEmail = {
