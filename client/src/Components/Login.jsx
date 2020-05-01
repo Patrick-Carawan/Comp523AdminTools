@@ -82,10 +82,11 @@ export default function Login(props) {
     function sendPasswordResetEmail() {
         if (onyen === '') {
             alert('Please fill in your onyen');
-        }
+        } else{
         axios.post(`/users/emailPasswordReset`, {
             onyen: onyen
         }).then(() => alert('Please check your school email to finish resetting your password.')).catch(err => alert('err'));
+        }
     }
 
     return (

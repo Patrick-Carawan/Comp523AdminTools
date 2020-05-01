@@ -283,7 +283,7 @@ function ComposeEmail(props) {
                   variant="contained"
                   color="secondary"
                   onClick={() => setMessage()}
-                  style={{ "margin-left": "50px" }}
+                  style={{ "marginLeft": "50px" }}
                 >
                   Save Message Body
                 </Button>
@@ -297,7 +297,7 @@ function ComposeEmail(props) {
                 >
                   <a
                     style={{
-                      "text-decoration": "none",
+                      "textDecoration": "none",
                       color: "inherit",
                     }}
                     href={`mailto:${arrToStringList()}?body=${letter}&subject=${subject}`}
