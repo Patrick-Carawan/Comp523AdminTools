@@ -7,30 +7,30 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Title from "./Title";
 import FormControl from "@material-ui/core/FormControl";
-import { Typography } from "@material-ui/core";
+import {Typography} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import Axios from "axios";
-import { debounce, throttle } from "lodash";
+import {debounce, throttle} from "lodash";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    "& .MuiTextField-root": {
-      margin: theme.spacing(1),
-      width: "25ch",
+    root: {
+        "& .MuiTextField-root": {
+            margin: theme.spacing(1),
+            width: "25ch",
+        },
+        "& > *": {
+            margin: theme.spacing(1),
+        },
     },
-    "& > *": {
-      margin: theme.spacing(1),
-    },
-  },
 }));
 
 export default function MeetingTask(props) {
-  const classes = useStyles();
-  const [comment, setComment] = React.useState(props.comment);
-  const [weeklyTodo, setWeeklyTodo] = React.useState(props.weekTodo);
-  const [demoStatus, setDemoStatus] = React.useState(props.demoStatus);
-  const [deliverableStatus, setDeliverableStatus] = React.useState("");
+    const classes = useStyles();
+    const [comment, setComment] = React.useState(props.comment);
+    const [weeklyTodo, setWeeklyTodo] = React.useState(props.weekTodo);
+    const [demoStatus, setDemoStatus] = React.useState(props.demoStatus);
+    const [deliverableStatus, setDeliverableStatus] = React.useState("");
 
     useEffect(() => {
         props.changeComment('');
@@ -45,30 +45,16 @@ export default function MeetingTask(props) {
         setDemoStatus('');
     }, [props.semester]);
 
-    useEffect(()=>{
-        if(!comment || props.comment === ''){
+    useEffect(() => {
+        if (!comment || props.comment === '') {
             setComment(props.comment);
         }
-        if(!weeklyTodo || props.weekTodo === ''){
+        if (!weeklyTodo || props.weekTodo === '') {
             setWeeklyTodo(props.weekTodo);
         }
-    },[props.weekTodo, props.comment]);
+    }, [props.weekTodo, props.comment]);
 
-  function debounced(delay, fn) {
-    let timerId;
-    return function (...args) {
-      if (timerId) {
-        clearTimeout(timerId);
-      }
-      timerId = setTimeout(() => {
-        fn(...args);
-        timerId = null;
-      }, delay);
-    };
-  }
-
-
-
+    //debounces keystrokes in the comment and weekly todo to prevent lag
     const delayedChangeComment = useRef(throttle(comment => props.changeComment(comment), 2000)).current;
     const delayedChangeWeeklyTodo = useRef(throttle(todo => props.changeWeeklyTodo(todo), 2000)).current;
 
@@ -77,20 +63,20 @@ export default function MeetingTask(props) {
         delayedChangeComment(event.target.value);
     };
 
-  const changeWeeklyTodo = (event) => {
-    setWeeklyTodo(event.target.value);
-    delayedChangeWeeklyTodo(event.target.value);
-  };
+    const changeWeeklyTodo = (event) => {
+        setWeeklyTodo(event.target.value);
+        delayedChangeWeeklyTodo(event.target.value);
+    };
 
-  const changeDeliverableStatus = (event) => {
-    setDeliverableStatus(event.target.value);
-    props.changeDeliverableStatus(event.target.value);
-  };
+    const changeDeliverableStatus = (event) => {
+        setDeliverableStatus(event.target.value);
+        props.changeDeliverableStatus(event.target.value);
+    };
 
-  const changeDemoStatus = (event) => {
-    setDemoStatus(event.target.value);
-    props.changeDemoStatus(event.target.value);
-  };
+    const changeDemoStatus = (event) => {
+        setDemoStatus(event.target.value);
+        props.changeDemoStatus(event.target.value);
+    };
 
     return (
         <div>

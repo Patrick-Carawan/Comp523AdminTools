@@ -1,14 +1,11 @@
 import React, {useEffect, useState} from "react";
-import ReactDOM from "react-dom";
 import '../App.css'
 import CSVReader from "react-csv-reader";
 import {makeStyles} from "@material-ui/core/styles";
 import DashBoard from "./AdminDashboard";
-import Container from "@material-ui/core/Container";
 import Card from "@material-ui/core/Card";
 import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import axios from 'axios';
 
@@ -68,6 +65,7 @@ function Roster() {
       setAllSemesterInfo();
     }, [semester]);
 
+    //sets the roster to be the contents of the csv
     const readfile = (data) => {
         setRoster(data)
     };

@@ -50,6 +50,7 @@ export default function Login(props) {
 
     const classes = useStyles();
 
+    //Logs user in
     function submit(e) {
         e.preventDefault();
         console.log('submitted');

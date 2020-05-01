@@ -158,6 +158,7 @@ export default function AdminDashboard(props) {
         }
     }, []);
 
+    //sets the roster for the semester whenever the semester is changed
     useEffect(() => {
         axios.get(`/roster/${semester}`, {
             headers: {
@@ -198,6 +199,7 @@ export default function AdminDashboard(props) {
         window.localStorage.setItem('semester', e.target.value);
     }
 
+    //gets all the semesters stored in the backend to display in dropdown
     useEffect(() => {
         axios.get(`/semesters`, {
             headers: {

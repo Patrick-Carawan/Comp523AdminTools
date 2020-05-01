@@ -1,6 +1,7 @@
 import React from 'react';
 
 function Name(props) {
+    //this function gets the info for the student whose name is being dragged
     const dragStart = e => {
         const target = e.target;
         let data = {

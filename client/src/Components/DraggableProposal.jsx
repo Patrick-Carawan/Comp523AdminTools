@@ -60,6 +60,8 @@ const DraggableProposal = React.forwardRef(
         );
     }
 );
+
+//handles what occurs when you drop the proposal in place
 export default DropTarget(
     ItemTypes.NAME,
     {

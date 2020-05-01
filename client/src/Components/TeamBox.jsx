@@ -1,19 +1,15 @@
 import React from 'react';
 
 function TeamBox(props) {
+    //handles behvaior when dragging name into team box
     const drop = e => {
         e.preventDefault();
         let data = e.dataTransfer.getData('data');
         data = JSON.parse(data);
-        // console.log(data);
         const onyen = data['onyen'];
         const oldBoxId = data['teamId'];
         const newBoxId = props.id;
         const studentIndex = data['studentIndex'];
-        // console.log('onyen', onyen);
-        // console.log('old teamId', oldBoxId);
-        // console.log('new teamId', newBoxId);
-        // console.log('studentIndex', studentIndex);
         props.setTeam(oldBoxId, newBoxId, onyen, studentIndex);
     };
 

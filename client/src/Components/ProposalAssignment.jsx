@@ -120,6 +120,7 @@ function ProposalAssignment(props) {
         setDisableButton(false);
     }
 
+    //posts all assignments of projects to teams to backend
     function submitAssignments() {
         let assignmentArray = [];
         let localPairingsArray = [];

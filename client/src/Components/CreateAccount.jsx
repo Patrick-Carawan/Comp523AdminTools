@@ -53,6 +53,7 @@ export default function CreateAccount() {
         return (<Redirect to="/login"/>);
     }
 
+    //posts to backend, creates user, sends verification email
     function submit(e) {
         e.preventDefault();
         console.log('onyen', onyen);
