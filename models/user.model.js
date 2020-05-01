@@ -69,7 +69,7 @@ userSchema.methods.sendPasswordResetEmail = function() {
         if (err) {
             console.log(err);
         }
-        let messageHtml = `Please click the following link to reset your password for COMP 523:\n <a href="http://localhost:3000/passwordReset/${this.onyen}/${emailToken}">Reset Password</a>`;
+        let messageHtml = `Please click the following link to verify your account for COMP 523:\n <a href="https://comp-523-admin-tools.herokuapp.com/verify/${this.onyen}/${emailToken}">Reset Password</a>`;
         let recipient = this.email ? this.email : `${this.onyen}${process.env.NOREPLY_RECIPIENT_DOMAIN}`;
         console.log('user.model this.email',this.email);
         let resetEmail = {
@@ -109,7 +109,7 @@ userSchema.methods.generateVerificationEmail = function() {
             console.log(err);
         }
         let url = `https://comp-523-admin-tools.herokuapp.com/verify/${emailToken}`;
-        let messageHtml = `Please click the following link to verify your account for COMP 523:\n <a href="http://localhost:3000/verify/${this.onyen}/${emailToken}">Verify Account</a>`;
+        let messageHtml = `Please click the following link to verify your account for COMP 523:\n <a href="https://comp-523-admin-tools.herokuapp.com/verify/${this.onyen}/${emailToken}">Verify Account</a>`;
         let recipient = this.email ? this.email : `${this.onyen}${process.env.NOREPLY_RECIPIENT_DOMAIN}`;
         let verificationEmail = {
         from: process.env.NOREPLY_EMAIL,
