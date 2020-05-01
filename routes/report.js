@@ -5,16 +5,26 @@ var TeamReport = require("../models/teamReport.model");
 
 // Get all student reports
 router.get('/students/:semester', auth.required, (req, res, next) => {
-    StudentReport.find({"semester": req.params.semester})
-        .then(reports => res.json(reports))
-        .catch(err => res.status(400).json('Error: ' + err));
+    if (req.payload.admin) {
+        StudentReport.find({"semester": req.params.semester})
+            .then(reports => res.json(reports))
+            .catch(err => res.status(400).json('Error: ' + err));
+    } else {
+        res.status(403).json("Not authorized");
+    }
+    
 });
 
 // Get all team reports for a semester
 router.get('/teams/:semester', auth.required, (req, res, next) => {
-    TeamReport.find({"semester": req.params.semester})
-        .then(reports => res.json(reports))
-        .catch(err => res.status(400).json('Error: ' + err));
+    if (req.payload.admin) {
+        TeamReport.find({"semester": req.params.semester})
+            .then(reports => res.json(reports))
+            .catch(err => res.status(400).json('Error: ' + err));
+    } else {
+        res.status(403).json("Not authorized");
+    }
+
 });
 
 // Add a student report

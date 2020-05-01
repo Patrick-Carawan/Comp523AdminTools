@@ -14,7 +14,7 @@ const auth = {
     required: jwt({
         secret: process.env.SECRET,
         userProperty: 'payload',
-        getToken: getTokenFromHeaders,
+        getToken: getTokenFromHeaders
     }),
     optional: jwt({
         secret: process.env.SECRET,

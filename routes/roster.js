@@ -5,16 +5,21 @@ const auth = require('./auth');
 // Add a roster
 router.post('/add/:semester', auth.required, (req, res, next) => {
 
-    const _semester = req.params.semester;
-    const _studentList = req.body.studentList;
+    if (req.payload.admin) {
+        const _semester = req.params.semester;
+        const _studentList = req.body.studentList;
 
-    const roster = {
-        semester: _semester,
-        studentList: _studentList
-    };
-    Roster.collection.replaceOne({"semester" : _semester.toString()}, roster, {upsert: true})
-        .then(() => res.json("Roster added."))
-        .catch(err => res.status(400).json('Error: ' + err));
+        const roster = {
+            semester: _semester,
+            studentList: _studentList
+        };
+        Roster.collection.replaceOne({"semester" : _semester.toString()}, roster, {upsert: true})
+            .then(() => res.json("Roster added."))
+            .catch(err => res.status(400).json('Error: ' + err));
+    } else {
+        res.status(403).json("Not authorized");
+    }
+    
 });
 
 

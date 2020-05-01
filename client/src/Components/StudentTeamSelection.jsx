@@ -68,6 +68,7 @@ function StudentTeamSelection(props) {
     }, []);
 
 
+    //puts dragged student into a team
     const setTeam = function (oldBoxId, newBoxId, onyen, studentIndex) {
         console.log('newBoxId', newBoxId);
         let tempStudents = [...students];
@@ -95,7 +96,9 @@ function StudentTeamSelection(props) {
                 return;
             }
         }
-
+        //verifies that students must  know onyen to put themselves in a team
+        //so they can' t put random students into random teams
+        //for mischievous purposes
         if (!typedOnyens.every((onyen) =>
             draggedOnyens.includes(onyen)
         ) || typedOnyens.length !== draggedOnyens.length || typedOnyens.length === 0) {

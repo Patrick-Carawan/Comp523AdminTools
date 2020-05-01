@@ -28,6 +28,7 @@ const ProjectRanking = () => {
     useEffect(() => {
 
 
+        //gets all available proposals from backend
         axios.get(`/proposals/`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
@@ -39,6 +40,7 @@ const ProjectRanking = () => {
     }, []);
 
     useEffect(() => console.log(proposals), [proposals]);
+
 
     const submitRanking = function () {
         let teamId = window.localStorage.getItem('teamId');
@@ -52,6 +54,7 @@ const ProjectRanking = () => {
         }).then(()=>alert('Project preferences submitted')).catch(err => alert(err))
     };
 
+    //lets user drag and drop proposals in order
     const moveCard = (dragIndex, hoverIndex) => {
         const dragCard = proposals[dragIndex];
         setProposals(

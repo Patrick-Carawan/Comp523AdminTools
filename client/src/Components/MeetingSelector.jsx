@@ -53,7 +53,7 @@ export default function CheckAttendance(props) {
   const [selectedValues, setSelectedValues] = React.useState([]);
   const [attendanceObj, setAttendanceObj] = React.useState({});
 
-  //   Radio
+  //sets the attendance for a user when radio button is clicked
   const changeAttendance = (event, index, member) => {
     let tempSelectedValues = [...selectedValues];
     tempSelectedValues[index] = event.target.value;
@@ -67,14 +67,11 @@ export default function CheckAttendance(props) {
     props.changeAttendance(member, event.target.value);
   };
 
+  //clears the current team members' attendance
   useEffect(() => {
     props.blankTeamMembers();
   }, [props.semester]);
 
-  // Record all attended
-  const handleAllAttended = (event) => {
-    // setSelectedValue(event.target.value);
-  };
   const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {

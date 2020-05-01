@@ -6,7 +6,6 @@ import Home from "./Components/Home";
 import Login from "./Components/Login";
 import ProposalsAdminView from "./Components/ProposalsAdminView";
 import DashBoard from "./Components/AdminDashboard";
-import StudentSetupPage from "./Components/StudentSetupPage";
 import TeammateSelectionRules from "./Components/TeammateSelectionRules";
 import StudentTeamSelection from "./Components/StudentTeamSelection";
 import RankContainer from "./Components/RankContainer";
@@ -118,11 +117,6 @@ function App() {
             <Route
               path="/acceptedClientForm"
               component={AcceptedClientForm}
-              exact={true}
-            />
-            <StudentProtectedRoute
-              path="/studentSetupPage"
-              component={StudentSetupPage}
               exact={true}
             />
             <AdminProtectedRoute

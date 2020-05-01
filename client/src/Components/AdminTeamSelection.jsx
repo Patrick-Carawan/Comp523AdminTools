@@ -42,7 +42,7 @@ function AdminTeamSelection(props) {
     const [newTeams, setNewTeams] = useState([]);
     const [semester, setSemester] = useState(window.localStorage.getItem('semester'));
 
-
+    //sets all the info to be accurate for the newly selected semester
     function setSemesterInfo() {
         axios.get(`/users/students/${semester}`, {
             headers: {
@@ -66,22 +66,16 @@ function AdminTeamSelection(props) {
         setSemesterInfo();
     }, [semester]);
 
-    useEffect(()=>{
-
-    }, [semester]);
-
     let groupingArray = [];
     students.forEach(student => groupingArray.push({
         name: student['onyen'],
         team: 'NONE'
     }));
 
+    //sets the team for a student who is moved
     const setTeam = function (oldTeamId, newTeamId, onyen, studentIndex) {
         let tempStudents = [...students];
-        // console.log('students', students);
         tempStudents[studentIndex]['teamId'] = newTeamId;
-        // console.log('newTeamId', newTeamId);
-        // console.log('tempStudents[index]', tempStudents[studentIndex]);
 
         setStudents(tempStudents);
 
@@ -97,6 +91,7 @@ function AdminTeamSelection(props) {
         }
     };
 
+    //posts all teams to the backend
     const submitTeams = function () {
         let teamMemberMap = new Map;
         students.forEach(student => {
@@ -155,9 +150,6 @@ function AdminTeamSelection(props) {
                             Authorization: `Token ${window.localStorage.getItem('token')}`
                         }
                     }).then(() => {
-                        // if (i === team.length - 1) {
-                        //     alert('Team successfully submitted')
-                        // }
                     }).catch(err => alert(err))
                 })
             }))
@@ -170,6 +162,7 @@ function AdminTeamSelection(props) {
 
     const classes = useStyles();
 
+    //adds new team box
     function addNewTeam() {
         let temp = [...newTeams];
         temp.push(0);

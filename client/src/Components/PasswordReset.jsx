@@ -15,7 +15,7 @@ function PasswordReset(props) {
     console.log(onyenAndToken);
     window.localStorage.setItem('token', onyenAndToken[1]);
 
-
+    //starts reset password process. will cause an email to be sent to the user to verify
     function submitNewPassword() {
         axios.post(`/users/reset`, {onyen: onyenAndToken[0], password: password}, {
             headers: {

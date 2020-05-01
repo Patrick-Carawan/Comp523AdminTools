@@ -100,14 +100,17 @@ export default function MeetingPage() {
     const [timesMembersAttended, setTimesMembersAttended] = useState([]);
     const pageEndRef = useRef(null);
 
+    //changes all relevant info when semester is changed
     useEffect(() => {
         setSemesterInfo()
     }, [semester]);
 
+    //unselects current team
     const blankTeamMembers = () => {
         setSelectedTeam({});
     };
 
+    //sets the teams, coach meeting data, students for the current semester
     function setSemesterInfo() {
         Axios.get(`/teams/semester/${semester}`, {
             headers: {
@@ -177,16 +180,8 @@ export default function MeetingPage() {
                 }
             });
         }
-
-        // console.log("selectedTeam", team._id);
-        // console.log("week", team._id);
     };
 
-    // Use to update the info in demo&comment section
-    const updateInfo = (info) => {
-        // changeDemoStatus(info.demoStatus);
-        // console.log("demo status: " + info.demoStatus);
-    };
 
     const changeWeek = (week) => {
         if (week !== -1 && selectedTeam.hasOwnProperty('_id')) {
@@ -264,12 +259,14 @@ export default function MeetingPage() {
     }
 
 
+    //scrolls to bottom of page to show the summary
     useEffect(() => {
         if (showSummary) {
             pageEndRef.current.scrollIntoView({behavior: 'smooth'});
         }
     }, [showSummary]);
 
+    //generates year-to-date info about the selected team
     function generateSummary() {
         if (!selectedTeam || !selectedTeam.hasOwnProperty('teamMembers')) {
             return null

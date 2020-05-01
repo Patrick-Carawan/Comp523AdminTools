@@ -36,13 +36,14 @@ userSchema.methods.validatePassword = function(password) {
 };
 
 userSchema.methods.generateJWT = function() {
-    const today = new Date();
-    const expirationDate = new Date(today);
-    expirationDate.setDate(today.getDate() + 60);
+    // const today = new Date();
+    // const expirationDate = new Date(today);
+    // expirationDate.setDate(today.getDate() + 60);
 
     return jwt.sign({
         onyen: this.onyen,
-        id: this._id
+        id: this._id,
+        admin: this.admin
     }, secret, {
         expiresIn: "7d"
     });
@@ -62,14 +63,15 @@ userSchema.methods.sendPasswordResetEmail = function() {
 
     jwt.sign({
         onyen: this.onyen,
-        id: this._id, 
+        id: this._id,
+        admin: this.admin
     }, secret, {
         expiresIn: "1d"
     }, (err, emailToken) => {
         if (err) {
             console.log(err);
         }
-        let messageHtml = `Please click the following link to reset your password for COMP 523:\n <a href="http://localhost:3000/passwordReset/${this.onyen}/${emailToken}">Reset Password</a>`;
+        let messageHtml = `Please click the following link to reset your password for COMP 523:\n <a href="https://comp-523-admin-tools.herokuapp.com/passwordReset/${this.onyen}/${emailToken}">Reset Password</a>`;
         let recipient = this.email ? this.email : `${this.onyen}${process.env.NOREPLY_RECIPIENT_DOMAIN}`;
         console.log('user.model this.email',this.email);
         let resetEmail = {
@@ -102,6 +104,7 @@ userSchema.methods.generateVerificationEmail = function() {
     jwt.sign({
         onyen: this.onyen,
         id: this._id,
+        admin: this.admin
     }, secret, {
         expiresIn: "3d"
     }, (err, emailToken) => {
@@ -109,7 +112,7 @@ userSchema.methods.generateVerificationEmail = function() {
             console.log(err);
         }
         let url = `https://comp-523-admin-tools.herokuapp.com/verify/${emailToken}`;
-        let messageHtml = `Please click the following link to verify your account for COMP 523:\n <a href="http://localhost:3000/verify/${this.onyen}/${emailToken}">Verify Account</a>`;
+        let messageHtml = `Please click the following link to verify your account for COMP 523:\n <a href="https://comp-523-admin-tools.herokuapp.com/verify/${this.onyen}/${emailToken}">Verify Account</a>`;
         let recipient = this.email ? this.email : `${this.onyen}${process.env.NOREPLY_RECIPIENT_DOMAIN}`;
         let verificationEmail = {
         from: process.env.NOREPLY_EMAIL,

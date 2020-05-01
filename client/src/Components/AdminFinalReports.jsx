@@ -6,7 +6,6 @@ import axios from 'axios';
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Select from "@material-ui/core/Select";
-import {Input} from "@material-ui/icons";
 import MenuItem from "@material-ui/core/MenuItem";
 import PropTypes from 'prop-types';
 import Tab from "@material-ui/core/Tab";
@@ -14,10 +13,9 @@ import Typography from "@material-ui/core/Typography";
 import Tabs from "@material-ui/core/Tabs";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-import {TextField} from "@material-ui/core";
-import lorem from "../lorem";
 
 
+//Function to general tabs content
 function TabPanel(props) {
     const {children, value, index, ...other} = props;
 
@@ -40,6 +38,7 @@ TabPanel.propTypes = {
     value: PropTypes.any.isRequired,
 };
 
+//makes the tabs scrollable
 function tabProps(index) {
     return {
         id: `scrollable-auto-tab-${index}`,
@@ -84,6 +83,8 @@ function AdminFinalReports() {
     const [onyenMap, setOnyenMap] = useState(new Map());
     const [semester, setSemester] = useState(window.localStorage.getItem('semester'));
 
+    //whenever the semester changes, sets all values, such as teams, final reports, students to be
+    //accurate for the new semester
     const setAllSemesterInfo = () => {
         console.log(onyenMap);
         setCurrentTeam({});

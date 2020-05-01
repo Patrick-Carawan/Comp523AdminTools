@@ -140,8 +140,6 @@ export default function AdminDashboard(props) {
   const [allSemesters, setAllSemesters] = useState([]);
   const [hasRoster, setHasRoster] = useState(false);
 
-  // useEffect(()=>{console.log('semester',semester)},[semester])
-
   useEffect(() => {
     if (!window.localStorage.getItem("semester")) {
       axios
@@ -159,7 +157,7 @@ export default function AdminDashboard(props) {
       setSemester(window.localStorage.getItem("semester"));
     }
   }, []);
-
+  //sets the roster for the semester whenever the semester is changed
   useEffect(() => {
     axios
       .get(`/roster/${semester}`, {
@@ -201,6 +199,25 @@ export default function AdminDashboard(props) {
     props.updateSemester(e.target.value);
     window.localStorage.setItem("semester", e.target.value);
   }
+  //gets all the semesters stored in the backend to display in dropdown
+  useEffect(() => {
+    axios
+      .get(`/semesters`, {
+        headers: {
+          Authorization: `Token ${window.localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        // console.log(res['data'][0]);
+        if (res["data"].length === 0) {
+          alert(
+            "Please upload a list of semesters in Mongo. \n Ex. 'Spring2020','Fall2021'"
+          );
+        } else {
+          setAllSemesters(res["data"][0]["semesters"]);
+        }
+      });
+  }, []);
 
   useEffect(() => {
     axios

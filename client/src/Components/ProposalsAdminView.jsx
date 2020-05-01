@@ -123,6 +123,7 @@ function ProposalsAdminView(props) {
       .catch((err) => alert(err));
   };
 
+  //renders an expansion panel with all proposals of a certain status inside
   const proposalGroup = function (label, className) {
     return (
       <>

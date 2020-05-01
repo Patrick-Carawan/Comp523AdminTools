@@ -40,16 +40,26 @@ router.get('/students/:semester', auth.required, (req, res, next) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
-//Update team for a given student
+// Update team for a given student (Students can only assign their own team, and they can only do it once)
+router.post('/updateTeam/', auth.required, (req, res, next) => {
+    
+});
+
+//Update team for a given student (Admins can do this as many times as needed)
 router.post('/updateTeam/:onyen', auth.required, (req, res, next) => {
-    User.findOne({onyen: req.params.onyen})
-        .then(student => {
-            student.teamId = req.body.teamId;
-            student.save()
-                .then(() => res.json("Student's teamId updated. ")) // Do we want to change the Team here too?
-                .catch(err => res.status(400).json('Error in saving student: ' + err));
-        })
-        .catch(err => res.status(400).json('Error in finding student: ' + err));
+    if (req.payload.admin) {
+        User.findOne({onyen: req.params.onyen})
+            .then(student => {
+                student.teamId = req.body.teamId;
+                student.save()
+                    .then(() => res.json("Student's teamId updated. "))
+                    .catch(err => res.status(400).json('Error in saving student: ' + err));
+            })
+            .catch(err => res.status(400).json('Error in finding student: ' + err));
+    } else {
+        res.status(403).json("Not authorized");
+    }
+    
 });
 
 // Create new User
@@ -205,17 +215,17 @@ router.post('/reset', auth.required, (req, res, next) => {
 });
 
 // GET current route (required, only authenticated users have access)
-router.get('/current', auth.required, (req, res, next) => {
-    const {payload: {id}} = req;
+// router.get('/current', auth.required, (req, res, next) => {
+//     const {payload: {id}} = req;
 
-    return User.findById(id)
-        .then((user) => {
-            if (!user) {
-                return res.sendStatus(400);
-            }
+//     return User.findById(id)
+//         .then((user) => {
+//             if (!user) {
+//                 return res.sendStatus(400);
+//             }
 
-            return res.json({user: user.toAuthJSON()});
-        });
-});
+//             return res.json({user: user.toAuthJSON()});
+//         });
+// });
 
 module.exports = router;

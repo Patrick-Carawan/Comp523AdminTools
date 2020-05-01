@@ -20,15 +20,27 @@ router.get("/pendingOrCurrent/:semester", auth.required, (req, res, next) => {
 
 
 
-// Delete a proposal
-router.delete("/:id", auth.required, (req, res, next) => {
-  Proposal.findByIdAndDelete(req.params.id)
-    .then(() => res.json("Proposal deleted."))
+// Get a proposal by its id
+router.get("/:id", auth.required, (req, res, next) => {
+  Proposal.findById(req.params.id)
+    .then((proposals) => res.json(proposals))
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
+// Delete a proposal
+router.delete("/:id", auth.required, (req, res, next) => {
+  if (req.payload.admin) {
+      Proposal.findByIdAndDelete(req.params.id)
+          .then(() => res.json("Proposal deleted."))
+          .catch((err) => res.status(400).json("Error: " + err));
+  } else {
+      res.status(403).json("Not authorized");
+  }
+
+});
+
 // Add a proposal
-router.route("/").post((req, res, next) => {
+router.post("/", auth.optional, (req, res, next) => {
   const _title = req.body.title;
   const _email = req.body.email;
   const _prop_name = req.body.prop_name;
@@ -56,106 +68,151 @@ router.route("/").post((req, res, next) => {
 
 // Get all proposal emails and their status
 router.get("/emails", auth.required, (req, res, next) => {
-  Proposal.find({}, "email status")
-    .then((emails) => res.json(emails))
-    .catch((err) => res.status(400).json("Error: " + err));
+  if (req.payload.admin) {
+    Proposal.find({}, "email status")
+      .then((emails) => res.json(emails))
+      .catch((err) => res.status(400).json("Error: " + err));
+  } else {
+      res.status(403).json("Not authorized");
+  }
+
 });
 
 // Add a letter
 router.post("/addLetter", auth.required, (req, res, next) => {
-  const text = req.body.text;
-  const status = req.body.status;
+  if (req.payload.admin) {
+    const text = req.body.text;
+    const status = req.body.status;
 
-  const newLetter = new Letter({
-    text,
-    status,
-  });
+    const newLetter = new Letter({
+      text,
+      status,
+    });
 
-  newLetter
-    .save()
-    .then(() => res.json("Letter added."))
-    .catch((err) => res.status(400).json("Error: " + err));
+    newLetter
+      .save()
+      .then(() => res.json("Letter added."))
+      .catch((err) => res.status(400).json("Error: " + err));
+  } else {
+      res.status(403).json("Not authorized");
+  }
+
 });
 
 
 // Get message to show clients on clientForm
 router.get("/clientForm", auth.optional, (req, res, next) => {
-  Letter.find({ status: "ClientForm" })
+  Letter.findOne({ status: "ClientForm" })
       .then((pending) => res.json(pending))
       .catch((err) => res.status(400).json("Error: " + err));
 });
 
 // Get pending letter
 router.get("/pendingLetter", auth.required, (req, res, next) => {
-  Letter.find({ status: "Pending" })
-    .then((pending) => res.json(pending))
-    .catch((err) => res.status(400).json("Error: " + err));
+  if (req.payload.admin) {
+    Letter.findOne({ status: "Pending" })
+      .then((pending) => res.json(pending))
+      .catch((err) => res.status(400).json("Error: " + err));
+  } else {
+      res.status(403).json("Not authorized");
+  }
+
 });
 
 // Update pending letter
 router.post("/pendingLetter", auth.required, (req, res, next) => {
-  Letter.findOne({ status: "Pending" })
-    .then((letter) => {
-      letter.text = req.body.text;
-      letter
-        .save()
-        .then(() => res.json("Pending letter updated"))
-        .catch((err) => res.status(400).json("Error: " + err));
-    })
-    .catch((err) => res.status(400).json("Error: " + err));
+  if (req.payload.admin) {
+    Letter.findOne({ status: "Pending" })
+      .then((letter) => {
+        letter.text = req.body.text;
+        letter
+          .save()
+          .then(() => res.json("Pending letter updated"))
+          .catch((err) => res.status(400).json("Error: " + err));
+      })
+      .catch((err) => res.status(400).json("Error: " + err));
+  } else {
+      res.status(403).json("Not authorized");
+  }
+
 });
 
 // Get rejection letter
 router.get("/rejectionLetter", auth.required, (req, res, next) => {
-  Letter.find({ status: "Rejected" })
-    .then((rejection) => res.json(rejection))
-    .catch((err) => res.status(400).json("Error: " + err));
+  if (req.payload.admin) {
+    Letter.findOne({ status: "Rejected" })
+      .then((rejection) => res.json(rejection))
+      .catch((err) => res.status(400).json("Error: " + err));
+  } else {
+      res.status(403).json("Not authorized");
+  }
+
 });
 
 // Update rejection letter
 router.post("/rejectionLetter", auth.required, (req, res, next) => {
-  Letter.findOne({ status: "Rejected" })
-    .then((letter) => {
-      letter.text = req.body.text;
-      letter
-        .save()
-        .then(() => res.json("Rejection letter updated"))
-        .catch((err) => res.status(400).json("Error: " + err));
-    })
-    .catch((err) => res.status(400).json("Error: " + err));
+  if (req.payload.admin) {
+    Letter.findOne({ status: "Rejected" })
+      .then((letter) => {
+        letter.text = req.body.text;
+        letter
+          .save()
+          .then(() => res.json("Rejection letter updated"))
+          .catch((err) => res.status(400).json("Error: " + err));
+      })
+      .catch((err) => res.status(400).json("Error: " + err));
+  } else {
+      res.status(403).json("Not authorized");
+  }
+
 });
 
 // Get acceptance letter
 router.get("/acceptanceLetter", auth.required, (req, res, next) => {
-  Letter.find({ status: "Accepted" })
-    .then((acceptance) => res.json(acceptance))
-    .catch((err) => res.status(400).json("Error: " + err));
+  if (req.payload.admin) {
+    Letter.findOne({ status: "Accepted" })
+      .then((acceptance) => res.json(acceptance))
+      .catch((err) => res.status(400).json("Error: " + err));
+  } else {
+      res.status(403).json("Not authorized");
+  }
+
 });
 
 // Update acceptance letter
 router.post("/acceptanceLetter", auth.required, (req, res, next) => {
-  Letter.findOne({ status: "Accepted" })
-    .then((letter) => {
-      letter.text = req.body.text;
-      letter
-        .save()
-        .then(() => res.json("Accepted letter updated"))
-        .catch((err) => res.status(400).json("Error: " + err));
-    })
-    .catch((err) => res.status(400).json("Error: " + err));
+  if (req.payload.admin) {
+    Letter.findOne({ status: "Accepted" })
+      .then((letter) => {
+        letter.text = req.body.text;
+        letter
+          .save()
+          .then(() => res.json("Accepted letter updated"))
+          .catch((err) => res.status(400).json("Error: " + err));
+      })
+      .catch((err) => res.status(400).json("Error: " + err));
+  } else {
+      res.status(403).json("Not authorized");
+  }
+
 });
 
 // Only updates status of proposal, can be changed to update other elements
 router.post("/update/:id", auth.required, (req, res, next) => {
-  Proposal.findById(req.params.id)
-    .then((proposal) => {
-      proposal.status = req.body.status;
-      proposal
-        .save()
-        .then(() => res.json("Proposal status updated"))
-        .catch((err) => res.status(400).json("Error: " + err));
-    })
-    .catch((err) => res.status(400).json("Error: " + err));
+  if (req.payload.admin) {
+    Proposal.findById(req.params.id)
+      .then((proposal) => {
+        proposal.status = req.body.status;
+        proposal
+          .save()
+          .then(() => res.json("Proposal status updated"))
+          .catch((err) => res.status(400).json("Error: " + err));
+      })
+      .catch((err) => res.status(400).json("Error: " + err));
+  } else {
+      res.status(403).json("Not authorized");
+  }
+
 });
 
 module.exports = router;

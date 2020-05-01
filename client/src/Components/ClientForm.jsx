@@ -30,6 +30,7 @@ function ClientForm(props) {
   const [showError, setShowError] = useState(false);
   const [instructions, setInstructions] = useState('');
 
+  //gets the message to display to the client
   useEffect(()=>{
     Axios.get("/proposals/clientForm").then(res => {
       setInstructions(res['data'][0]['text']);
@@ -82,6 +83,8 @@ function ClientForm(props) {
   }
 
   function Form() {
+
+    //posts proposal to backend
     const submitForm = function (e) {
       e.preventDefault();
       if (firstName && lastName && projectTitle && description && email) {
@@ -287,7 +290,6 @@ function ClientForm(props) {
           Thanks for submitting your application to work with UNC COMP 523. Dr.
           Stotts will be in touch with you soon with more details.
         </Typography>
-        <Link to="/">Go Home</Link>
       </Box>
     );
   }

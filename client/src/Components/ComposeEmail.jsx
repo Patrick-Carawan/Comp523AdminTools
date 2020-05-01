@@ -128,6 +128,7 @@ function ComposeEmail(props) {
     setClientGroup(event.target.value);
   };
 
+  //converts the json list of emails to a semi-colon separated string
   const arrToStringList = function () {
     let arr;
     switch (clientGroup) {
@@ -177,9 +178,9 @@ function ComposeEmail(props) {
     console.log(e.target.value);
   }
 
+  //sets the message body of the email template based on client group
   function setMessage() {
     let path = "";
-
     switch (clientGroup) {
       case clientGroups.ACCEPTED:
         path = "acceptance";
