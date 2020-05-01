@@ -51,7 +51,7 @@ router.post('/updateTeam/:onyen', auth.admin, (req, res, next) => {
         .then(student => {
             student.teamId = req.body.teamId;
             student.save()
-                .then(() => res.json("Student's teamId updated. ")) // Do we want to change the Team here too?
+                .then(() => res.json("Student's teamId updated. "))
                 .catch(err => res.status(400).json('Error in saving student: ' + err));
         })
         .catch(err => res.status(400).json('Error in finding student: ' + err));
