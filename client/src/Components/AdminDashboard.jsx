@@ -137,18 +137,42 @@ export default function AdminDashboard(props) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(true);
     const [semester, setSemester] = useState('');
-    const [allSemesters, setAllSemesters] = useState(['test']);
+    const [allSemesters, setAllSemesters] = useState([]);
+    const [hasRoster, setHasRoster] = useState(false);
+
+    // useEffect(()=>{console.log('semester',semester)},[semester])
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/semesters/current`,{
+        if (!window.localStorage.getItem('semester')) {
+            axios.get(`/semesters/current`, {
+                headers: {
+                    Authorization: `Token ${window.localStorage.getItem('token')}`
+                }
+            }).then(res => {
+                // console.log('current semester',res['data']);
+                setSemester(res['data']);
+                window.localStorage.setItem('semester', res['data']);
+            })
+        } else{
+            setSemester(window.localStorage.getItem('semester'));
+        }
+    }, []);
+
+    useEffect(() => {
+        axios.get(`/roster/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
-        }).then(res =>{
-            console.log('current semester',res['data']);
-            setSemester(res['data']);
+        }).then((res) => {
+            // console.log(res['data'][0])
+            if (res.data[0]) {
+                setHasRoster(true)
+            } else {
+                setHasRoster(false);
+                alert('Upload a roster to get access disabled menu buttons')
+            }
         })
-    }, []);
+    }, [semester]);
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -159,30 +183,33 @@ export default function AdminDashboard(props) {
     const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
 
     function logout() {
-        window.localStorage.setItem('teamId','');
-        window.localStorage.setItem('onyen','');
-        window.localStorage.setItem('token','');
-        window.localStorage.setItem('name','');
-        window.localStorage.setItem('studentUser','false');
-        window.localStorage.setItem('adminUser','false');
+        window.localStorage.setItem('teamId', '');
+        window.localStorage.setItem('onyen', '');
+        window.localStorage.setItem('token', '');
+        window.localStorage.setItem('name', '');
+        window.localStorage.setItem('studentUser', 'false');
+        window.localStorage.setItem('adminUser', 'false');
         history.push("/login");
     }
 
-    function handleSemesterChange(e){
+    function handleSemesterChange(e) {
         setSemester(e.target.value);
-        window.localStorage.setItem('semester', e.target.value);
-        // console.log(window.localStorage.getItem('semester'));
         props.updateSemester(e.target.value);
+        window.localStorage.setItem('semester', e.target.value);
     }
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/semesters`,{
+        axios.get(`/semesters`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
         }).then(res => {
-            console.log(res['data'][0]);
-            setAllSemesters(res['data'][0]['semesters']);
+            // console.log(res['data'][0]);
+            if (res['data'].length === 0) {
+                alert('Please upload a list of semesters in Mongo. \n Ex. \'Spring2020\',\'Fall2021\'')
+            } else {
+                setAllSemesters(res['data'][0]['semesters']);
+            }
         })
     }, []);
 
@@ -218,13 +245,15 @@ export default function AdminDashboard(props) {
                     <FormControl>
                         <InputLabel>Semester</InputLabel>
                         <Select onChange={handleSemesterChange}
+                                displayEmpty={true}
                                 value={semester}
-                                style={{'minWidth':'7em', 'marginBottom':'1em'}}>
-                            {allSemesters ? allSemesters.map((semester,index) =>
+                                label="Current Semester"
+                                style={{'minWidth': '7em', 'marginBottom': '1em', 'color': 'white'}}>
+                            {allSemesters ? allSemesters.map((semester, index) =>
                                 <MenuItem key={index} value={allSemesters[index]}>
                                     {semester}
                                 </MenuItem>
-                            ):null}
+                            ) : null}
                         </Select>
                     </FormControl>
                     <Button style={{'color': 'white'}} onClick={logout}>Logout</Button>
@@ -272,8 +301,9 @@ export default function AdminDashboard(props) {
                     </ListItem>
                     <ListItem
                         button
+                        disabled={!hasRoster}
                         key={3}
-                        title="Change which students are in which teams"
+                        title={hasRoster ? "Change which students are in which teams" : "Add roster to access this component"}
                         className={classes.listItem}
                     >
                         <Link to="/teamSelection" className={classes.link}>
@@ -285,9 +315,10 @@ export default function AdminDashboard(props) {
                     </ListItem>
                     <ListItem
                         button
+                        disabled={!hasRoster}
                         key={4}
                         className={classes.listItem}
-                        title="Keep track of teams' progress in coach meetings"
+                        title={hasRoster ? "Keep track of teams' progress in coach meetings" : "Add roster to access this component"}
                     >
                         <Link to="/meeting" className={classes.link}>
                             <ListItemIcon>
@@ -299,9 +330,10 @@ export default function AdminDashboard(props) {
                     <Divider/>
                     <ListItem
                         button
+                        disabled={!hasRoster}
                         key={5}
                         className={classes.listItem}
-                        title="View Team and Individual Final Reports"
+                        title={hasRoster ? "View Team and Individual Final Reports" : "Add roster to access this component"}
                     >
                         <Link to="/viewFinalReports" className={classes.link}>
                             <ListItemIcon>
@@ -312,9 +344,10 @@ export default function AdminDashboard(props) {
                     </ListItem>
                     <ListItem
                         button
+                        disabled={!hasRoster}
                         key={6}
                         className={classes.listItem}
-                        title="Give feedback on team deliverables"
+                        title={hasRoster ? "Give feedback on team deliverables" : "Add roster to access this component"}
                     >
                         <Link to="/proposalAssignment" className={classes.link}>
                             <ListItemIcon>
@@ -327,7 +360,7 @@ export default function AdminDashboard(props) {
                         button
                         key={7}
                         className={classes.listItem}
-                        title="View or upload current roster"
+                        title="View or upload roster for selected semester"
                     >
                         <Link to="/roster" className={classes.link}>
                             <ListItemIcon>

@@ -30,7 +30,7 @@ const TeamFinalReport = () => {
     const [report, setReport] = useState('');
 
     const submitReport = function () {
-        axios.post(`http://localhost:5000/finalReports/teams`, {
+        axios.post(`/finalReports/teams`, {
             team: window.localStorage.getItem('teamId'),
             text: report
         },{

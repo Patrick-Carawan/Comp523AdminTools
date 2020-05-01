@@ -19,7 +19,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const uri = process.env.ATLAS_URI;
+const uri = process.env.MONGODB_URI || "mongodb+srv://Patrick:Patrick@cluster0-wqpir.mongodb.net/test?retryWrites=true&w=majority";
 mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true });
 
 const connection = mongoose.connection;
@@ -54,7 +54,7 @@ connection.once('open', () => {
         lastName: "Weber",
         phone: "336-831-6140",
         email: "dan97w@live.unc.edu",
-        verified: false,
+        verified: true,
         semester: "Spring2020"
     });
     
@@ -195,6 +195,7 @@ connection.once('open', () => {
     });
 
     const users = [adminUser, user1, user2, user3, user4, user5, user6];
+    // const users = [adminUser];
     const proposals = [prop1, prop2, prop3, prop4];
     const teams = [team1, team2];
     const letters = [pendingLetter, acceptedLetter, rejectedLetter];
@@ -281,13 +282,13 @@ connection.once('open', () => {
     //     console.error(err);
     // });
     //
-    // for (let user of users) {
-    //     user.setPassword("password");
-    // }
-    //
-    // User.collection.insertMany(users, function(err) {
-    //     console.error(err);
-    // });
+    for (let user of users) {
+        user.setPassword("password");
+    }
+    
+    User.collection.insertMany(users, function(err) {
+        console.error(err);
+    });
 
     Semesters.collection.insertMany(semesters, function(err){
         console.error(err);

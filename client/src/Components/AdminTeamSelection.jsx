@@ -40,10 +40,11 @@ function AdminTeamSelection(props) {
     const [students, setStudents] = useState([]);
     const [teams, setTeams] = useState([]);
     const [newTeams, setNewTeams] = useState([]);
-    const [semester, setSemester] = useState('');
+    const [semester, setSemester] = useState(window.localStorage.getItem('semester'));
 
-    useEffect(() => {
-        axios.get(`http://localhost:5000/users/students/Spring2020`, {
+
+    function setSemesterInfo() {
+        axios.get(`/users/students/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
@@ -51,7 +52,7 @@ function AdminTeamSelection(props) {
             console.log('students', res['data'].filter(student => student['admin'] === false));
             setStudents(res['data'].filter(student => student['admin'] === false))
         });
-        axios.get(`http://localhost:5000/teams/semester/Spring2020`, {
+        axios.get(`/teams/semester/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
@@ -59,7 +60,15 @@ function AdminTeamSelection(props) {
             console.log(res['data']);
             setTeams(res['data'].sort((t1, t2) => t1['teamName'] < t2['teamName'] ? -1 : 1))
         })
-    }, []);
+    }
+
+    useEffect(() => {
+        setSemesterInfo();
+    }, [semester]);
+
+    useEffect(()=>{
+
+    }, [semester]);
 
     let groupingArray = [];
     students.forEach(student => groupingArray.push({
@@ -102,7 +111,7 @@ function AdminTeamSelection(props) {
         modifiedTeams.forEach(team => {
             if (team !== "Pending") {
                 // console.log('teamMembers', teamMemberMap.get(team))
-                axiosPromises.push(axios.post(`http://localhost:5000/teams/updateMembers/${team}`, {
+                axiosPromises.push(axios.post(`/teams/updateMembers/${team}`, {
                     teamMembers: teamMemberMap.get(team) ? teamMemberMap.get(team) : [""]
                 }, {
                     headers: {
@@ -112,7 +121,7 @@ function AdminTeamSelection(props) {
             }
         });
         reassignedStudents.forEach(student => {
-            axiosPromises.push(axios.post(`http://localhost:5000/users/updateTeam/${student.onyen}`, {
+            axiosPromises.push(axios.post(`/users/updateTeam/${student.onyen}`, {
                 teamId: student.teamId
             },{
                 headers: {
@@ -129,17 +138,17 @@ function AdminTeamSelection(props) {
             tempNewTeams[index - 1].push(student['onyen']);
         });
         tempNewTeams.forEach(team => {
-            axiosPromises.push(axios.post(`http://localhost:5000/teams/add`, {
+            axiosPromises.push(axios.post(`/teams/add`, {
                 teamName: `Team ${Math.floor(Math.random() * 100)}`,
                 teamMembers: team,
-                semester: 'Spring2020'
+                semester: semester
             },{
                 headers: {
                     Authorization: `Token ${window.localStorage.getItem('token')}`
                 }
             }).then((res) => {
                 team.forEach((onyen, i) => {
-                    axios.post(`http://localhost:5000/users/updateTeam/${onyen}`, {
+                    axios.post(`/users/updateTeam/${onyen}`, {
                         teamId: res['data']['id']
                     },{
                         headers: {
@@ -217,7 +226,7 @@ function AdminTeamSelection(props) {
                         )}
                     </Grid>
 
-                    <Button variant="outlined" style={{'marginBottom': '2em', 'marginTop': '2em'}} onClick={addNewTeam}>Add
+                    <Button title="To add multiple new teams, submit one new team then refresh the page" disabled={newTeams.length > 0} variant="outlined" style={{'marginBottom': '2em', 'marginTop': '2em'}} onClick={addNewTeam}>Add
                         new
                         Team</Button>
                     <Grid container spacing={3}>

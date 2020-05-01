@@ -9,9 +9,9 @@ router.get('/', auth.required, (req, res, next) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
-// Get all teams proposal ranks
-router.get('/rankings', auth.required, (req, res, next) => {
-    Team.find({}, "teamName proposalRanks")
+// Get all teams proposal ranks for a semester
+router.get('/rankings/:semester', auth.required, (req, res, next) => {
+    Team.find({"semester": req.params.semester}, "teamName proposalRanks")
         .then(teams => res.json(teams))
         .catch(err => res.status(400).json('Error: ' + err));
 });
@@ -19,19 +19,22 @@ router.get('/rankings', auth.required, (req, res, next) => {
 
 // Add a new team to the database
 router.post('/add', auth.required, (req, res, next) => {
-    const _teamName = req.body.teamName;
-    const _teamMembers = req.body.teamMembers;
-    const _semester = req.body.semester;
+    // const _teamName = req.body.teamName;
+    let _teamName;
+    Team.collection.countDocuments({"semester":process.env.CURRENT_SEMESTER}).then(response => {
+        _teamName = 'Team ' + (response+1);
+        const _teamMembers = req.body.teamMembers;
 
-    const newTeam = new Team({
-        teamName:  _teamName,
-        teamMembers: _teamMembers,
-        semester: _semester
-    });
+        const newTeam = new Team({
+            teamName:  _teamName,
+            teamMembers: _teamMembers,
+        });
 
-    newTeam.save()
-        .then((team) => res.json({id: team._id}))
-        .catch(err => res.status(400).json('Error: ' + err));
+        newTeam.save()
+            .then((team) => res.json({id: team._id}))
+            .catch(err => res.status(400).json('Error: ' + err));
+    }).catch(err => res.status(400).json('Error' + err));
+
 });
 
 // Delete a team
@@ -52,7 +55,7 @@ router.get('/semester/:semester', auth.required, (req, res, next) => {
 router.get('/:id', auth.required, (req, res, next) => {
     Team.findById(req.params.id)
         .then(team => res.json(team))
-        .catch(err => res.status(400).json('Error: ' + err));
+        .catch(err => err.status(400).json('Error: ' + err));
 });
 
 /*  
@@ -64,7 +67,7 @@ Assign projects to teams, request should look like
         ]
     }    
 */
-router.post('/assignments', auth.required, (req, res, next) => {
+router.post('/assignments/', auth.required, (req, res, next) => {
     var assignments = req.body.assignments;
     for (let i = 0; i < assignments.length; i++) {
         
@@ -81,23 +84,12 @@ router.post('/assignments', auth.required, (req, res, next) => {
     }
 });
 
-// Update a team entry, to add or remove a student from a team, change proposal ranking, etc.
-// router.post('/update/:id', auth.required, (req, res, next) => {
-//     Team.findById(req.params.id)
-//         .then(team => {
-//             team.teamName = req.body.teamName;
-//             team.projectId = req.body.projectId;
-//             team.projectTitle = req.body.projectTitle;
-//             team.teamMembers = req.body.teamMembers;
-//             team.proposalRanks = req.body.proposalRanks;
-//             team.save()
-//                 .then(() => res.json("Team updated with new info."))
-//                 .catch(err => res.status(400).json('Error: ' + err));
-//          })
-//          .catch(err => res.status(400).json('Error: ' + err));
-// });
-
-// Update a team's members
+/*  Update a team's members
+    Request should look like
+    {
+        "teamMembers": ["onyen1", "onyen2", "onyen3"]
+    }
+*/
 router.post('/updateMembers/:id', auth.required, (req, res, next) => {
     Team.findById(req.params.id)
         .then(team => {

@@ -26,7 +26,9 @@ const ProjectRanking = () => {
     const [proposals, setProposals] = useState([]);
 
     useEffect(() => {
-        axios.get(`http://localhost:5000/proposals/`, {
+
+
+        axios.get(`/proposals/`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
@@ -41,7 +43,7 @@ const ProjectRanking = () => {
     const submitRanking = function () {
         let teamId = window.localStorage.getItem('teamId');
         let rankings = proposals.map(proposal => proposal['_id']);
-        axios.post(`http://localhost:5000/teams/updateRankings/${teamId}`, {
+        axios.post(`/teams/updateRankings/${teamId}`, {
             proposalRanks: rankings
         }, {
             headers: {

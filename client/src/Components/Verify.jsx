@@ -9,7 +9,7 @@ function Verify(props) {
     onyenAndToken = onyenAndToken.split('/');
     console.log(onyenAndToken);
     window.localStorage.setItem('token', onyenAndToken[1]);
-    axios.post(`http://localhost:5000/users/verifyUser`, {onyen: onyenAndToken[0]}, {
+    axios.post(`/users/verifyUser`, {onyen: onyenAndToken[0]}, {
         headers: {
             Authorization: `Token ${onyenAndToken[1]}`
         }

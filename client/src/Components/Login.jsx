@@ -43,7 +43,7 @@ export default function Login(props) {
     let history = useHistory();
     window.localStorage.setItem("adminUser", "false");
     window.localStorage.setItem("studentUser", "false");
-    console.log(window.localStorage.getItem('token'));
+    // console.log(window.localStorage.getItem('token'));
 
     const [onyen, setOnyen] = useState('');
     const [password, setPassword] = useState('');
@@ -53,13 +53,13 @@ export default function Login(props) {
     function submit(e) {
         e.preventDefault();
         console.log('submitted');
-        axios.post(`http://localhost:5000/users/login`, {
+        axios.post(`/users/login`, {
             user: {
                 onyen: onyen,
                 password: password
             }
         }).then(res => {
-            console.log(res);
+            // console.log(res);
             window.localStorage.setItem('token', res.data.user.token);
             window.localStorage.setItem('onyen', res.data.onyen);
             window.localStorage.setItem('name', res.data.name);
@@ -82,10 +82,11 @@ export default function Login(props) {
     function sendPasswordResetEmail() {
         if (onyen === '') {
             alert('Please fill in your onyen');
-        }
-        axios.post(`http://localhost:5000/users/emailPasswordReset`, {
+        } else{
+        axios.post(`/users/emailPasswordReset`, {
             onyen: onyen
         }).then(() => alert('Please check your school email to finish resetting your password.')).catch(err => alert('err'));
+        }
     }
 
     return (

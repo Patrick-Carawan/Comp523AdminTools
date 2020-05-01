@@ -68,8 +68,8 @@ export default function CheckAttendance(props) {
   };
 
   useEffect(() => {
-    console.log("Team members: ", props.attendance["pat1"]);
-  }, [props.attendance["pat1"]]);
+    props.blankTeamMembers();
+  }, [props.semester]);
 
   // Record all attended
   const handleAllAttended = (event) => {
@@ -123,7 +123,7 @@ export default function CheckAttendance(props) {
         ? props.team.teamMembers.map((member, index) =>
             props.team.teamMembers.length > 0 ? (
               <div className="teamMember" key={index}>
-                <Title>{member}</Title>
+                <Title>{props.roster.get(member)}</Title>
                 <FormControl component="fieldset">
                   <RadioGroup
                     row

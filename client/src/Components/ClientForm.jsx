@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -8,6 +8,8 @@ import Container from "@material-ui/core/Container";
 import ClearIcon from "@material-ui/icons/HighlightOff";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
+import Box from "@material-ui/core/Box";
+import Axios from "axios";
 
 const clientAppState = {
   WELCOME: "welcome",
@@ -20,11 +22,21 @@ function ClientForm(props) {
   const [projectTitle, setProjectTitle] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
   const [description, setDescription] = useState("");
   const [URL, setURL] = useState("");
   const [softwareReq, setSoftwareReq] = useState("");
   const [hardwareReq, setHardwareReq] = useState("");
   const [showError, setShowError] = useState(false);
+  const [instructions, setInstructions] = useState('');
+
+  useEffect(()=>{
+    Axios.get("/proposals/clientForm").then(res => {
+      setInstructions(res['data'][0]['text']);
+      console.log(res)
+    }).catch(err => console.log(err));
+  },[]);
+
   switch (appState) {
     case clientAppState.WELCOME:
       return Welcome();
@@ -36,41 +48,35 @@ function ClientForm(props) {
       return Welcome();
   }
 
+
+
   function Welcome() {
     return (
       <Container>
-        <div className="MiddleText">
-          <Typography component="h1" variant="h2" align="center">
-            Welcome, Client!
-          </Typography>
-          <br />
-          <Typography component="h1" variant="h5">
-            This is where we'll put all the information that Stotts wants the
-            clients to know before they send in an application to work with 523
-            students for this project. Lorem ipsum dolor sit amet, consectetur
-            adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-            exercitation ullamco laboris nisi ut aliquip ex ea commodo
-            consequat. Duis aute irure dolor in reprehenderit in voluptate velit
-            esse cillum dolore eu fugiat nulla pariatur.Lorem ipsum dolor sit
-            amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-            ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-            nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-            consequat. Duis aute irure dolor in reprehenderit in voluptate velit
-            esse cillum dolore eu fugiat nulla pariatur.
-          </Typography>
-          <br />
-          <br />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="secondary"
-            onClick={() => setAppState(clientAppState.FORM)}
-          >
-            Begin Application
-          </Button>
-        </div>
+        <Grid>
+          <Box className="MiddleText">
+            <Typography component="h1" variant="h2" align="center">
+              Welcome, Client!
+            </Typography>
+            <br />
+            <Typography component="h1" variant="h5">
+              {instructions}
+            </Typography>
+            <br />
+            <br />
+            <Box justifyContent="center">
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                color="secondary"
+                onClick={() => setAppState(clientAppState.FORM)}
+              >
+                Begin Application
+              </Button>
+            </Box>
+          </Box>
+        </Grid>
       </Container>
     );
   }
@@ -78,8 +84,18 @@ function ClientForm(props) {
   function Form() {
     const submitForm = function (e) {
       e.preventDefault();
-      if (firstName && lastName && projectTitle && description) {
-        console.log("submit form called");
+      if (firstName && lastName && projectTitle && description && email) {
+        // console.log("submit form called");
+
+        Axios.post("/proposals", {
+          title: projectTitle,
+          email: email,
+          prop_name: `${firstName} ${lastName}`,
+          description: description,
+          info_url: URL,
+          tech_requirements: softwareReq,
+          hardware_requirements: hardwareReq,
+        });
         setAppState(clientAppState.SUBMITTED);
         setShowError(false);
       } else {
@@ -148,7 +164,24 @@ function ClientForm(props) {
             justify="flex-start"
             alignItems="stretch"
           >
-            <span>4. Project description</span>
+            <span>4. EMAIL</span>
+            <br />
+            <TextField
+              id="outlined-basic"
+              label="Email"
+              variant="outlined"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <br />
+          </Grid>
+
+          <Grid
+            container
+            direction="column"
+            justify="flex-start"
+            alignItems="stretch"
+          >
+            <span>5. Project description</span>
             <br />
             <TextField
               id="outlined-basic"
@@ -165,7 +198,7 @@ function ClientForm(props) {
             alignItems="stretch"
           >
             <br />
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="subtitle1" gutterBottom>
               Please add a link to any supporting documents, such as PowerPoints
               or published papers below:
             </Typography>
@@ -236,7 +269,7 @@ function ClientForm(props) {
                     onClick={() => setShowError(false)}
                   >
                     <ClearIcon style={{ marginRight: "8px" }} />
-                    Please fill out the first 4 fields
+                    Please fill out the first 5 fields
                   </Button>
                 ) : null}
               </Grid>
@@ -249,13 +282,13 @@ function ClientForm(props) {
 
   function ThankYouScreen() {
     return (
-      <div className="MiddleText">
+      <Box className="MiddleText">
         <Typography component="h1" variant="h3">
           Thanks for submitting your application to work with UNC COMP 523. Dr.
           Stotts will be in touch with you soon with more details.
         </Typography>
         <Link to="/">Go Home</Link>
-      </div>
+      </Box>
     );
   }
 }

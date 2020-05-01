@@ -44,6 +44,8 @@ export default function CreateAccount() {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [adminToken, setAdminToken] = useState('');
+    const [adminEmail, setAdminEmail] = useState('');
+
     let history = useHistory();
 
     function toLogin() {
@@ -57,20 +59,28 @@ export default function CreateAccount() {
         console.log('password', password);
         console.log('firstname', firstName);
         console.log('lastname ', lastName);
-
+        let data = adminEmail === '' ? {
+            "user": {
+                onyen: onyen,
+                password: password,
+                firstName: firstName,
+                lastName: lastName,
+                adminToken: adminToken
+            }
+        } :  {
+            "user": {
+                onyen: onyen,
+                password: password,
+                firstName: firstName,
+                lastName: lastName,
+                adminToken: adminToken,
+                email: adminEmail
+            }
+        }
         if (password !== confirmPassword) {
             alert('Passwords must match')
         } else {
-            axios.post(`http://localhost:5000/users`, {
-                "user": {
-                    onyen: onyen,
-                    password: password,
-                    firstName: firstName,
-                    lastName: lastName,
-                    semester: "Spring2020",
-                    adminToken: adminToken
-                }
-            }).then(res => {
+            axios.post(`/users`, data).then(res => {
                 console.log(res);
                 alert('Account Created. Please check your school email to verify account and log in.')
                 setOnyen('');
@@ -79,9 +89,14 @@ export default function CreateAccount() {
                 setPassword('');
                 setConfirmPassword('');
                 setAdminToken('');
+                setAdminEmail('');
             }).catch(err => {
-                alert('Could not create user. Make sure this is the correct onyen. See your teacher for help if needed.')
-                console.log(err)
+                if (err.response.status === 406) {
+                    alert(err.response.data)
+                } else {
+                    alert('Could not create user. Make sure this is the correct onyen. See your teacher for help if needed.')
+                    console.log('err', err)
+                }
             })
         }
     }
@@ -166,6 +181,15 @@ export default function CreateAccount() {
                         label="Admin Key"
                         type="password"
                         onChange={(e) => setAdminToken(e.target.value)}
+                    />
+                    <Typography>If you are an administrator and your email does not end with @live.unc.edu, please enter your email here.</Typography>
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        fullWidth
+                        value={adminEmail}
+                        label="Admin Email"
+                        onChange={(e) => setAdminEmail(e.target.value)}
                     />
                     <Button
                         type="submit"

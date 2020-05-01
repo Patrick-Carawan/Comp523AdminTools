@@ -59,13 +59,14 @@ function ProposalAssignment(props) {
     const [idMap, setIdMap] = useState(new Map());
     const [pairings, setPairings] = useState([]);
     const [showPairings, setShowPairings] = useState(false);
-    const [semester, setSemester] = useState('');
+    const [semester, setSemester] = useState(window.localStorage.getItem('semester'));
     const [selectedProjects, setSelectedProjects] = useState([]);
     const [remainingProjects, setRemainingProjects] = useState([]);
     const [disableButton, setDisableButton] = useState(true);
 
-    useEffect(() => {
-        axios.get(`http://localhost:5000/proposals`, {
+
+    function setAllSemesterInfo() {
+        axios.get(`/proposals`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
@@ -85,7 +86,7 @@ function ProposalAssignment(props) {
             setTitleMap(tempMap);
             setIdMap(tempIdMap);
         });
-        axios.get(`http://localhost:5000/teams`, {
+        axios.get(`/teams/semester/${semester}`, {
             headers: {
                 Authorization: `Token ${window.localStorage.getItem('token')}`
             }
@@ -104,7 +105,11 @@ function ProposalAssignment(props) {
             }
             setPairings(localPairingArray)
         });
-    }, []);
+    }
+
+    useEffect(() => {
+        setAllSemesterInfo();
+    }, [semester]);
 
 
     function handleChange(e, index, team) {
@@ -129,7 +134,7 @@ function ProposalAssignment(props) {
         });
         setPairings(localPairingsArray);
         axios
-            .post(`http://localhost:5000/teams/assignments`, {
+            .post(`/teams/assignments`, {
                 assignments: assignmentArray,
             })
             .then(() => {

@@ -3,7 +3,6 @@ const path = require('path'); // Module to work with directories
 const session = require('express-session');
 const cors = require('cors');
 const mongoose = require('mongoose');
-// const errorHandler = require('errorhandler');
 
 require('dotenv').config();
 
@@ -17,15 +16,9 @@ app.use(express.urlencoded({ extended: false })); // May not need this line
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "client", "build")));
 
-// if(!isProduction) {
-//   app.use(errorHandler);
-// }
-
-
 // Configure and connect to mongoose
-const uri = process.env.MONGODB_URI || "mongodb+srv://Patrick:Patrick@cluster0-wqpir.mongodb.net/test?retryWrites=true&w=majority";
+const uri = process.env.MONGODB_URI;
 mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true });
-//mongoose.set('debug', true);
 
 const connection = mongoose.connection;
 connection.once('open', () => {
@@ -51,18 +44,6 @@ app.use('/roster', rosterRouter);
 app.use('/coachMeetings', meetingRouter);
 app.use('/semesters', semesterRouter);
 
-// if(!isProduction) {
-//   app.use((err, req, res) => {
-//     res.status(err.status || 500);
-
-//     res.json({
-//       errors: {
-//         message: err.message,
-//         error: err,
-//       },
-//     });
-//   });
-// }
 
 app.use((err, req, res, next) => {
   res.status(err.status || 500);

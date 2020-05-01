@@ -20,6 +20,19 @@ router.get('/:onyen', auth.user, (req, res, next) => {
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
+// Check if a user exists (useful for preventing multiple registrations)
+router.get('/exists/:onyen', auth.optional, (req, res, next) => {
+    User.find({ onyen: req.params.onyen })
+        .then((user)=> {
+            if (user) {
+                res.json(true);
+            } else {
+                res.json(false);
+            }
+        })
+        .catch(err => res.status(400).json('Error: ' + err));
+});
+
 // Get all students for a given semester
 router.get('/students/:semester', auth.user, (req, res, next) => {
     User.find({"semester": req.params.semester})
@@ -72,16 +85,26 @@ router.post('/', auth.optional, (req, res, next) => {
         finalUser.admin = false;
     }
 
+    if (user.adminToken !== '' && user.adminToken && user.adminToken !== process.env.ADMIN_TOKEN) {
+        res.status(406).send("Admin Key is incorrect. Please log in as a student without an admin key, or enter the correct key.");
+        return
+    }
+
+    console.log(user);
+
     finalUser.setPassword(user.password);
     finalUser.verified = false;
 
     finalUser.generateVerificationEmail();
 
     return finalUser.save()
-        .then(() => res.json({
-            onyen: finalUser.onyen,
-            name: `${finalUser.firstName} ${finalUser.lastName}`
-        }))
+        .then(() => {
+            //finalUser.generateVerificationEmail();
+            res.json({
+                onyen: finalUser.onyen,
+                name: `${finalUser.firstName} ${finalUser.lastName}`
+            });
+        })
         .catch(err => res.status(400).json('Error saving student: ' + err));
 });
 
