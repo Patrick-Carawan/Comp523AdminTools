@@ -102,7 +102,7 @@ router.post("/addLetter", auth.required, (req, res, next) => {
 
 // Get message to show clients on clientForm
 router.get("/clientForm", auth.optional, (req, res, next) => {
-  Letter.find({ status: "ClientForm" })
+  Letter.findOne({ status: "ClientForm" })
       .then((pending) => res.json(pending))
       .catch((err) => res.status(400).json("Error: " + err));
 });
@@ -110,7 +110,7 @@ router.get("/clientForm", auth.optional, (req, res, next) => {
 // Get pending letter
 router.get("/pendingLetter", auth.required, (req, res, next) => {
   if (req.payload.admin) {
-    Letter.find({ status: "Pending" })
+    Letter.findOne({ status: "Pending" })
       .then((pending) => res.json(pending))
       .catch((err) => res.status(400).json("Error: " + err));
   } else {
@@ -140,7 +140,7 @@ router.post("/pendingLetter", auth.required, (req, res, next) => {
 // Get rejection letter
 router.get("/rejectionLetter", auth.required, (req, res, next) => {
   if (req.payload.admin) {
-    Letter.find({ status: "Rejected" })
+    Letter.findOne({ status: "Rejected" })
       .then((rejection) => res.json(rejection))
       .catch((err) => res.status(400).json("Error: " + err));
   } else {
@@ -170,7 +170,7 @@ router.post("/rejectionLetter", auth.required, (req, res, next) => {
 // Get acceptance letter
 router.get("/acceptanceLetter", auth.required, (req, res, next) => {
   if (req.payload.admin) {
-    Letter.find({ status: "Accepted" })
+    Letter.findOne({ status: "Accepted" })
       .then((acceptance) => res.json(acceptance))
       .catch((err) => res.status(400).json("Error: " + err));
   } else {
