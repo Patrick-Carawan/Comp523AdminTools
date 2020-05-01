@@ -36,13 +36,14 @@ userSchema.methods.validatePassword = function(password) {
 };
 
 userSchema.methods.generateJWT = function() {
-    const today = new Date();
-    const expirationDate = new Date(today);
-    expirationDate.setDate(today.getDate() + 60);
+    // const today = new Date();
+    // const expirationDate = new Date(today);
+    // expirationDate.setDate(today.getDate() + 60);
 
     return jwt.sign({
         onyen: this.onyen,
-        id: this._id
+        id: this._id,
+        admin: this.admin
     }, secret, {
         expiresIn: "7d"
     });
@@ -62,7 +63,8 @@ userSchema.methods.sendPasswordResetEmail = function() {
 
     jwt.sign({
         onyen: this.onyen,
-        id: this._id, 
+        id: this._id,
+        admin: this.admin
     }, secret, {
         expiresIn: "1d"
     }, (err, emailToken) => {
@@ -102,6 +104,7 @@ userSchema.methods.generateVerificationEmail = function() {
     jwt.sign({
         onyen: this.onyen,
         id: this._id,
+        admin: this.admin
     }, secret, {
         expiresIn: "3d"
     }, (err, emailToken) => {
