@@ -54,10 +54,11 @@ function ProposalsAdminView(props) {
   const [newProposals, setNewProposals] = useState([]);
   const [pendingProposals, setPendingProposals] = useState([]);
   const [rejectedProposals, setRejectedProposals] = useState([]);
-  const [semester, setSemester] = useState("");
+  const [completedProposals, setCompletedProposals] = useState([]);
+  const [semester, setSemester] = useState(window.localStorage.getItem('semester'));
   useEffect(() => {
     axios
-      .get("/proposals/", {
+      .get(`/proposals/pendingOrCurrent/${semester}`, {
         headers: {
           Authorization: `Token ${window.localStorage.getItem("token")}`,
         },
@@ -74,6 +75,9 @@ function ProposalsAdminView(props) {
         );
         setPendingProposals(
           proposals.filter((prop) => prop["status"] === "Pending")
+        );
+        setCompletedProposals(
+            proposals.filter((prop) => prop["status"] === "Completed")
         );
       })
       .catch(function (error) {
