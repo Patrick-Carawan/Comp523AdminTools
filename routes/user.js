@@ -109,7 +109,7 @@ router.post('/', auth.optional, (req, res, next) => {
 });
 
 // Verify User
-router.post('/verifyUser', auth.required, (req, res, next) => {
+router.post('/verifyUser', auth.user, (req, res, next) => {
     const {body: {onyen}} = req;
     User.findOne({onyen: onyen})
         .then(user => {

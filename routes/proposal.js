@@ -4,21 +4,28 @@ var Proposal = require("../models/proposal.model");
 var Letter = require("../models/letter.model");
 
 // Get all proposals
-router.get("/", auth.required, (req, res, next) => {
+router.get("/", auth.user, (req, res, next) => {
   Proposal.find()
     .then((proposals) => res.json(proposals))
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
+// Get a proposal by its id
+router.get("/:id", auth.user, (req, res, next) => {
+  Proposal.findById(req.params.id)
+    .then((proposals) => res.json(proposals))
+    .catch((err) => res.status(400).json("Error: " + err));
+});
+
 // Delete a proposal
-router.delete("/:id", auth.required, (req, res, next) => {
+router.delete("/:id", auth.admin, (req, res, next) => {
   Proposal.findByIdAndDelete(req.params.id)
     .then(() => res.json("Proposal deleted."))
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
 // Add a proposal
-router.route("/").post((req, res, next) => {
+router.post("/", auth.optional, (req, res, next) => {
   const _title = req.body.title;
   const _email = req.body.email;
   const _prop_name = req.body.prop_name;
@@ -42,17 +49,17 @@ router.route("/").post((req, res, next) => {
     .save()
     .then(() => res.json("Proposal added."))
     .catch((err) => res.status(400).json("Error: " + err));
-});
+})
 
 // Get all proposal emails and their status
-router.get("/emails", auth.required, (req, res, next) => {
+router.get("/emails", auth.admin, (req, res, next) => {
   Proposal.find({}, "email status")
     .then((emails) => res.json(emails))
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
 // Add a letter
-router.post("/addLetter", auth.required, (req, res, next) => {
+router.post("/addLetter", auth.admin, (req, res, next) => {
   const text = req.body.text;
   const status = req.body.status;
 
@@ -76,14 +83,14 @@ router.get("/clientForm", auth.optional, (req, res, next) => {
 });
 
 // Get pending letter
-router.get("/pendingLetter", auth.required, (req, res, next) => {
+router.get("/pendingLetter", auth.admin, (req, res, next) => {
   Letter.find({ status: "Pending" })
     .then((pending) => res.json(pending))
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
 // Update pending letter
-router.post("/pendingLetter", auth.required, (req, res, next) => {
+router.post("/pendingLetter", auth.admin, (req, res, next) => {
   Letter.findOne({ status: "Pending" })
     .then((letter) => {
       letter.text = req.body.text;
@@ -96,14 +103,14 @@ router.post("/pendingLetter", auth.required, (req, res, next) => {
 });
 
 // Get rejection letter
-router.get("/rejectionLetter", auth.required, (req, res, next) => {
+router.get("/rejectionLetter", auth.admin, (req, res, next) => {
   Letter.find({ status: "Rejected" })
     .then((rejection) => res.json(rejection))
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
 // Update rejection letter
-router.post("/rejectionLetter", auth.required, (req, res, next) => {
+router.post("/rejectionLetter", auth.admin, (req, res, next) => {
   Letter.findOne({ status: "Rejected" })
     .then((letter) => {
       letter.text = req.body.text;
@@ -116,14 +123,14 @@ router.post("/rejectionLetter", auth.required, (req, res, next) => {
 });
 
 // Get acceptance letter
-router.get("/acceptanceLetter", auth.required, (req, res, next) => {
+router.get("/acceptanceLetter", auth.admin, (req, res, next) => {
   Letter.find({ status: "Accepted" })
     .then((acceptance) => res.json(acceptance))
     .catch((err) => res.status(400).json("Error: " + err));
 });
 
 // Update acceptance letter
-router.post("/acceptanceLetter", auth.required, (req, res, next) => {
+router.post("/acceptanceLetter", auth.admin, (req, res, next) => {
   Letter.findOne({ status: "Accepted" })
     .then((letter) => {
       letter.text = req.body.text;
@@ -136,7 +143,7 @@ router.post("/acceptanceLetter", auth.required, (req, res, next) => {
 });
 
 // Only updates status of proposal, can be changed to update other elements
-router.post("/update/:id", auth.required, (req, res, next) => {
+router.post("/update/:id", auth.admin, (req, res, next) => {
   Proposal.findById(req.params.id)
     .then((proposal) => {
       proposal.status = req.body.status;
