@@ -3,7 +3,7 @@ var CoachMeeting = require('../models/coachMeeting.model');
 const auth = require('./auth');
 
 // Add a coachMeeting
-router.post('/add/:semester/:week/:teamId', auth.required, (req, res, next) => {
+router.post('/add/:semester/:week/:teamId', auth.admin, (req, res, next) => {
 
     const _demoStatus = req.body.demoStatus;
     const _deliverableStatus = req.body.deliverableStatus;
@@ -31,14 +31,14 @@ router.post('/add/:semester/:week/:teamId', auth.required, (req, res, next) => {
 
 //Get all coach meetings is a semester for a single team
 
-router.get('/:semester/:teamId', auth.required, (req, res, next) => {
+router.get('/:semester/:teamId', auth.admin, (req, res, next) => {
     CoachMeeting.find({"semester": req.params.semester, "teamId": req.params.teamId})
         .then(meeting => res.json(meeting))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
 // Get coach meeting
-router.get('/:semester/:week/:teamId', auth.required, (req, res, next) => {
+router.get('/:semester/:week/:teamId', auth.admin, (req, res, next) => {
     CoachMeeting.find({"semester": req.params.semester, "week": req.params.week, "teamId": req.params.teamId})
         .then(meeting => res.json(meeting))
         .catch(err => res.status(400).json('Error: ' + err));
@@ -47,7 +47,7 @@ router.get('/:semester/:week/:teamId', auth.required, (req, res, next) => {
 
 
 // Get all coach meetings for a semester
-router.get('/:semester', auth.required, (req, res, next) => {
+router.get('/:semester', auth.admin, (req, res, next) => {
     CoachMeeting.find({"semester": req.params.semester})
         .then(meeting => res.json(meeting))
         .catch(err => res.status(400).json('Error: ' + err));

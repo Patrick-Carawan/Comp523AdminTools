@@ -3,7 +3,7 @@ var Roster = require('../models/roster.model');
 const auth = require('./auth');
 
 // Add a roster
-router.post('/add/:semester', auth.required, (req, res, next) => {
+router.post('/add/:semester', auth.admin, (req, res, next) => {
 
     const _semester = req.params.semester;
     const _studentList = req.body.studentList;
@@ -19,7 +19,7 @@ router.post('/add/:semester', auth.required, (req, res, next) => {
 
 
 // Get roster for a semester
-router.get('/:semester', auth.required, (req, res) => {
+router.get('/:semester', auth.user, (req, res) => {
     Roster.find({"semester": req.params.semester})
         .then(roster => res.json(roster))
         .catch(err => res.status(400).json('Error: ' + err));
