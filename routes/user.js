@@ -7,14 +7,14 @@ var User = require('../models/user.model');
 require('dotenv').config();
 
 // Get all users
-router.get('/', auth.user, (req, res, next) => {
+router.get('/', auth.required, (req, res, next) => {
     User.find()
         .then(users => res.json(users))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
 // Get a user by their onyen
-router.get('/:onyen', auth.user, (req, res, next) => {
+router.get('/:onyen', auth.required, (req, res, next) => {
     User.find({onyen: req.params.onyen})
         .then(user => res.json(user))
         .catch(err => res.status(400).json('Error: ' + err));
@@ -34,27 +34,32 @@ router.get('/exists/:onyen', auth.optional, (req, res, next) => {
 });
 
 // Get all students for a given semester
-router.get('/students/:semester', auth.user, (req, res, next) => {
+router.get('/students/:semester', auth.required, (req, res, next) => {
     User.find({"semester": req.params.semester})
         .then(users => res.json(users))
         .catch(err => res.status(400).json('Error: ' + err));
 });
 
 // Update team for a given student (Students can only assign their own team, and they can only do it once)
-router.post('/updateTeam/', auth.user, (req, res, next) => {
+router.post('/updateTeam/', auth.required, (req, res, next) => {
     
 });
 
 //Update team for a given student (Admins can do this as many times as needed)
-router.post('/updateTeam/:onyen', auth.admin, (req, res, next) => {
-    User.findOne({onyen: req.params.onyen})
-        .then(student => {
-            student.teamId = req.body.teamId;
-            student.save()
-                .then(() => res.json("Student's teamId updated. "))
-                .catch(err => res.status(400).json('Error in saving student: ' + err));
-        })
-        .catch(err => res.status(400).json('Error in finding student: ' + err));
+router.post('/updateTeam/:onyen', auth.required, (req, res, next) => {
+    if (req.payload.admin) {
+        User.findOne({onyen: req.params.onyen})
+            .then(student => {
+                student.teamId = req.body.teamId;
+                student.save()
+                    .then(() => res.json("Student's teamId updated. "))
+                    .catch(err => res.status(400).json('Error in saving student: ' + err));
+            })
+            .catch(err => res.status(400).json('Error in finding student: ' + err));
+    } else {
+        res.status(403).json("Not authorized");
+    }
+    
 });
 
 // Create new User
@@ -109,7 +114,7 @@ router.post('/', auth.optional, (req, res, next) => {
 });
 
 // Verify User
-router.post('/verifyUser', auth.user, (req, res, next) => {
+router.post('/verifyUser', auth.required, (req, res, next) => {
     const {body: {onyen}} = req;
     User.findOne({onyen: onyen})
         .then(user => {
@@ -191,7 +196,7 @@ router.post('/emailPasswordReset', auth.optional, (req, res, next) => {
 });
 
 // Reset password route
-router.post('/reset', auth.user, (req, res, next) => {
+router.post('/reset', auth.required, (req, res, next) => {
     User.findOne({onyen: req.body.onyen})
         .then(user => {
             // console.log(req.body.user.password);

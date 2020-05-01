@@ -4,21 +4,31 @@ var StudentReport = require("../models/studentReport.model");
 var TeamReport = require("../models/teamReport.model");
 
 // Get all student reports
-router.get('/students/:semester', auth.admin, (req, res, next) => {
-    StudentReport.find({"semester": req.params.semester})
-        .then(reports => res.json(reports))
-        .catch(err => res.status(400).json('Error: ' + err));
+router.get('/students/:semester', auth.required, (req, res, next) => {
+    if (req.payload.admin) {
+        StudentReport.find({"semester": req.params.semester})
+            .then(reports => res.json(reports))
+            .catch(err => res.status(400).json('Error: ' + err));
+    } else {
+        res.status(403).json("Not authorized");
+    }
+    
 });
 
 // Get all team reports for a semester
-router.get('/teams/:semester', auth.admin, (req, res, next) => {
-    TeamReport.find({"semester": req.params.semester})
-        .then(reports => res.json(reports))
-        .catch(err => res.status(400).json('Error: ' + err));
+router.get('/teams/:semester', auth.required, (req, res, next) => {
+    if (req.payload.admin) {
+        TeamReport.find({"semester": req.params.semester})
+            .then(reports => res.json(reports))
+            .catch(err => res.status(400).json('Error: ' + err));
+    } else {
+        res.status(403).json("Not authorized");
+    }
+
 });
 
 // Add a student report
-router.post('/students', auth.user, (req, res, next) => {
+router.post('/students', auth.required, (req, res, next) => {
     const _onyen = req.body.onyen;
     const _text = req.body.text;
 
@@ -32,7 +42,7 @@ router.post('/students', auth.user, (req, res, next) => {
 });
 
 // Add a team report
-router.post('/teams', auth.user, (req, res, next) => {
+router.post('/teams', auth.required, (req, res, next) => {
     const _team = req.body.team;
     const _text = req.body.text;
 
