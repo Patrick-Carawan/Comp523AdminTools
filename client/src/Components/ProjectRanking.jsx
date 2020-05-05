@@ -44,6 +44,10 @@ const ProjectRanking = () => {
 
     const submitRanking = function () {
         let teamId = window.localStorage.getItem('teamId');
+        if(!teamId || teamId.toLowerCase() ==="pending"){
+            alert('Please join a team before submitting your preferences.');
+            return;
+        }
         let rankings = proposals.map(proposal => proposal['_id']);
         axios.post(`/teams/updateRankings/${teamId}`, {
             proposalRanks: rankings

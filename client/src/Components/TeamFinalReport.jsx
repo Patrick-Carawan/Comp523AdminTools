@@ -30,6 +30,11 @@ const TeamFinalReport = () => {
     const [report, setReport] = useState('');
 
     const submitReport = function () {
+        let teamId = window.localStorage.getItem('teamId');
+        if(!teamId || teamId.toLowerCase() === "pending"){
+            alert(`Please join a team before submitting your team's final report.`);
+                return
+        }
         axios.post(`/finalReports/teams`, {
             team: window.localStorage.getItem('teamId'),
             text: report

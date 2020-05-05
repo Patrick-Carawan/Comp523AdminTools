@@ -109,6 +109,7 @@ function StudentTeamSelection(props) {
                     Authorization: `Token ${window.localStorage.getItem('token')}`
                 }
             }).then((res) => {
+                window.localStorage.setItem('teamId',res['data']['id']);
                 draggedOnyens.forEach((onyen, i) => {
                     axios.post(`/users/updateTeam/${onyen}`, {
                         teamId: res['data']['id']
