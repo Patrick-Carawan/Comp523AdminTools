@@ -3,6 +3,7 @@ const passport = require('passport')
 const router = require('express').Router();
 const auth = require('./auth');
 var User = require('../models/user.model');
+var Roster = require('../models/roster.model');
 
 require('dotenv').config();
 
@@ -77,52 +78,60 @@ router.post('/updateTeam', auth.required, (req, res, next) => {
 // Create new User
 router.post('/', auth.optional, (req, res, next) => {
     const {body: {user}} = req;
-
-    if (!user.onyen) {
-        return res.status(422).json({
-            errors: {
-                onyen: 'is required',
-            },
-        });
-    }
-
-    if (!user.password) {
-        return res.status(422).json({
-            errors: {
-                password: 'is required',
-            },
-        });
-    }
-
-    const finalUser = new User(user);
-
-    if (user.adminToken && user.adminToken === process.env.ADMIN_TOKEN) {
-        finalUser.admin = true;
-    } else {
-        finalUser.admin = false;
-    }
-
-    if (user.adminToken !== '' && user.adminToken && user.adminToken !== process.env.ADMIN_TOKEN) {
-        res.status(406).send("Admin Key is incorrect. Please log in as a student without an admin key, or enter the correct key.");
-        return
-    }
-
-    console.log(user);
-
-    finalUser.setPassword(user.password);
-    finalUser.verified = false;
-
-    finalUser.generateVerificationEmail();
-
-    return finalUser.save()
-        .then(() => {
-            //finalUser.generateVerificationEmail();
-            res.json({
-                onyen: finalUser.onyen,
-                name: `${finalUser.firstName} ${finalUser.lastName}`
+    Roster.findOne({semester: process.env.CURRENT_SEMESTER}).then(roster =>{
+        if (!user.onyen) {
+            return res.status(422).json({
+                errors: {
+                    onyen: 'is required',
+                },
             });
-        })
-        .catch(err => res.status(400).json('Error saving student: ' + err));
+        }
+
+
+
+        if (!user.password) {
+            return res.status(422).json({
+                errors: {
+                    password: 'is required',
+                },
+            });
+        }
+
+        const finalUser = new User(user);
+
+        if (user.adminToken && user.adminToken === process.env.ADMIN_TOKEN) {
+            finalUser.admin = true;
+        } else {
+            finalUser.admin = false;
+        }
+        if(!(roster.studentList.map(student => student.onyen).includes(user.onyen) || finalUser.admin)){
+            return res.status(406).json(
+              'Must be in the class roster or be an admin'
+            );
+        }
+        if (user.adminToken !== '' && user.adminToken && user.adminToken !== process.env.ADMIN_TOKEN) {
+            res.status(406).send("Admin Key is incorrect. Please log in as a student without an admin key, or enter the correct key.");
+            return
+        }
+
+        console.log(user);
+
+        finalUser.setPassword(user.password);
+        finalUser.verified = false;
+
+        finalUser.generateVerificationEmail();
+
+        return finalUser.save()
+            .then(() => {
+                //finalUser.generateVerificationEmail();
+                res.json({
+                    onyen: finalUser.onyen,
+                    name: `${finalUser.firstName} ${finalUser.lastName}`
+                });
+            })
+            .catch(err => res.status(400).json('Error saving student: ' + err));
+    }).catch(err => res.status(400).json('Error with server roster. Please contact your teacher: ' + err));
+
 });
 
 // Verify User

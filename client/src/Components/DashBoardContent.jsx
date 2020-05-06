@@ -94,18 +94,16 @@ export default function Dashboard() {
                 <WelcomeCard />
               </Paper>
             </Grid>
-            {/* FutureEventCard */}
-            <Grid item xs={12} md={5} lg={5}>
-              <Paper className={fixedHeightPaper}>
-                <FutureEventCard />
-              </Paper>
-            </Grid>
-            {/* Recent Orders */}
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-                <Card />
-              </Paper>
-            </Grid>
+          {/*  <Grid item xs={12} md={5} lg={5}>*/}
+          {/*    <Paper className={fixedHeightPaper}>*/}
+          {/*      <FutureEventCard />*/}
+          {/*    </Paper>*/}
+          {/*  </Grid>*/}
+          {/*  <Grid item xs={12}>*/}
+          {/*    <Paper className={classes.paper}>*/}
+          {/*      <Card />*/}
+          {/*    </Paper>*/}
+          {/*  </Grid>*/}
           </Grid>
         </Container>
       </main>

@@ -24,11 +24,11 @@ export default function Card() {
     <React.Fragment>
       <Title>Welcome Panel</Title>
       <Typography component="p" variant="h4">
-        Good morning, Dr.Stotts
+        Welcome {window.localStorage.getItem('name')}
       </Typography>
-      <Typography color="textSecondary" className={classes.depositContext}>
-        on 30 March, 2020
-      </Typography>
+      {/*<Typography color="textSecondary" className={classes.depositContext}>*/}
+      {/*  on 30 March, 2020*/}
+      {/*</Typography>*/}
       <Calendar />
     </React.Fragment>
   );

@@ -265,7 +265,7 @@ export default function AdminDashboard(props) {
             noWrap
             className={classes.title}
           >
-            COMP 523 Admin Tool
+            COMP 523 Admin Tools
           </Typography>
           <FormControl>
             <InputLabel>Semester</InputLabel>
