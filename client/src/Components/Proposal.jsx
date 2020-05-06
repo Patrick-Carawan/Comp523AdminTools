@@ -24,6 +24,8 @@ function Proposal(props) {
                     <Typography>Software requirements: {props.softwareReq}</Typography>
                     <br/>
                     <Typography>Hardware requirements: {props.hardwareReq}</Typography>
+                    {props.powerpoint? <Typography>PowerPoint link:  <a href={props.powerpoint}>{props.powerpoint}
+                    </a></Typography>:null}
                 </> : null
             }
         </>

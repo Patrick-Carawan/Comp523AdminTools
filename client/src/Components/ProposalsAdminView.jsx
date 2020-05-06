@@ -156,6 +156,7 @@ function ProposalsAdminView(props) {
                             description={prop.description}
                             hardwareReq={prop.hardware_requirements}
                             softwareReq={prop.tech_requirements}
+                            powerpoint={prop.powerpoint_url}
                           />
                         </Grid>
                         <Box mx="auto">
