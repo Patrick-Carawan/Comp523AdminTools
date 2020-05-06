@@ -19,6 +19,12 @@ router.get("/pendingOrCurrent/:semester", auth.required, (req, res, next) => {
 });
 
 
+// Get accepted proposals for current
+router.get("/accepted", auth.optional, (req, res, next) => {
+    Proposal.find({semester: process.env.CURRENT_SEMESTER, status: "Accepted"} )
+        .then((proposals) => res.json(proposals))
+        .catch((err) => res.status(400).json("Error: " + err));
+});
 
 
 // Delete a proposal
@@ -31,6 +37,20 @@ router.delete("/:id", auth.required, (req, res, next) => {
       res.status(403).json("Not authorized");
   }
 
+});
+
+//update a proposal
+router.post("/updatePowerPoint/:id", auth.optional, (req, res, next) => {
+        Proposal.findById(req.params.id)
+            .then((proposal) => {
+                proposal.powerpoint_url = req.body.powerpoint_url;
+                proposal.description = req.body.description;
+                proposal
+                    .save()
+                    .then(() => res.json("Proposal status updated"))
+                    .catch((err) => res.status(400).json("Error: " + err));
+            })
+            .catch((err) => res.status(400).json("Error: " + err));
 });
 
 // Add a proposal

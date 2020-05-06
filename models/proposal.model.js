@@ -10,6 +10,7 @@ const proposalSchema = new Schema({
     description: { type: String, required: true },
     info_url:  { type: String },
     tech_requirements: { type: String },
+    powerpoint_url: {type: String },
     hardware_requirements: { type: String },
     status: { type: String, default: "New" } 
 }, {

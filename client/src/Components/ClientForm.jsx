@@ -167,7 +167,7 @@ function ClientForm(props) {
             justify="flex-start"
             alignItems="stretch"
           >
-            <span>4. EMAIL</span>
+            <span>4. Email</span>
             <br />
             <TextField
               id="outlined-basic"
@@ -202,9 +202,12 @@ function ClientForm(props) {
           >
             <br />
             <Typography variant="subtitle1" gutterBottom>
-              Please add a link to any supporting documents, such as PowerPoints
-              or published papers below:
+              Please add a link (or a comma separated list of links) to any supporting documents, such as PowerPoints
+              or published papers below.
             </Typography>
+              <Typography>
+            (Upload your files to Google drive and use a shareable link if your documents aren't hosted anywhere)
+              </Typography>
           </Grid>
 
           <Grid
@@ -215,7 +218,7 @@ function ClientForm(props) {
           >
             <TextField
               id="outlined-basic"
-              label="URL"
+              label="URL(s)"
               variant="outlined"
               onChange={(e) => setURL(e.target.value)}
             />
