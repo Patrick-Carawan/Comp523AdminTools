@@ -44,7 +44,7 @@ app.use('/roster', rosterRouter);
 app.use('/coachMeetings', meetingRouter);
 app.use('/semesters', semesterRouter);
 
-
+// Handler for errors
 app.use((err, req, res, next) => {
   res.status(err.status || 500);
 
@@ -56,10 +56,12 @@ app.use((err, req, res, next) => {
   });
 });
 
+// Redirects all URLs to homepage
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client", "build", "index.html"));
 });
 
+// Run server
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
 });

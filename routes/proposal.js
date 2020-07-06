@@ -11,7 +11,7 @@ router.get("/", auth.required, (req, res, next) => {
 });
 
 
-// Get proposals in a given semester
+// Get proposals in a given semester or proposals still pending
 router.get("/pendingOrCurrent/:semester", auth.required, (req, res, next) => {
   Proposal.find({$or: [{semester: req.params.semester}, {status: "Pending"} ]})
       .then((proposals) => res.json(proposals))
